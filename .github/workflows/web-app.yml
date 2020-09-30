@@ -16,8 +16,10 @@ jobs:
         uses: actions/checkout@master
       - name: Install Dependencies
         run: npm install
+        working-directory: web-app
       - name: Build Project
         run: npm run build
+        working-directory: web-app
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
@@ -34,10 +36,11 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: build
-          path: build
+          path: ./web-app/build
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_PATH: ./web-app
