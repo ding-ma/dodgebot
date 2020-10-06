@@ -1,6 +1,6 @@
 # Mine data from Riot API
 
-1- get user list per rank [here](https://developer.riotgames.com/apis#league-exp-v4)
+1- get user list per rank [here](https://developer.riotgames.com/apis#league-exp-v4/GET_getLeagueEntries)
 
 sample response:
 ```
@@ -35,7 +35,7 @@ sample response:
     "summonerLevel": 350
 }
 ```
-3- get all the matches from `acountId` here [here](https://developer.riotgames.com/apis#match-v4/GET_getMatchlist) with `queue = 420` for Solo Queue Ranked
+3- get all the matches by `acountId` here [here](https://developer.riotgames.com/apis#match-v4/GET_getMatchlist) with `queue = 420` for Solo Queue Ranked
 
 sample response:
 ```
@@ -170,6 +170,35 @@ sample response
       
 ```
 
+# Important info about variables
+```
+1. gameId - unique match id
+2. gameDuration - length of the match in epoch time (~60,000 units are equal to one minute)
+3. timestamp - epoch time of the end of the time interval
+4. accountId - unique player id
+5. teamId - 100 or 200
+6. win - game outcome (Win or Fail)
+7. totalGold - total gold accumulated of the player by the end of the interval (EOI)
+8. currentGold - current available (unspent) gold of the player by EOI
+9. level - champion level of the player by EOI
+10. xp - total experience gained of the player by EOI
+11. minionsKilled - regular minions killed by the player by EOI
+12. jungleMinionsKilled - jungle minions killed by the player by EOI
+13. positionX - player's horizontal coordinate on Summoner's Rift (from 0 to 14820) by EOI
+14. positionY - player's vertical coordinate on Summoner's Rift (from 0 to 14881) by EOI
+15. championKills - enemy champions killed through final blow by the player by EOI
+16. assists - enemy champions killed through assist by the player by EOI
+17. deaths - times the player died by EOI
+18. wardsPlaced - wards used by the player by EOI
+19. buildingKills - buildings destroyed by the player by EOI
+20. monsterKills - elite monsters killed by the player by EOI (= dragonKills + heraldKills + baronKills)
+21. dragonKills - Dragons killed by the player by EOI
+22. heraldKills - Rift Heralds killed by the player by EOI
+23. baronKills - Baron Nashors killed by the player by EOI
+```
+
+
 # Useful link
 * [champion id to name](http://ddragon.leagueoflegends.com/cdn/10.20.1/data/en_US/champion.json)
 * [spell ID](https://github.com/ngryman/lol-spells/blob/master/spells.json)
+* [variables explained](https://github.com/szhan/game-on)
