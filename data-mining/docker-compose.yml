@@ -1,0 +1,21 @@
+version: '3'
+
+x-enviroment: &commonEnv
+    - 'GOOGLE_APPLICATION_CREDENTIALS=/code/GCP_KEY.json'
+    - 'HOST=na1.api.riotgames.com'
+
+services:
+  master:
+    build: .
+    ports:
+    - '9999:5000'
+    env_file:
+      - .env.master
+    environment: *commonEnv
+  diamond:
+    build: .
+    ports:
+      - '8888:5000'
+    env_file:
+      - .env.diamond
+    environment: *commonEnv

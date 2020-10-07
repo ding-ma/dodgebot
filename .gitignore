@@ -1,2 +1,4 @@
 .idea/
 build/
+.env*
+GCP_KEY.json
