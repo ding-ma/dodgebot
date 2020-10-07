@@ -1,3 +1,4 @@
+import os
 tiers = [
     "MASTER GRANDMASTER CHALLENGER",
     "DIAMOND",
@@ -8,10 +9,10 @@ tiers = [
     "IRON"
 ]
 
-keys = open(".env.list", "r").read()
+keys = open("env/.env.list", "r").read()
 
 for api, tier in zip(keys.split("\n"), tiers):
     fileName = tier.split()
-    f = open(".env.{}".format(fileName[0].lower()), "w")
+    f = open(os.path.join("env",".env.{}".format(fileName[0].lower())), "w")
     f.write("API_KEY={}\nELO={}".format(api,tier))
     f.close()

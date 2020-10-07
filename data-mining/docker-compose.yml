@@ -10,34 +10,34 @@ services:
     build: .
     environment: *commonEnv
     env_file:
-      - .env.master
+      - env/.env.master
   diamond:
     build: .
     environment: *commonEnv
     env_file:
-      - .env.diamond
+      - env/.env.diamond
   platnium:
     build: .
     environment: *commonEnv
     env_file:
-      - .env.platinum
+      - env/.env.platinum
   gold:
     build: .
     environment: *commonEnv
     env_file:
-      - .env.gold
+      - env/.env.gold
   silver:
     build: .
     environment: *commonEnv
     env_file:
-      - .env.silver
+      - env/.env.silver
   bronze:
     build: .
     environment: *commonEnv
     env_file:
-      - .env.bronze
+      - env/.env.bronze
   iron:
     build: .
     environment: *commonEnv
     env_file:
-      - .env.iron
+      - env/.env.iron
