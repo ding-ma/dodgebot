@@ -1,5 +1,5 @@
 Containers are awesome so we are using them. Each container can scrape a different elo with a personal API key from riot. 
-* rename the `sample.env.containerX` to `.env.tier` with `tier` being one of the possible tiers found below. 
+* rename the `sample.env.tier` to `.env.tier` with `tier` being one of the possible tiers found below. 
 
 ## Possible Tiers
 * CHALLENGER, GRANDMASTER, MASTER*
@@ -10,7 +10,7 @@ Containers are awesome so we are using them. Each container can scrape a differe
 * BRONZE
 * IRON
 
-\* since CHALLENGER, GRANDMASTER, AND MASTER tier represents less than 1% of the player base, we will group them together for this project
+\* since CHALLENGER, GRANDMASTER, AND MASTER tier represents less than 1% of the player base, we will group them together for this project and name it to `.env.master`
 
 ## Possible Regions
 To change the region, edit the `docker-compose.yml`

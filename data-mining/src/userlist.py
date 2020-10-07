@@ -1,9 +1,9 @@
 import os
-from flask import Flask
-
-server = Flask(__name__)
-
 from google.cloud import storage
+from dotenv import load_dotenv
+import requests
+
+load_dotenv()
 
 
 def upload_blob(bucket_name, source_file_name, destination_blob_name):
@@ -27,10 +27,7 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
 
 # todo, figure out how to upload file
 
-@server.route("/")
-def hello():
-    return os.environ.get('GOOGLE_APPLICATION_CREDENTIALS') + "\n" + open("/code/GCP_KEY.json", "r").read()
+# upload_blob("dodge-bot-data", "../requirements.txt", "gold/testupload2")
+# Step 1
 
-
-if __name__ == "__main__":
-    server.run(host='0.0.0.0')
+print(os.environ.get('ELO'), os.environ.get('API_KEY'), os.environ.get('HOST'))

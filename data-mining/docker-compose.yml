@@ -3,19 +3,41 @@ version: '3'
 x-enviroment: &commonEnv
     - 'GOOGLE_APPLICATION_CREDENTIALS=/code/GCP_KEY.json'
     - 'HOST=na1.api.riotgames.com'
+    - 'GCLOUD_PROJECT=ordinal-cacao-291815'
 
 services:
   master:
     build: .
-    ports:
-    - '9999:5000'
+    environment: *commonEnv
     env_file:
       - .env.master
-    environment: *commonEnv
   diamond:
     build: .
-    ports:
-      - '8888:5000'
+    environment: *commonEnv
     env_file:
       - .env.diamond
+  platnium:
+    build: .
     environment: *commonEnv
+    env_file:
+      - .env.platinum
+  gold:
+    build: .
+    environment: *commonEnv
+    env_file:
+      - .env.gold
+  silver:
+    build: .
+    environment: *commonEnv
+    env_file:
+      - .env.silver
+  bronze:
+    build: .
+    environment: *commonEnv
+    env_file:
+      - .env.bronze
+  iron:
+    build: .
+    environment: *commonEnv
+    env_file:
+      - .env.iron
