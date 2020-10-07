@@ -1,14 +1,3 @@
-apiKeys = [
-    "API_K1",
-    "K2",
-    "K3",
-    "K4",
-    "K5",
-    "K6",
-    "K7"
-]
-
-
 tiers = [
     "MASTER GRANDMASTER CHALLENGER",
     "DIAMOND",
@@ -19,7 +8,9 @@ tiers = [
     "IRON"
 ]
 
-for api, tier in zip(apiKeys, tiers):
+keys = open(".env.list", "r").read()
+
+for api, tier in zip(keys.split("\n"), tiers):
     fileName = tier.split()
     f = open(".env.{}".format(fileName[0].lower()), "w")
     f.write("API_KEY={}\nELO={}".format(api,tier))
