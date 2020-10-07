@@ -1,9 +1,9 @@
 import os
-from google.cloud import storage
-from dotenv import load_dotenv
-import requests
 
-load_dotenv("../env/.env")
+from dotenv import load_dotenv
+from google.cloud import storage
+
+load_dotenv("../env/.env.local")  # loads the env file for local development
 
 
 def upload_blob(bucket_name, source_file_name, destination_blob_name):

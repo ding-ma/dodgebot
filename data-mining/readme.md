@@ -1,3 +1,6 @@
+## Environment files
+All .env files are located in the env folder. Change each accordingly
+
 ## generateEnv.py
 * rename the `sample.env.list` to `.env.list`
 * enter all 7 riot api key in order to scrape for all 7 elo tiers.
