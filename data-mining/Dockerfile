@@ -10,4 +10,4 @@ RUN pip install -r requirements.txt
 
 COPY src/riot-api.py .
 
-CMD ["python", "-u", "./riot-api.py"]
+CMD ["python", "./riot-api.py"]

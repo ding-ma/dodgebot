@@ -1,19 +1,23 @@
 import os
 
-tiers = [
-    # "MASTER GRANDMASTER CHALLENGER",
-    "DIAMOND",
-    "PLATINUM",
-    "GOLD",
-    "SILVER",
-    "BRONZE",
-    "IRON"
+regions = [
+    'br1.api.riotgames.com',
+    'eun1.api.riotgames.com',
+    'euw1.api.riotgames.com',
+    'jp1.api.riotgames.com',
+    'kr.api.riotgames.com',
+    'la1.api.riotgames.com',
+    'la2.api.riotgames.com',
+    'na1.api.riotgames.com',
+    'oc1.api.riotgames.com',
+    'tr1.api.riotgames.com',
+    'ru.api.riotgames.com'
 ]
 
-keys = open("env/.env.list", "r").read()
+common = open(os.path.join("env", ".env.common")).read()
 
-for api, tier in zip(keys.split("\n"), tiers):
-    fileName = tier.split()
-    f = open(os.path.join("env", ".env.local.{}".format(fileName[0].lower())), "w")
-    f.write("API_KEY={}\nELO={}".format(api, tier))
+for region in regions:
+    fileName = region.split(".")
+    f = open(os.path.join("env", ".env.{}".format(fileName[0].lower())), "w")
+    f.write("REGION={}\nHOST={}\n{}".format(fileName[0], region,common))
     f.close()

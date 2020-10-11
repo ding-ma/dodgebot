@@ -10,9 +10,12 @@ import logging
 
 load_dotenv("../env/.env.local")  # loads the env file for local development
 
-region = os.environ.get('REGION')
-elo = os.environ.get('ELO').split()[0]
+region = os.environ.get('REGION').upper()
+elo = os.environ.get('ELO')
 host = os.environ.get('HOST')
+
+yesterday = date.today() - timedelta(days=1)
+epochMs = int(time.mktime(yesterday.timetuple())) * 1000
 
 folderName = os.path.join(region, elo)
 timeStamp = datetime.now().strftime("%Y%m%d-%H%M")
@@ -24,7 +27,18 @@ header = {
     "X-Riot-Token": os.environ.get('API_KEY')
 }
 
-log = logging.getLogger('LOGGER: {}/{}'.format(region, elo))
+def get_module_logger(mod_name):
+    """
+    To use this, do logger = get_module_logger(__name__)
+    """
+    logger = logging.getLogger(mod_name)
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter(
+        '%(asctime)s [%(name)-12s] %(levelname)-8s %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.setLevel(logging.DEBUG)
+    return logger
 
 
 def upload_folder_gcs(source_folder, bucket_name="dodge-bot-data"):
@@ -35,7 +49,7 @@ def upload_folder_gcs(source_folder, bucket_name="dodge-bot-data"):
         blob = bucket.blob(files.replace('\\', '/'))
         blob.upload_from_filename(files)
 
-    log.info('upload done for ' + source_folder)
+    get_module_logger(__name__).info('upload done for ' + source_folder)
 
 
 def make_folder(p):
@@ -47,19 +61,21 @@ def get_account_list():
     basePath = os.path.join(folderName, "SUMMONER")
     make_folder(basePath)
     for tier in ["II", "III"]:
-        for page in range(1, 5):
+        get_module_logger(__name__).info('Getting account list tier: {}'.format(tier))
+        for page in range(1, 75):
             url = '{}/league-exp/v4/entries/RANKED_SOLO_5x5/{}/{}?page={}'.format(baseURL, elo, tier, page)
             data = requests.get(url=url, headers=header).json()
+
+            if len(data) == 0:
+                break
 
             path = os.path.join(basePath, "{}-T{}-p{}.json".format(timeStamp, tier, page))
             f = open(path, "w")
             f.write(json.dumps(data, indent=2))
             f.close()
-
-    # time.sleep(125)
-    print("done")
-    log.info('Done getting account list')
-    # upload_folder_gcs(basePath)
+            time.sleep(125)
+    get_module_logger(__name__).info('Done getting account list')
+    upload_folder_gcs(basePath)
 
 
 def get_summoner_id(sum_id):
@@ -71,25 +87,22 @@ def get_summoner_id(sum_id):
         return None
 
 
-yesterday = date.today() - timedelta(days=1)
-timeInEpoch = int(time.mktime(yesterday.timetuple())) * 1000
-
-
 def get_matches():
     summonerPath = os.path.join(folderName, "SUMMONER")
     matchPath = os.path.join(folderName, "MATCHES")
     make_folder(matchPath)
     for file in glob.glob(summonerPath + "/**"):
+        get_module_logger(__name__).info('Processing {}'.format(file))
         for i, accounts in enumerate(json.load(open(file))):
             summerId = accounts['summonerId']
             accountId = get_summoner_id(summerId)
             if accountId is None:
                 continue
 
-            url = '{}/match/v4/matchlists/by-account/{}?queue=420&beginTime={}'.format(baseURL, accountId, timeInEpoch)
+            url = '{}/match/v4/matchlists/by-account/{}?queue=420&beginTime={}'.format(baseURL, accountId, epochMs)
 
             data = requests.get(url=url, headers=header)
-            print(i, data)
+
             if data.status_code == 404:
                 continue
 
@@ -109,7 +122,10 @@ def get_matches():
     upload_folder_gcs(matchPath)
 
 
-# Step 1
-get_account_list()
-time.sleep(125)
-get_matches()
+if __name__ == "__main__":
+    # Step 1
+    get_account_list()
+    time.sleep(125)
+
+    # Step 2
+    get_matches()

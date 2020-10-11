@@ -1,15 +1,18 @@
+## How it works
+This scrapper uses one Riot Game API. Note, this scrapper does not support **Master+ elo**. 
+
+* Scrapes all the data for all Regions for the selected elo and tier II, III. 
+* Upload their profile on GCS (Google Cloud Storage).
+* Upload their matches played for **yesterday** on GCS. This way, we can ensure that while training the ML model, 
+we know very closely the rank of the player as Riot does not give a way to find it out. 
+
 ## Environment files
 All .env files are located in the env folder. Change each accordingly
 
 ## generateEnv.py
-* rename the `sample.env.list` to `.env.list`
-* enter all 7 riot api key in order to scrape for all 7 elo tiers.
-
-you can adjust the `generate.py` script as well as the `docker-compose.yml` to just scrape the elo you want
-
-
-Containers are awesome so we are using them. Each container can scrape a different elo with a personal API key from riot. 
-* rename the `sample.env.tier` to `.env.tier` with `tier` being one of the possible tiers found below. 
+* Rename the `sample.env.common` to `.env.common`
+* Change the appropriate names in the `.env.common`
+* Run the `generateEnv.py` script in order to generate all the environment variables for all the containers
 
 ## Possible Tiers
 * CHALLENGER, GRANDMASTER, MASTER*
@@ -20,7 +23,8 @@ Containers are awesome so we are using them. Each container can scrape a differe
 * BRONZE
 * IRON
 
-\* since CHALLENGER, GRANDMASTER, AND MASTER tier represents less than 1% of the player base, we will group them together for this project and name it to `.env.master`
+\* since CHALLENGER, GRANDMASTER, AND MASTER tier represents less than 1% of the player base.
+We will deal with them later. 
 
 ## Possible Regions
 To change the region, edit the `docker-compose.yml`
