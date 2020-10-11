@@ -19,5 +19,5 @@ common = open(os.path.join("env", ".env.common")).read()
 for region in regions:
     fileName = region.split(".")
     f = open(os.path.join("env", ".env.{}".format(fileName[0].lower())), "w")
-    f.write("REGION={}\nHOST={}\n{}".format(fileName[0], region,common))
+    f.write("HOST={}\n{}".format(region, common))
     f.close()

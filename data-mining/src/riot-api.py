@@ -1,24 +1,27 @@
-import os
-import requests
+import csv
+import glob
 import json
+import logging
+import os
+import time
+from datetime import datetime, timedelta, date
+
+import requests
 from dotenv import load_dotenv
 from google.cloud import storage
-from datetime import datetime, timedelta, date
-import time
-import glob
-import logging
 
 load_dotenv("../env/.env.local")  # loads the env file for local development
 
-region = os.environ.get('REGION').upper()
+region = os.environ.get('HOST').split(".")[0].upper()
 elo = os.environ.get('ELO')
 host = os.environ.get('HOST')
 
-yesterday = date.today() - timedelta(days=1)
+yesterday = date.today() - timedelta(days=2)
 epochMs = int(time.mktime(yesterday.timetuple())) * 1000
 
 folderName = os.path.join(region, elo)
 timeStamp = datetime.now().strftime("%Y%m%d")
+
 baseURL = "https://{}/lol".format(host)
 header = {
     "Accept-Language": "en-GB,en;q=0.9,en-US;q=0.8,fr;q=0.7",
@@ -27,18 +30,12 @@ header = {
     "X-Riot-Token": os.environ.get('API_KEY')
 }
 
-def get_module_logger(mod_name):
-    """
-    To use this, do logger = get_module_logger(__name__)
-    """
-    logger = logging.getLogger(mod_name)
-    handler = logging.StreamHandler()
-    formatter = logging.Formatter(
-        '%(asctime)s [%(name)-12s] %(levelname)-8s %(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    logger.setLevel(logging.DEBUG)
-    return logger
+logger = logging.getLogger(region)
+handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s [%(name)-3s] %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
 
 
 def upload_folder_gcs(source_folder, bucket_name="dodge-bot-data"):
@@ -49,7 +46,7 @@ def upload_folder_gcs(source_folder, bucket_name="dodge-bot-data"):
         blob = bucket.blob(files.replace('\\', '/'))
         blob.upload_from_filename(files)
 
-    get_module_logger(__name__).info('upload done for ' + source_folder)
+    logger.info('upload done for ' + source_folder)
 
 
 def make_folder(p):
@@ -60,12 +57,19 @@ def make_folder(p):
 def get_account_list():
     basePath = os.path.join(folderName, "SUMMONER")
     make_folder(basePath)
+    apiCounter = 1
+
     for tier in ["II", "III"]:
-        get_module_logger(__name__).info('Getting account list tier: {}'.format(tier))
-        for page in range(1, 75):
+        logger.info('Getting account list tier: {}'.format(tier))
+        for page in range(1, 150):
             url = '{}/league-exp/v4/entries/RANKED_SOLO_5x5/{}/{}?page={}'.format(baseURL, elo, tier, page)
             data = requests.get(url=url, headers=header).json()
 
+            if apiCounter % 100 == 0:
+                time.sleep(125)
+            apiCounter = + 1
+
+            # means that we are at the end of the pages
             if len(data) == 0:
                 break
 
@@ -73,9 +77,8 @@ def get_account_list():
             f = open(path, "w")
             f.write(json.dumps(data, indent=2))
             f.close()
-            time.sleep(125)
-    get_module_logger(__name__).info('Done getting account list')
-    upload_folder_gcs(basePath)
+
+    logger.info('Done getting account list')
 
 
 def get_summoner_id(sum_id):
@@ -83,7 +86,7 @@ def get_summoner_id(sum_id):
     data = requests.get(url=url, headers=header).json()
     try:
         return data['accountId']
-    except KeyError:
+    except:
         return None
 
 
@@ -91,9 +94,16 @@ def get_matches():
     summonerPath = os.path.join(folderName, "SUMMONER")
     matchPath = os.path.join(folderName, "MATCHES")
     make_folder(matchPath)
+
+    csvFile = open(os.path.join(matchPath, "{}-{}-{}.csv".format(timeStamp, region, elo)), 'a', newline='')
+    writer = csv.writer(csvFile)
+
+    writer.writerow(['GAME_ID', 'ROLE', 'LANE', 'CHAMPION', 'TIME_STAMP', 'SUMMONER_NAME', 'TIER', 'RANK'])
+
+    apiCounter = 1
     for file in glob.glob(summonerPath + "/**"):
-        get_module_logger(__name__).info('Processing {}'.format(file))
-        for i, accounts in enumerate(json.load(open(file))):
+        logger.info('Processing {}'.format(file))
+        for accounts in json.load(open(file)):
             summerId = accounts['summonerId']
             accountId = get_summoner_id(summerId)
             if accountId is None:
@@ -103,29 +113,27 @@ def get_matches():
 
             data = requests.get(url=url, headers=header)
 
-            if data.status_code == 404:
+            if apiCounter % 50 == 0:
+                time.sleep(125)
+            apiCounter += 1
+
+            if data.status_code != 200:
                 continue
 
-            data = data.json()
-            data['summonerName'] = accounts['summonerName']
-            data['tier'] = accounts['tier']
-            data['rank'] = accounts['rank']
+            for match in data.json()['matches']:
+                try:
+                    writer.writerow(
+                        [match['gameId'], match['role'], match['lane'], match['champion'], match['timestamp'],
+                         accounts['summonerName'], accounts['tier'], accounts['rank']])
+                except:
+                    continue
 
-            file = os.path.join(matchPath,
-                                "T{}-{}-{}.json".format(accounts['rank'], timeStamp, accounts['summonerName']))
-            f = open(file, "w")
-            f.write(json.dumps(data, indent=2))
-            f.close()
-            if i % 99 == 0:
-                time.sleep(125)
-
+    csvFile.close()
     upload_folder_gcs(matchPath)
 
 
-if __name__ == "__main__":
-    # Step 1
-    get_account_list()
-    time.sleep(125)
+# Step 1
+get_account_list()
 
-    # Step 2
-    get_matches()
+# Step 2
+get_matches()
