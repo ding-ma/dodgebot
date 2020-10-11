@@ -18,7 +18,7 @@ yesterday = date.today() - timedelta(days=1)
 epochMs = int(time.mktime(yesterday.timetuple())) * 1000
 
 folderName = os.path.join(region, elo)
-timeStamp = datetime.now().strftime("%Y%m%d-%H%M")
+timeStamp = datetime.now().strftime("%Y%m%d")
 baseURL = "https://{}/lol".format(host)
 header = {
     "Accept-Language": "en-GB,en;q=0.9,en-US;q=0.8,fr;q=0.7",
