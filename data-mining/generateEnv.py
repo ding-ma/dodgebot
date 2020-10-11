@@ -1,7 +1,7 @@
 import os
 
 tiers = [
-    "MASTER GRANDMASTER CHALLENGER",
+    # "MASTER GRANDMASTER CHALLENGER",
     "DIAMOND",
     "PLATINUM",
     "GOLD",

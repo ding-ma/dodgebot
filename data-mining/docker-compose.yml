@@ -1,43 +1,42 @@
-version: '3'
+version: '3.4'
 
 x-enviroment: &commonEnv
     - 'GOOGLE_APPLICATION_CREDENTIALS=/code/GCP_KEY.json'
     - 'HOST=na1.api.riotgames.com'
     - 'GCLOUD_PROJECT=ordinal-cacao-291815'
+    - 'REGION=NA'
+    - 'PYTHONUNBUFFERED=0'
+
+x-baseContainer: &baseContainer
+  build: .
+  environment: *commonEnv
 
 services:
   master:
-    build: .
-    environment: *commonEnv
+    <<: *baseContainer
     env_file:
       - env/.env.master
   diamond:
-    build: .
-    environment: *commonEnv
+    <<: *baseContainer
     env_file:
       - env/.env.diamond
   platnium:
-    build: .
-    environment: *commonEnv
+    << : *baseContainer
     env_file:
       - env/.env.platinum
   gold:
-    build: .
-    environment: *commonEnv
+    <<: *baseContainer
     env_file:
       - env/.env.gold
   silver:
-    build: .
-    environment: *commonEnv
+    <<: *baseContainer
     env_file:
       - env/.env.silver
   bronze:
-    build: .
-    environment: *commonEnv
+    <<: *baseContainer
     env_file:
       - env/.env.bronze
   iron:
-    build: .
-    environment: *commonEnv
+    <<: *baseContainer
     env_file:
       - env/.env.iron

@@ -8,6 +8,6 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY src/userlist.py .
+COPY src/riot-api.py .
 
-CMD ["python", "./userlist.py"]
+CMD ["python", "-u", "./riot-api.py"]
