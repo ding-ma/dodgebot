@@ -61,7 +61,7 @@ def get_account_list():
 
     for tier in ["II", "III"]:
         logger.info('Getting account list tier: {}'.format(tier))
-        for page in range(1, 150):
+        for page in range(1, 100):
             url = '{}/league-exp/v4/entries/RANKED_SOLO_5x5/{}/{}?page={}'.format(baseURL, elo, tier, page)
             data = requests.get(url=url, headers=header).json()
 
@@ -90,6 +90,7 @@ def get_summoner_id(sum_id):
         return None
 
 
+# todo: need to be more fault tolerant
 def get_matches():
     summonerPath = os.path.join(folderName, "SUMMONER")
     matchPath = os.path.join(folderName, "MATCHES")
@@ -97,20 +98,19 @@ def get_matches():
 
     csvFile = open(os.path.join(matchPath, "{}-{}-{}.csv".format(timeStamp, region, elo)), 'a', newline='')
     writer = csv.writer(csvFile)
-
     writer.writerow(['GAME_ID', 'ROLE', 'LANE', 'CHAMPION', 'TIME_STAMP', 'SUMMONER_NAME', 'TIER', 'RANK'])
-
     apiCounter = 1
+
     for file in glob.glob(summonerPath + "/**"):
         logger.info('Processing {}'.format(file))
         for accounts in json.load(open(file)):
-            summerId = accounts['summonerId']
-            accountId = get_summoner_id(summerId)
+
+            summoner = accounts['summonerId']
+            accountId = get_summoner_id(summoner)
             if accountId is None:
                 continue
 
             url = '{}/match/v4/matchlists/by-account/{}?queue=420&beginTime={}'.format(baseURL, accountId, epochMs)
-
             data = requests.get(url=url, headers=header)
 
             if apiCounter % 50 == 0:
@@ -124,7 +124,8 @@ def get_matches():
                 try:
                     writer.writerow(
                         [match['gameId'], match['role'], match['lane'], match['champion'], match['timestamp'],
-                         accounts['summonerName'], accounts['tier'], accounts['rank']])
+                         accounts['summonerName'], accounts['tier'], accounts['rank']]
+                    )
                 except:
                     continue
 
