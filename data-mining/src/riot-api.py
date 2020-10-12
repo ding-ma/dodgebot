@@ -94,9 +94,12 @@ def merge_sequentially(l1, l2, acc):
 
 def get_summoner_id(sum_id):
     url = '{}/summoner/v4/summoners/{}'.format(baseURL, sum_id)
-    data = requests.get(url=url, headers=header).json()
+    data = requests.get(url=url, headers=header)
+
+    if data.status_code == 403:
+        return 403
     try:
-        return data['accountId']
+        return data.json()['accountId']
     except:
         return None
 
@@ -135,6 +138,8 @@ def get_matches():
             accountId = get_summoner_id(accounts['summonerId'])
             if accountId is None:
                 continue
+            if accounts == 403:  # this means our key expired and we want to finish ASAP
+                break
 
             url = '{}/match/v4/matchlists/by-account/{}?queue=420&beginTime={}'.format(baseURL, accountId, epochMs)
             data = requests.get(url=url, headers=header)
@@ -145,6 +150,10 @@ def get_matches():
 
             if data.status_code != 200:
                 continue
+
+            # this means our key expired and we want to finish ASAP
+            if data.status_code == 403:
+                break
 
             for match in data.json()['matches']:
                 try:
