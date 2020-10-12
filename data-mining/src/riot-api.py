@@ -3,6 +3,7 @@ import glob
 import json
 import logging
 import os
+import random
 import time
 from datetime import datetime, timedelta, date
 
@@ -16,8 +17,8 @@ region = os.environ.get('HOST').split(".")[0].upper()
 elo = os.environ.get('ELO')
 host = os.environ.get('HOST')
 
-yesterday = date.today() - timedelta(days=2)
-epochMs = int(time.mktime(yesterday.timetuple())) * 1000
+daysToScrape = date.today() - timedelta(days=2)  # scrape past 3 days of data, including today's
+epochMs = int(time.mktime(daysToScrape.timetuple())) * 1000
 
 folderName = os.path.join(region, elo)
 timeStamp = datetime.now().strftime("%Y%m%d")
@@ -57,28 +58,38 @@ def make_folder(p):
 def get_account_list():
     basePath = os.path.join(folderName, "SUMMONER")
     make_folder(basePath)
-    apiCounter = 1
+    apiCounter = 0
 
     for tier in ["II", "III"]:
         logger.info('Getting account list tier: {}'.format(tier))
-        for page in range(1, 100):
+        tierFiles = os.path.join(basePath, tier)
+        make_folder(tierFiles)
+        for page in range(1, 101):
             url = '{}/league-exp/v4/entries/RANKED_SOLO_5x5/{}/{}?page={}'.format(baseURL, elo, tier, page)
             data = requests.get(url=url, headers=header).json()
 
-            if apiCounter % 100 == 0:
-                time.sleep(125)
             apiCounter = + 1
+            if apiCounter % 99 == 0:
+                time.sleep(125)
 
             # means that we are at the end of the pages
             if len(data) == 0:
                 break
 
-            path = os.path.join(basePath, "{}-T{}-p{}.json".format(timeStamp, tier, page))
+            path = os.path.join(tierFiles, "{}-T{}-p{}.json".format(timeStamp, tier, str(page).zfill(2)))
             f = open(path, "w")
             f.write(json.dumps(data, indent=2))
             f.close()
 
     logger.info('Done getting account list')
+
+
+def merge_sequentially(l1, l2, acc):
+    if l1:
+        x, xs = l1[0], l1[1:]
+        return merge_sequentially(l2, xs, acc + [x])
+    else:
+        return acc + l2
 
 
 def get_summoner_id(sum_id):
@@ -92,30 +103,45 @@ def get_summoner_id(sum_id):
 
 # todo: need to be more fault tolerant
 def get_matches():
-    summonerPath = os.path.join(folderName, "SUMMONER")
+    basePath = os.path.join(folderName, "SUMMONER")
+    tier2Path = os.path.join(basePath, "II")
+    tier3Path = os.path.join(basePath, "III")
+
+    # randomly shuffle the files in order to get as different summoners as possible on every pass of the scraper
+    tier2Files = glob.glob(tier2Path + "/**")
+    random.shuffle(tier2Files)
+
+    tier3Files = glob.glob(tier3Path + "/**")
+    random.shuffle(tier3Files)
+
+    allFiles = merge_sequentially(tier2Files, tier3Files, [])
+    totalFiles = len(allFiles)
+
     matchPath = os.path.join(folderName, "MATCHES")
     make_folder(matchPath)
-
     csvFile = open(os.path.join(matchPath, "{}-{}-{}.csv".format(timeStamp, region, elo)), 'a', newline='')
     writer = csv.writer(csvFile)
     writer.writerow(['GAME_ID', 'ROLE', 'LANE', 'CHAMPION', 'TIME_STAMP', 'SUMMONER_NAME', 'TIER', 'RANK'])
-    apiCounter = 1
 
-    for file in glob.glob(summonerPath + "/**"):
-        logger.info('Processing {}'.format(file))
+    apiCounter = 0
+    for i, file in enumerate(allFiles, 1):
+        logger.info('Processing {} -- {}/{}'.format(file, i, totalFiles))
         for accounts in json.load(open(file)):
 
-            summoner = accounts['summonerId']
-            accountId = get_summoner_id(summoner)
+            # happens when we exceed the limit
+            if accounts == "status":
+                break
+
+            accountId = get_summoner_id(accounts['summonerId'])
             if accountId is None:
                 continue
 
             url = '{}/match/v4/matchlists/by-account/{}?queue=420&beginTime={}'.format(baseURL, accountId, epochMs)
             data = requests.get(url=url, headers=header)
 
-            if apiCounter % 50 == 0:
-                time.sleep(125)
             apiCounter += 1
+            if apiCounter % 49 == 0:
+                time.sleep(125)
 
             if data.status_code != 200:
                 continue
@@ -135,6 +161,7 @@ def get_matches():
 
 # Step 1
 get_account_list()
+time.sleep(125)
 
 # Step 2
 get_matches()
