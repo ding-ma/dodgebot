@@ -13,6 +13,7 @@ All .env files are located in the env folder. Change each accordingly
 * Rename the `sample.env.common` to `.env.common`
 * Change the appropriate names in the `.env.common`
 * Run the `generateEnv.py` script in order to generate all the environment variables for all the containers
+* `KEY_EXPIRE=YYYY-MM-DD-HH:HH` is in 24H format and the time given is PST
 
 ## Possible Tiers
 * CHALLENGER, GRANDMASTER, MASTER*

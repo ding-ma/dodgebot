@@ -7,15 +7,18 @@ import random
 import time
 from datetime import datetime, timedelta, date
 
+import pytz
 import requests
 from dotenv import load_dotenv
 from google.cloud import storage
+from pytz import timezone
 
 load_dotenv("../env/.env.local")  # loads the env file for local development
 
 region = os.environ.get('HOST').split(".")[0].upper()
 elo = os.environ.get('ELO')
 host = os.environ.get('HOST')
+keyExpireTime = datetime.strptime(os.environ.get('KEY_EXPIRE'), "%Y-%m-%d-%H:%M").replace(tzinfo=timezone('US/Pacific'))
 
 daysToScrape = date.today() - timedelta(days=2)  # scrape past 3 days of data, including today's
 epochMs = int(time.mktime(daysToScrape.timetuple())) * 1000
@@ -95,9 +98,6 @@ def merge_sequentially(l1, l2, acc):
 def get_summoner_id(sum_id):
     url = '{}/summoner/v4/summoners/{}'.format(baseURL, sum_id)
     data = requests.get(url=url, headers=header)
-
-    if data.status_code == 403:
-        return 403
     try:
         return data.json()['accountId']
     except:
@@ -129,7 +129,18 @@ def get_matches():
     apiCounter = 0
     for i, file in enumerate(allFiles, 1):
         logger.info('Processing {} -- {}/{}'.format(file, i, totalFiles))
+
+        # if our key is expired
+        if datetime.now(tz=pytz.utc) > keyExpireTime:
+            logger.warning('API Key expired!')
+            break
+
         for accounts in json.load(open(file)):
+
+            # if our key is expired
+            if datetime.now(tz=pytz.utc) > keyExpireTime:
+                logger.warning('API Key expired!')
+                break
 
             # happens when we exceed the limit
             if accounts == "status":
@@ -138,8 +149,6 @@ def get_matches():
             accountId = get_summoner_id(accounts['summonerId'])
             if accountId is None:
                 continue
-            if accounts == 403:  # this means our key expired and we want to finish ASAP
-                break
 
             url = '{}/match/v4/matchlists/by-account/{}?queue=420&beginTime={}'.format(baseURL, accountId, epochMs)
             data = requests.get(url=url, headers=header)
@@ -150,10 +159,6 @@ def get_matches():
 
             if data.status_code != 200:
                 continue
-
-            # this means our key expired and we want to finish ASAP
-            if data.status_code == 403:
-                break
 
             for match in data.json()['matches']:
                 try:
