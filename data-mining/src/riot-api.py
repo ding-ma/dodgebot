@@ -133,14 +133,14 @@ def get_matches():
         # if our key is expired
         if datetime.now(tz=pytz.utc) > keyExpireTime:
             logger.warning('API Key expired!')
-            break
+            exit(403)
 
         for accounts in json.load(open(file)):
 
             # if our key is expired
             if datetime.now(tz=pytz.utc) > keyExpireTime:
                 logger.warning('API Key expired!')
-                break
+                exit(403)
 
             # happens when we exceed the limit
             if accounts == "status":
@@ -161,7 +161,9 @@ def get_matches():
                 continue
 
             if data.status_code == 403:  # shouldn't get here
-                break
+                logger.warning('API Key expired!')
+                exit(403)
+
             for match in data.json()['matches']:
                 try:
                     writer.writerow(
