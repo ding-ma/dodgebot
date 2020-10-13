@@ -160,6 +160,8 @@ def get_matches():
             if data.status_code != 200:
                 continue
 
+            if data.status_code == 403:  # shouldn't get here
+                break
             for match in data.json()['matches']:
                 try:
                     writer.writerow(
