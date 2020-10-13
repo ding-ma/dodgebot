@@ -1,68 +1,86 @@
 version: '3.4'
 
+
+x-limit: &resources
+  deploy:
+    resources:
+      limits:
+        cpus: '0.04'
+
 # start scrapper sequentially to not overload E2 VM
 services:
   br1:
     build: .
     env_file:
       - env/.env.br1
+    <<: *resources
   eun1:
     build: .
     env_file:
       - env/.env.eun1
     depends_on:
       - br1
+    <<: *resources
   euw1:
     build: .
     env_file:
       - env/.env.euw1
     depends_on:
       - eun1
+    <<: *resources
   jp1:
     build: .
     env_file:
       - env/.env.jp1
     depends_on:
       - euw1
+    <<: *resources
   kr:
     build: .
     env_file:
       - env/.env.kr
     depends_on:
       - jp1
+    <<: *resources
   la1:
     build: .
     env_file:
       - env/.env.la1
     depends_on:
       - kr
+    <<: *resources
   la2:
     build: .
     env_file:
       - env/.env.la2
     depends_on:
       - la1
+    <<: *resources
   na1:
     build: .
     env_file:
       - env/.env.na1
     depends_on:
       - la2
+    <<: *resources
   oc1:
     build: .
     env_file:
       - env/.env.oc1
     depends_on:
       - na1
+    <<: *resources
   tr1:
     build: .
     env_file:
       - env/.env.tr1
     depends_on:
       - oc1
+    <<: *resources
   ru:
     build: .
     env_file:
       - env/.env.ru
     depends_on:
       - tr1
+    <<: *resources
