@@ -71,7 +71,7 @@ def get_account_list():
             url = '{}/league-exp/v4/entries/RANKED_SOLO_5x5/{}/{}?page={}'.format(baseURL, elo, tier, page)
             data = requests.get(url=url, headers=header).json()
 
-            apiCounter = + 1
+            apiCounter += 1
             if apiCounter % 99 == 0:
                 time.sleep(125)
 
