@@ -69,12 +69,15 @@ def get_account_list():
         make_folder(tierFiles)
         for page in range(1, 101):
             url = '{}/league-exp/v4/entries/RANKED_SOLO_5x5/{}/{}?page={}'.format(baseURL, elo, tier, page)
-            data = requests.get(url=url, headers=header).json()
-
+            data = requests.get(url=url, headers=header)
             apiCounter += 1
             if apiCounter % 99 == 0:
                 time.sleep(125)
 
+            if data.status_code != 200:
+                continue
+
+            data = data.json()
             # means that we are at the end of the pages
             if len(data) == 0:
                 break
