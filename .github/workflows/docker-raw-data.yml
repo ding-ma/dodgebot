@@ -9,6 +9,10 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
+      - run: 'echo "$GCP_UPLOAD" > ./data-mining/GCP_KEY.json'
+        shell: bash
+        env:
+          SSH_KEY: ${{secrets.GCP_UPLOAD}}
       - name: Push to Docker Hub
         uses: docker/build-push-action@v2   
         with:
