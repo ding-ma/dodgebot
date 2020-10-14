@@ -15,6 +15,7 @@ from pytz import timezone
 
 load_dotenv("../env/.env.local")  # loads the env file for local development
 
+
 region = os.environ.get('HOST').split(".")[0].upper()
 elo = os.environ.get('ELO')
 host = os.environ.get('HOST')
