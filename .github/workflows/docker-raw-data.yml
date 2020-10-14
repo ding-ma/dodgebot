@@ -17,7 +17,8 @@ jobs:
       - name: Push to Docker Hub
         uses: docker/build-push-action@v2
         with:
-          tags: iamabaws/rito-web-scrapper
+          tags: iamabaws/rito-web-scrapper:latest
+          push: true 
           context: ./data-mining
           file: ./data-mining/Dockerfile
           platforms: linux/amd64
