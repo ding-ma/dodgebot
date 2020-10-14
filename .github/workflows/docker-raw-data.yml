@@ -26,4 +26,4 @@ jobs:
           file: ./data-mining/raw-data/Dockerfile
           platforms: linux/amd64
           push: true
-          tags: iamabaws/rito-web-scrapper:latest
+          tags: iamabaws/rito-raw-data-scrapper:latest
