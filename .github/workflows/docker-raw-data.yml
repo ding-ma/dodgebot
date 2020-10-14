@@ -2,8 +2,7 @@ name: Publish Docker Image - Riot Scraper 1/2
 
 on:
   push:
-    paths:
-      - 'data-mining/**'
+    - any
 
 jobs:
   push_to_registry:
@@ -14,9 +13,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Push to Docker Hub
         uses: docker/build-push-action@v1
-        working-directory: data-mining
-        with:
+        working-directory: data-mining        with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: my-docker-hub-namespace/my-docker-hub-repository
+          repository: iamabaws/rito-web-scrapper
           tag_with_ref: true
