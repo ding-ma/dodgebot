@@ -101,8 +101,8 @@ def merge_sequentially(l1, l2, acc):
 
 def get_summoner_id(sum_id):
     url = '{}/summoner/v4/summoners/{}'.format(baseURL, sum_id)
-    data = requests.get(url=url, headers=header)
     try:
+        data = requests.get(url=url, headers=header)
         return data.json()['accountId']
     except:
         return None
@@ -155,27 +155,32 @@ def get_matches():
                 continue
 
             url = '{}/match/v4/matchlists/by-account/{}?queue=420&beginTime={}'.format(baseURL, accountId, epochMs)
-            data = requests.get(url=url, headers=header)
 
-            apiCounter += 1
-            if apiCounter % 49 == 0:
-                time.sleep(125)
+            try:
+                data = requests.get(url=url, headers=header)
 
-            if data.status_code != 200:
-                continue
+                apiCounter += 1
+                if apiCounter % 49 == 0:
+                    time.sleep(125)
 
-            if data.status_code == 403:  # shouldn't get here
-                logger.warning('API Key expired!')
-                break
-
-            for match in data.json()['matches']:
-                try:
-                    writer.writerow(
-                        [match['gameId'], match['role'], match['lane'], match['champion'], match['timestamp'],
-                         accounts['summonerName'], accounts['tier'], accounts['rank']]
-                    )
-                except:
+                if data.status_code != 200:
                     continue
+
+                if data.status_code == 403:  # shouldn't get here
+                    logger.warning('API Key expired!')
+                    break
+
+                for match in data.json()['matches']:
+                    try:
+                        writer.writerow(
+                            [match['gameId'], match['role'], match['lane'], match['champion'], match['timestamp'],
+                             accounts['summonerName'], accounts['tier'], accounts['rank']]
+                        )
+                    except:
+                        continue
+
+            except:
+                continue
 
     csvFile.close()
     upload_folder_gcs(matchPath)
