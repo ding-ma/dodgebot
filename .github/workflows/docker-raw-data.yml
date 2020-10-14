@@ -1,6 +1,8 @@
-name: Publish Docker Image - Riot Scraper 1/2
+name: Docker Image - Riot Scraper Raw Data
 
 on: [push]
+  paths:
+    - 'data-mining/raw-data/**'
 
 jobs:
   push_to_registry:
@@ -19,12 +21,8 @@ jobs:
       - name: Push to Docker Hub
         uses: docker/build-push-action@v2
         with:
-          context: ./data-mining
-          file: ./data-mining/Dockerfile
+          context: ./data-mining/raw-data
+          file: ./data-mining/raw-data/Dockerfile
           platforms: linux/amd64
           push: true
           tags: iamabaws/rito-web-scrapper:latest
-          
-      
-          
-          

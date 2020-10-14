@@ -1,5 +1,7 @@
 ![Deploy Web app to Firebase](https://github.com/ding-ma/dodgebot/workflows/Deploy%20Web%20app%20to%20Firebase/badge.svg?branch=master)
 
+![Docker Image - Riot Scraper Raw Data](https://github.com/ding-ma/dodgebot/workflows/Publish%20Docker%20Image%20-%20Riot%20Scraper%201/2/badge.svg?branch=master)
+
 # Dodgebot
 League of Legends ML algorithm to calculate the win percentage for a game. 
 
