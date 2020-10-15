@@ -12,14 +12,11 @@ jobs:
     - name: Prepare
       id: prep
       run: |
-        DOCKERHUB_IMAGE=cicirello/alpine-plus-plus
         GHCR_IMAGE=ghcr.io/${{ github.repository_owner }}/riot-raw-data-scrapper
         VERSION=${GITHUB_REF#refs/tags/v}
-        TAGS="${DOCKERHUB_IMAGE}:${VERSION},${DOCKERHUB_IMAGE}:latest"
         TAGS="${TAGS},${GHCR_IMAGE}:${VERSION},${GHCR_IMAGE}:latest"
         echo ::set-output name=tags::${TAGS}
         echo ::set-output name=version::${VERSION}
-        echo ::set-output name=dockerhub_image::${DOCKERHUB_IMAGE}
         echo ::set-output name=ghcr_image::${GHCR_IMAGE}
 
     - name: Set up QEMU
@@ -44,7 +41,7 @@ jobs:
         builder: ${{ steps.buildx.outputs.name }}
         context: ./data-mining/raw-data
         file: ./data-mining/raw-data/Dockerfile
-        platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x,linux/386,linux/arm/v6,linux/arm/v7
+        platforms: linux/amd64
         push: true
         tags: ${{ steps.prep.outputs.tags }}
         labels: org.opencontainers.image.version=${{ steps.prep.outputs.version }}
