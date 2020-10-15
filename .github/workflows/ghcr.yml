@@ -17,4 +17,4 @@ jobs:
         registry: ghcr.io
         workdir: ./data-mining/raw-data/
         default_branch: trunk
-        tag: "latest"
+        tags: "latest"
