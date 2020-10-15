@@ -14,7 +14,7 @@ jobs:
         name: ding-ma/raw-data-scrapper
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN  }}
-        registry: docker.pkg.github.com
+        registry: ghcr.io
         workdir: ./data-mining/raw-data/
         default_branch: trunk
         tag: "latest"
