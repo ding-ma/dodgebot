@@ -43,5 +43,5 @@ jobs:
         file: ./data-mining/raw-data/Dockerfile
         platforms: linux/amd64
         push: true
-        tags: ${{ steps.prep.outputs.tags }}
+        tags: "latest"
         labels: org.opencontainers.image.version=${{ steps.prep.outputs.version }}
