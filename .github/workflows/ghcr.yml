@@ -17,7 +17,8 @@ jobs:
     - name: uild and push
       uses: docker/build-push-action@v2
       with:
+        context: ./data-mining/raw-data/
         file: ./data-mining/raw-data/Dockerfile 
+        tags: ding-ma/riot-raw-data-scrapper:latest        
         push: true
-        tags: ding-ma/riot-raw-data-scrapper:latest
         platforms: linux/amd64
