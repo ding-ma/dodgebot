@@ -17,7 +17,7 @@ jobs:
     - name: uild and push
       uses: docker/build-push-action@v2
       with:
-        registry: ghcr.io
         file: ./data-mining/raw-data/Dockerfile 
         push: true
         tags: ding-ma/riot-raw-data-scrapper:latest
+        platforms: linux/amd64
