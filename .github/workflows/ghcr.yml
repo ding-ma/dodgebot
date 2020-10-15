@@ -20,5 +20,4 @@ jobs:
         context: ./data-mining/raw-data/
         file: ./data-mining/raw-data/Dockerfile 
         tags: ding-ma/riot-raw-data-scrapper:latest        
-        push: true
         platforms: linux/amd64
