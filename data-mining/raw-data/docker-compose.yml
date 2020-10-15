@@ -1,7 +1,7 @@
 version: '3.4'
 
 x-base: &base
-  image: iamabaws/rito-raw-data-scrapper:latest
+  image: ghcr.io/ding-ma/riot-raw-data-scrapper:latest
   volumes:
     - ./GCP_KEY.json:/code/GCP_KEY.json
 
