@@ -1,0 +1,20 @@
+name: Docker Image - Riot Scraper Raw Data
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: ding-ma/raw-data-scrapper
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN  }}
+        registry: docker.pkg.github.com
+        workdir: ./data-mining/raw-data/
+        default_branch: trunk
+        tag: "latest"
