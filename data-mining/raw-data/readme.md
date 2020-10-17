@@ -47,11 +47,14 @@ To change the region, edit the `docker-compose.yml`
 you can run the `deploy.py` script in order to 
 1. clean docker containers
 1. set api key
-1. set elo
-1. set api expiry time
+1. start docker containers with new variables
 
-`deploy.sh` takes arguments from the CLI.
-* First one is the Tiers
-* Second one is the Riot API key
-* Optionally, the third one is the end time in this format: `YYYY-MM-DD-HH:MM`. The hours is in 24h format.
-Tt will default tomorrow 20:30 PST if there are none.
+It will automatically set
+* elo
+* set api expiry time
+
+### What to input
+`deploy.py RIOT_API_KEY` takes arguments from the CLI.
+* The time by default is tomorrow's 20:30 PST since the key expires after 24h. 
+* The tier is based on the `.env.common` current tier + 2. For example, if it is DIAMOND, it will generate for BRONZE.
+This script is used for a double container setup. 

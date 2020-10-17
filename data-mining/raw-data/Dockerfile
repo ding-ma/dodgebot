@@ -4,10 +4,10 @@ WORKDIR /code
 
 COPY requirements.txt .
 
-ENV TZ=PST8PDT
-
 RUN pip install -r requirements.txt
 
 COPY src/riot-api.py .
+
+ENV TZ=PST8PDT
 
 CMD ["python", "./riot-api.py"]

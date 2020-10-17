@@ -1,25 +1,38 @@
 import sys
 from datetime import datetime, timedelta
 import os
+import pytz
 
-# todo fix this
-# from .generateEnv import generat
+tiers = [
+    'IRON',
+    'BRONZE',
+    'SILVER',
+    'GOLD',
+    'PLATINUM',
+    'DIAMOND'
+]
 
-# defaults to 11:30pm EST if there is no extra arg
-apiExpireDate = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d-20:30")
-if len(sys.argv) == 4:
-    apiExpireDate = sys.argv[3]
+if len(sys.argv) != 2:
+    raise KeyError("Script requires API_KEY argument")
 
 file = open(os.path.join("env", ".env.common"), "r")
 data = file.read().splitlines()
 file.close()
-data[2] = "API_KEY={}".format(sys.argv[2])
-data[3] = "ELO={}".format(sys.argv[1])
+tmr = datetime.now(pytz.utc) + timedelta(days=1)
+# defaults to 8:30pm PST of tomorrow
+apiExpireDate = tmr.astimezone(pytz.timezone("PST8PDT")).strftime("%Y-%m-%d-20:30")
+tierIdx = tiers.index(data[3].split("=")[1])
+nextTier = tiers[(tierIdx + 2) % len(tiers)]
+
+data[2] = "API_KEY={}".format(sys.argv[1])
+data[3] = "ELO={}".format(nextTier)
 data[4] = "KEY_EXPIRE={}".format(apiExpireDate)
 
 modifiedCommonEnv = open(os.path.join("env", ".env.common"), "w")
 modifiedCommonEnv.writelines(line + '\n' for line in data)
+modifiedCommonEnv.close()
 
-os.system("docker-compose down")
+os.system('docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:$PWD" -w="$PWD" docker/compose:1.24.0 down')
 os.system("python3 generateEnv.py")
-os.system("docker-compose up")
+os.system('docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:$PWD" -w="$PWD" docker/compose:1.24.0 pull')
+os.system('docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:$PWD" -w="$PWD" docker/compose:1.24.0 up -d')

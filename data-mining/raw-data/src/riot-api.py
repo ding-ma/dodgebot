@@ -6,20 +6,17 @@ import os
 import random
 import time
 from datetime import datetime, timedelta, date
-
-import pytz
 import requests
-from dotenv import load_dotenv
 from google.cloud import storage
-from pytz import timezone
+from dotenv import load_dotenv
 
-load_dotenv("../env/.env.local")  # loads the env file for local development
+# load_dotenv("../env/.env.na1")  # loads the env file for local development
 
 
 region = os.environ.get('HOST').split(".")[0].upper()
 elo = os.environ.get('ELO')
 host = os.environ.get('HOST')
-keyExpireTime = datetime.strptime(os.environ.get('KEY_EXPIRE'), "%Y-%m-%d-%H:%M").replace(tzinfo=timezone('US/Pacific'))
+keyExpireTime = datetime.strptime(os.environ.get('KEY_EXPIRE'), "%Y-%m-%d-%H:%M")
 
 daysToScrape = date.today() - timedelta(days=2)  # scrape past 3 days of data, including today's
 epochMs = int(time.mktime(daysToScrape.timetuple())) * 1000
@@ -135,14 +132,14 @@ def get_matches():
         logger.info('Processing {} -- {}/{}'.format(file, i, totalFiles))
 
         # if our key is expired
-        if datetime.now(tz=pytz.utc) > keyExpireTime:
+        if datetime.now() > keyExpireTime:
             logger.warning('API Key expired!')
             break
 
         for accounts in json.load(open(file)):
 
             # if our key is expired
-            if datetime.now(tz=pytz.utc) > keyExpireTime:
+            if datetime.now() > keyExpireTime:
                 logger.warning('API Key expired!')
                 break
 
