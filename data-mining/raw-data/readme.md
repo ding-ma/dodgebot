@@ -42,3 +42,16 @@ To change the region, edit the `docker-compose.yml`
 |OC1|oc1.api.riotgames.com|
 |TR1|tr1.api.riotgames.com|
 |RU|ru.api.riotgames.com|
+
+## Deploy script
+you can run the `deploy.py` script in order to 
+1. clean docker containers
+1. set api key
+1. set elo
+1. set api expiry time
+
+`deploy.sh` takes arguments from the CLI.
+* First one is the Tiers
+* Second one is the Riot API key
+* Optionally, the third one is the end time in this format: `YYYY-MM-DD-HH:MM`. The hours is in 24h format.
+Tt will default tomorrow 20:30 PST if there are none.
