@@ -55,6 +55,6 @@ It will automatically set
 
 ### What to input
 `deploy.py RIOT_API_KEY` takes arguments from the CLI.
-* The time by default is tomorrow's 20:30 PST since the key expires after 24h. 
+* The time by default is tomorrow's current time - 10 minutes since the key expires after 24h.
 * The tier is based on the `.env.common` current tier + 2. For example, if it is DIAMOND, it will generate for BRONZE.
 This script is used for a double container setup. 

@@ -18,9 +18,8 @@ if len(sys.argv) != 2:
 file = open(os.path.join("env", ".env.common"), "r")
 data = file.read().splitlines()
 file.close()
-tmr = datetime.now(pytz.utc) + timedelta(days=1)
-# defaults to 8:30pm PST of tomorrow
-apiExpireDate = tmr.astimezone(pytz.timezone("PST8PDT")).strftime("%Y-%m-%d-20:30")
+tmr = datetime.now(pytz.utc) + timedelta(days=1) - timedelta(minutes=10)
+apiExpireDate = tmr.astimezone(pytz.timezone("PST8PDT")).strftime("%Y-%m-%d-%H:%M")
 tierIdx = tiers.index(data[3].split("=")[1])
 nextTier = tiers[(tierIdx + 2) % len(tiers)]
 
