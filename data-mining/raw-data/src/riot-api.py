@@ -10,15 +10,20 @@ import requests
 from google.cloud import storage
 from dotenv import load_dotenv
 
-# load_dotenv("../env/.env.na1")  # loads the env file for local development
-
+# load_dotenv("..//env/.env.na1")  # loads the env file for local development
 
 region = os.environ.get('HOST').split(".")[0].upper()
 elo = os.environ.get('ELO')
 host = os.environ.get('HOST')
 keyExpireTime = datetime.strptime(os.environ.get('KEY_EXPIRE'), "%Y-%m-%d-%H:%M")
 
-daysToScrape = date.today() - timedelta(days=2)  # scrape past 3 days of data, including today's
+tiers = ["II", "III"]
+pastDays = 2  # scrape past 3 days of data, including today's
+if elo in ["MASTER", " GRANDMASTER", "CHALLENGER"]:
+    tiers = ["I"]
+    pastDays = 10  # master+ we can get more data as that their is less volatile
+
+daysToScrape = date.today() - timedelta(days=pastDays)
 epochMs = int(time.mktime(daysToScrape.timetuple())) * 1000
 
 folderName = os.path.join(region, elo)
@@ -61,7 +66,7 @@ def get_account_list():
     make_folder(basePath)
     apiCounter = 0
 
-    for tier in ["II", "III"]:
+    for tier in tiers:
         logger.info('Getting account list tier: {}'.format(tier))
         tierFiles = os.path.join(basePath, tier)
         make_folder(tierFiles)
@@ -108,8 +113,11 @@ def get_summoner_id(sum_id):
 # todo: need to be more fault tolerant
 def get_matches():
     basePath = os.path.join(folderName, "SUMMONER")
-    tier2Path = os.path.join(basePath, "II")
-    tier3Path = os.path.join(basePath, "III")
+    tier2Path = os.path.join(basePath, tiers[0])
+    try:
+        tier3Path = os.path.join(basePath, tiers[1])
+    except IndexError:
+        tier3Path = "randomPaths"
 
     # randomly shuffle the files in order to get as different summoners as possible on every pass of the scraper
     tier2Files = glob.glob(tier2Path + "/**")

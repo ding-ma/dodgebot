@@ -28,4 +28,4 @@ jobs:
           file: ./data-mining/raw-data/Dockerfile
           platforms: linux/amd64
           push: true
-          tags:  ghcr.io/ding-ma/riot-raw-data-scrapper:latest
+          tags:  ghcr.io/ding-ma/riot-raw-data-scraper:latest
