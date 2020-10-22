@@ -40,7 +40,7 @@ logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
 
-def upload_folder_gcs(source_folder, bucket_name="dodge-bot-data"):
+def upload_folder_gcs(source_folder, bucket_name="dodge-bot"):
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
 

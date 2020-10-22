@@ -1,0 +1,75 @@
+version: '3.4'
+
+x-base: &base
+  image: ghcr.io/ding-ma/riot-process-data-scraper:latest
+  volumes:
+    - ./GCP_KEY.json:/code/GCP_KEY.json
+  environment:
+    - TZ=PST8PDT
+
+# start scrapper sequentially to not overload E2 VM
+services:
+  br1:
+    <<: *base
+    env_file:
+      - env/.env.br1
+  eun1:
+    <<: *base
+    env_file:
+      - env/.env.eun1
+    depends_on:
+      - br1
+  euw1:
+    <<: *base
+    env_file:
+      - env/.env.euw1
+    depends_on:
+      - eun1
+  jp1:
+    <<: *base
+    env_file:
+      - env/.env.jp1
+    depends_on:
+      - euw1
+  kr:
+    <<: *base
+    env_file:
+      - env/.env.kr
+    depends_on:
+      - jp1
+  la1:
+    <<: *base
+    env_file:
+      - env/.env.la1
+    depends_on:
+      - kr
+  la2:
+    <<: *base
+    env_file:
+      - env/.env.la2
+    depends_on:
+      - la1
+  na1:
+    <<: *base
+    env_file:
+      - env/.env.na1
+    depends_on:
+      - la2
+  oc1:
+    <<: *base
+    env_file:
+      - env/.env.oc1
+    depends_on:
+      - na1
+  tr1:
+    <<: *base
+    env_file:
+      - env/.env.tr1
+    depends_on:
+      - oc1
+  ru:
+    <<: *base
+    env_file:
+      - env/.env.ru
+    depends_on:
+      - tr1
