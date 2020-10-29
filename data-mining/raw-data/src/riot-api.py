@@ -19,7 +19,7 @@ keyExpireTime = datetime.strptime(os.environ.get('KEY_EXPIRE'), "%Y-%m-%d-%H:%M"
 
 tiers = ["II", "III"]
 pastDays = 2  # scrape past 3 days of data, including today's
-if elo in ["MASTER", " GRANDMASTER", "CHALLENGER"]:
+if elo in ["MASTER", "GRANDMASTER", "CHALLENGER"]:
     tiers = ["I"]
     pastDays = 10  # master+ we can get more data as that their is less volatile
 
