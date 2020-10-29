@@ -1,11 +1,9 @@
 version: '3.4'
 
 x-base: &base
-  image: ghcr.io/ding-ma/riot-raw-data-scrapper:latest
+  image: ghcr.io/ding-ma/riot-raw-data-scraper:latest
   volumes:
     - ./GCP_KEY.json:/code/GCP_KEY.json
-  environment:
-    - TZ=PST8PDT
 
 # start scrapper sequentially to not overload E2 VM
 services:
