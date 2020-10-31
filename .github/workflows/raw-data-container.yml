@@ -23,13 +23,9 @@ jobs:
         run: |
           pip install --upgrade pip
           sudo -H pip install -U pipenv
-      - name: Install pipenv
-        env:
-          PYTHON_BIN_PATH: "$(python3 -m site --user-base)/bin"
-          PATH: "$PATH:$PYTHON_BIN_PATH"
-        run: |  
-          pipenv install
-          pipenv lock -r > raw-data/requirements.txt
+      - run: pipenv install
+        working-directory: ./data-mining
+      - run: pipenv lock -r > raw-data/requirements.txt
         working-directory: ./data-mining
       - name: Build and push
         uses: docker/build-push-action@v2
