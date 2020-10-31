@@ -30,7 +30,7 @@ jobs:
           pip install --upgrade pip
           sudo -H pip install -U pipenv
           pipenv install
-          pipenv lock -r > raw-data/requirements.txt
+          pipenv lock -r > data-processing/requirements.txt
         working-directory: ./data-mining
       - name: Build and push
         uses: docker/build-push-action@v2
