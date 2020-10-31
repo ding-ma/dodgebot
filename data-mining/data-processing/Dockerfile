@@ -6,8 +6,8 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY src/proces-data.py .
+COPY src/process-data.py .
 
 ENV TZ=PST8PDT
 
-CMD ["python", "./proces-data.py"]
+CMD ["python", "./process-data.py"]
