@@ -19,10 +19,15 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GH_CONTAINER_REGISTRY }}
-      - name: Generate and Copy requirements.txt
+      - name: Install pip
         run: |
           pip install --upgrade pip
-          pip install -U pipenv
+          sudo -H pip install -U pipenv
+      - name: Install pipenv
+        env:
+          PYTHON_BIN_PATH: "$(python3 -m site --user-base)/bin"
+          PATH: "$PATH:$PYTHON_BIN_PATH"
+        run: |  
           pipenv install
           pipenv lock -r > raw-data/requirements.txt
         working-directory: ./data-mining
