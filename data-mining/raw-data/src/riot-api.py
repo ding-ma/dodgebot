@@ -15,21 +15,21 @@ from dotenv import load_dotenv
 region = os.environ.get('HOST').split(".")[0].upper()
 elo = os.environ.get('ELO')
 host = os.environ.get('HOST')
-keyExpireTime = datetime.strptime(os.environ.get('KEY_EXPIRE'), "%Y-%m-%d-%H:%M")
+key_expire_time = datetime.strptime(os.environ.get('KEY_EXPIRE'), "%Y-%m-%d-%H:%M")
 
 tiers = ["II", "III"]
-pastDays = 2  # scrape past 3 days of data, including today's
+past_days = 2  # scrape past 3 days of data, including today's
 if elo in ["MASTER", "GRANDMASTER", "CHALLENGER"]:
     tiers = ["I"]
-    pastDays = 10  # master+ we can get more data as that their is less volatile
+    past_days = 10  # master+ we can get more data as that their is less volatile
 
-daysToScrape = date.today() - timedelta(days=pastDays)
-epochMs = int(time.mktime(daysToScrape.timetuple())) * 1000
+days_to_scrape = date.today() - timedelta(days=past_days)
+epoch_ms = int(time.mktime(days_to_scrape.timetuple())) * 1000
 
-folderName = os.path.join(region, elo)
-timeStamp = datetime.now().strftime("%Y%m%d")
+folder_name = os.path.join(region, elo)
+time_stamp = datetime.now().strftime("%Y%m%d")
 
-baseURL = "https://{}/lol".format(host)
+base_url = "https://{}/lol".format(host)
 header = {
     "Accept-Language": "en-GB,en;q=0.9,en-US;q=0.8,fr;q=0.7",
     "Accept-Charset": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -62,19 +62,19 @@ def make_folder(p):
 
 
 def get_account_list():
-    basePath = os.path.join(folderName, "SUMMONER")
-    make_folder(basePath)
-    apiCounter = 0
+    base_path = os.path.join(folder_name, "SUMMONER")
+    make_folder(base_path)
+    api_counter = 0
 
     for tier in tiers:
         logger.info('Getting account list tier: {}'.format(tier))
-        tierFiles = os.path.join(basePath, tier)
-        make_folder(tierFiles)
+        tier_files = os.path.join(base_path, tier)
+        make_folder(tier_files)
         for page in range(1, 101):
-            url = '{}/league-exp/v4/entries/RANKED_SOLO_5x5/{}/{}?page={}'.format(baseURL, elo, tier, page)
+            url = '{}/league-exp/v4/entries/RANKED_SOLO_5x5/{}/{}?page={}'.format(base_url, elo, tier, page)
             data = requests.get(url=url, headers=header)
-            apiCounter += 1
-            if apiCounter % 99 == 0:
+            api_counter += 1
+            if api_counter % 99 == 0:
                 time.sleep(125)
 
             if data.status_code != 200:
@@ -85,7 +85,7 @@ def get_account_list():
             if len(data) == 0:
                 break
 
-            path = os.path.join(tierFiles, "{}-T{}-p{}.json".format(timeStamp, tier, str(page).zfill(2)))
+            path = os.path.join(tier_files, "{}-T{}-p{}.json".format(time_stamp, tier, str(page).zfill(2)))
             f = open(path, "w")
             f.write(json.dumps(data, indent=2))
             f.close()
@@ -102,7 +102,7 @@ def merge_sequentially(l1, l2, acc):
 
 
 def get_summoner_id(sum_id):
-    url = '{}/summoner/v4/summoners/{}'.format(baseURL, sum_id)
+    url = '{}/summoner/v4/summoners/{}'.format(base_url, sum_id)
     try:
         data = requests.get(url=url, headers=header)
         return data.json()['accountId']
@@ -112,42 +112,42 @@ def get_summoner_id(sum_id):
 
 # todo: need to be more fault tolerant
 def get_matches():
-    basePath = os.path.join(folderName, "SUMMONER")
-    tier2Path = os.path.join(basePath, tiers[0])
+    base_path = os.path.join(folder_name, "SUMMONER")
+    tier2_path = os.path.join(base_path, tiers[0])
     try:
-        tier3Path = os.path.join(basePath, tiers[1])
+        tier3_path = os.path.join(base_path, tiers[1])
     except IndexError:
-        tier3Path = "randomPaths"
+        tier3_path = "randomPaths"
 
     # randomly shuffle the files in order to get as different summoners as possible on every pass of the scraper
-    tier2Files = glob.glob(tier2Path + "/**")
-    random.shuffle(tier2Files)
+    tier2_files = glob.glob(tier2_path + "/**")
+    random.shuffle(tier2_files)
 
-    tier3Files = glob.glob(tier3Path + "/**")
-    random.shuffle(tier3Files)
+    tier3_files = glob.glob(tier3_path + "/**")
+    random.shuffle(tier3_files)
 
-    allFiles = merge_sequentially(tier2Files, tier3Files, [])
-    totalFiles = len(allFiles)
+    all_files = merge_sequentially(tier2_files, tier3_files, [])
+    total_files = len(all_files)
 
-    matchPath = os.path.join(folderName, "MATCHES")
-    make_folder(matchPath)
-    csvFile = open(os.path.join(matchPath, "{}-{}-{}.csv".format(timeStamp, region, elo)), 'a', newline='')
-    writer = csv.writer(csvFile)
+    match_path = os.path.join(folder_name, "MATCHES")
+    make_folder(match_path)
+    csv_file = open(os.path.join(match_path, "{}-{}-{}.csv".format(time_stamp, region, elo)), 'a', newline='')
+    writer = csv.writer(csv_file)
     writer.writerow(['GAME_ID', 'ROLE', 'LANE', 'CHAMPION', 'TIME_STAMP', 'SUMMONER_NAME', 'TIER', 'RANK'])
 
-    apiCounter = 0
-    for i, file in enumerate(allFiles, 1):
-        logger.info('Processing {} -- {}/{}'.format(file, i, totalFiles))
+    api_counter = 0
+    for i, file in enumerate(all_files, 1):
+        logger.info('Processing {} -- {}/{}'.format(file, i, total_files))
 
         # if our key is expired
-        if datetime.now() > keyExpireTime:
+        if datetime.now() > key_expire_time:
             logger.warning('API Key expired!')
             break
 
         for accounts in json.load(open(file)):
 
             # if our key is expired
-            if datetime.now() > keyExpireTime:
+            if datetime.now() > key_expire_time:
                 logger.warning('API Key expired!')
                 break
 
@@ -155,17 +155,17 @@ def get_matches():
             if accounts == "status":
                 break
 
-            accountId = get_summoner_id(accounts['summonerId'])
-            if accountId is None:
+            account_id = get_summoner_id(accounts['summonerId'])
+            if account_id is None:
                 continue
 
-            url = '{}/match/v4/matchlists/by-account/{}?queue=420&beginTime={}'.format(baseURL, accountId, epochMs)
+            url = '{}/match/v4/matchlists/by-account/{}?queue=420&beginTime={}'.format(base_url, account_id, epoch_ms)
 
             try:
                 data = requests.get(url=url, headers=header)
 
-                apiCounter += 1
-                if apiCounter % 49 == 0:
+                api_counter += 1
+                if api_counter % 49 == 0:
                     time.sleep(125)
 
                 if data.status_code != 200:
@@ -187,8 +187,8 @@ def get_matches():
             except:
                 continue
 
-    csvFile.close()
-    upload_folder_gcs(matchPath)
+    csv_file.close()
+    upload_folder_gcs(match_path)
 
 
 # Step 1

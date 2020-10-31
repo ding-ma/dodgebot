@@ -1,22 +1,19 @@
 import csv
-import glob
-import json
 import logging
 import os
-import random
 import time
-from datetime import datetime, timedelta, date
+from datetime import datetime
+
 import requests
-from google.cloud import storage
 from dotenv import load_dotenv
-import csv
+from google.cloud import storage
 
 load_dotenv("..//env/.env.na1")  # loads the env file for local development
 
 region = os.environ.get('HOST').split(".")[0].upper()
 elo = os.environ.get('ELO')
 host = os.environ.get('HOST')
-keyExpireTime = datetime.strptime(os.environ.get('KEY_EXPIRE'), "%Y-%m-%d-%H:%M")
+key_expire_time = datetime.strptime(os.environ.get('KEY_EXPIRE'), "%Y-%m-%d-%H:%M")
 
 logger = logging.getLogger(region)
 handler = logging.StreamHandler()
@@ -25,7 +22,7 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
-baseURL = "https://{}".format(host)
+base_url = "https://{}".format(host)
 header = {
     "Accept-Language": "en-GB,en;q=0.9,en-US;q=0.8,fr;q=0.7",
     "Accept-Charset": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -192,7 +189,7 @@ def process_json(data):
 
 
 def get_matches_by_id(match_id):
-    url = "{}/lol/match/v4/matches/{}".format(baseURL, match_id)
+    url = "{}/lol/match/v4/matches/{}".format(base_url, match_id)
     r = requests.get(url=url, headers=header)
     if r.status_code != 200:
         return []
