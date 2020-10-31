@@ -1,9 +1,7 @@
 name: Docker Image - Riot Scraper Raw Data
 
-on:
-  push:
-    paths:
-      - 'data-mining/raw-data/**'
+on: [push]
+
 
 jobs:
   build:
