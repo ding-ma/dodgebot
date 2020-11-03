@@ -1,7 +1,7 @@
 from google.cloud import storage
 from dotenv import load_dotenv
 
-load_dotenv("..//env/.env.na1")  # loads the env file for local development
+load_dotenv(".env.na1")  # loads the env file for local development
 
 
 def set_blob_metadata(blob_name, bucket_name="dodge-bot"):

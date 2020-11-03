@@ -51,7 +51,9 @@ def upload_folder_gcs(source_folder, bucket_name="dodge-bot"):
 
     for files in glob.glob(source_folder + "/**"):
         blob = bucket.blob(files.replace('\\', '/'))
+        blob.metadata = {'processed': 'No'}
         blob.upload_from_filename(files)
+        blob.patch()
 
     logger.info('upload done for ' + source_folder)
 

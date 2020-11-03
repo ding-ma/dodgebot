@@ -11,9 +11,16 @@ from google.cloud import storage
 load_dotenv("..//env/.env.na1")  # loads the env file for local development
 
 region = os.environ.get('HOST').split(".")[0].upper()
-elo = os.environ.get('ELO')
 host = os.environ.get('HOST')
 key_expire_time = datetime.strptime(os.environ.get('KEY_EXPIRE'), "%Y-%m-%d-%H:%M")
+elos = [
+    'IRON',
+    'BRONZE',
+    'SILVER',
+    'GOLD',
+    'PLATINUM',
+    'DIAMOND'
+]
 
 logger = logging.getLogger(region)
 handler = logging.StreamHandler()
@@ -31,16 +38,18 @@ header = {
 }
 
 
-def get_file_to_process(bucket_name='dodge-bot', download_file_name="fileToProcess.csv"):
+def get_file_to_process(bucket_name='dodge-bot'):
     """Since all files have 70k entries, we will simply process 1 file from there everyday and download it"""
-
     client = storage.Client()
-    for blob in client.list_blobs(bucket_name, prefix='KR/CHALLENGER'):
-        if blob.metadata is not None:
-            if blob.metadata['processed'] == 'No':
-                blob.download_to_filename(download_file_name)
-                return blob
-    return None
+    for elo in elos:
+        # todo change path when matches are cleaned
+        for blob in client.list_blobs(bucket_name, prefix='{}/{}/MATCHES'.format(region, elo)):
+            file_name = blob.name.split("/")[-1]
+            if blob.metadata is not None:
+                if blob.metadata['processed'] == 'No':
+                    blob.download_to_filename(file_name)
+                    return blob, file_name
+    return None, None
 
 
 def update_metadata(blob):
@@ -49,39 +58,49 @@ def update_metadata(blob):
     blob.patch()
 
 
-def read_and_process_csv():
-    file_in = open("fileToProcess.csv", "r", encoding="utf8")
-    reader = csv.reader(file_in, delimiter=",")
-
-    file_out = open("{}-{}-{}.csv".format('TIER', 'RANK', 'REGION'), "w")
-    writer = csv.writer(file_out)
+def read_and_process_csv(file):
     # redTeamWon 0 = RedTeamLost, 1 = RedTeamWon
     # teamId 100 = blueside, 200=redside
-    writer.writerow([
+
+    file_in = open(file, "r", encoding="utf8")
+    reader = csv.reader(file_in, delimiter=",")
+
+    file_success = open("{}-{}".format("PROCESSED", file), "w")
+    writer_success = csv.writer(file_success)
+    writer_success.writerow([
         'GAME_ID', 'RedBan1', 'RedBan2', 'RedBan3', 'RedBan4', 'RedBan5',
         'RedTop', 'RedJg', 'RedMid', 'RedAdc', 'RedSup',
         'BlueBan1', 'BlueBan2', 'BlueBan3', 'BlueBan4', 'BlueBan5',
         'BlueTop', 'BlueJg', 'BlueMid', 'BlueAdc', 'BlueSup', 'redTeamWin'
     ])
+    fails = 0
+    success = 0
 
     logger.info("Starting to process file")
     for i, line in enumerate(reader, start=1):
-        match_data = get_matches_by_id(line[0])
+        success, match_data = get_matches_by_id(line[0])
+        print(i, line[0], success, match_data)
         if match_data:
-            writer.writerow(match_data)
-        if i % 199 == 0:
+            if success:
+                writer_success.writerow(match_data)
+                success += 1
+            else:
+                fails += 1
+        if i % 99 == 0:
+            break
             time.sleep(125)
+    return success / success + fails
 
 
 def process_json(data):
     def filter_by_team(participants):
-        red_participants, blue_participants = [], []
+        red, blue = [], []
         for participant in participants:
             if participant['teamId'] == 100:
-                blue_participants.append(participant)
+                blue.append(participant)
             else:
-                red_participants.append(participant)
-        return blue_participants, red_participants
+                red.append(participant)
+        return blue, red
 
     def get_champion_ban_list(ban_map):
         lst = []
@@ -105,65 +124,40 @@ def process_json(data):
         :return: sorted team list with the champion ID
         """
 
-        """
-        3 potential cases
-        [DUO,DUO] -> need to do more filtering to get carry and support
-        [DUO_CARRY, DUO_SUPPORT]->life is good
-        [SOLO, NONE]?? -> discard that match
-        """
-        role_to_champion = {}
-
-        bot_lane = [None] * 2
-        rest_participants = []
-        counter = 0
-        need_extra_filtering = False
+        extra_process = []
+        champions_per_lane = [None] * 5
+        champions_played = []
+        # strips down the json to what we need
         for participant in team:
             lane = participant['timeline']['lane']
             role = participant['timeline']['role']
-            if lane == 'BOTTOM':
-                if lane == 'SOLO':
-                    return []
-                if role == "DUO_CARRY" or role == "DUO_SUPPORT":
-                    role_to_champion[role] = participant['championId']
-                if role == "DUO":
-                    bot_lane[counter] = participant
-                    counter += 1
-                    need_extra_filtering = True
+            champion = participant['championId']
+            try:
+                cs_at_10 = participant['timeline']['creepsPerMinDeltas']['0-10']
+            except KeyError:
+                cs_at_10 = 0
+            if "TOP" in lane:
+                champions_per_lane[0] = champion
+            elif "JUNGLE" in lane:
+                champions_per_lane[1] = champion
+            elif "MIDDLE" in lane:
+                champions_per_lane[2] = champion
             else:
-                rest_participants.append(participant)
+                extra_process.append((lane, role, cs_at_10, champion))
+            champions_played.append(champion)
 
-        """we are going to take the cs at 10min as benchmark"""
-        if need_extra_filtering:
-            bot_1 = bot_lane[0]
-            cs_bot_1 = bot_1['timeline']['creepsPerMinDeltas']['10-20']
+        if len(extra_process) != 2:
+            return False, champions_played
 
-            bot_2 = bot_lane[1]
-            cs_bot_2 = bot_2['timeline']['creepsPerMinDeltas']['10-20']
-
-            if cs_bot_1 > cs_bot_2:
-                role_to_champion['DUO_CARRY'] = bot_1['championId']
-                role_to_champion['DUO_SUPPORT'] = bot_2['championId']
-            else:
-                role_to_champion['DUO_CARRY'] = bot_2['championId']
-                role_to_champion['DUO_SUPPORT'] = bot_1['championId']
-
-        for participant in rest_participants:
-            role = participant['timeline']['lane']
-            role_to_champion[role] = participant['championId']
-
-        champion_per_role = [None] * 5
-        for k, v in role_to_champion.items():
-            if k == 'DUO_CARRY':
-                champion_per_role[3] = v
-            if k == 'DUO_SUPPORT':
-                champion_per_role[4] = v
-            if k == 'MIDDLE':
-                champion_per_role[2] = v
-            if k == 'JUNGLE':
-                champion_per_role[1] = v
-            if k == 'TOP':
-                champion_per_role[0] = v
-        return champion_per_role
+        bot_1 = extra_process[0]
+        bot_2 = extra_process[1]
+        if bot_1[2] > bot_2[2]:
+            champions_per_lane[3] = bot_1[3]
+            champions_per_lane[4] = bot_2[3]
+        else:
+            champions_per_lane[3] = bot_2[3]
+            champions_per_lane[4] = bot_1[3]
+        return True, champions_per_lane
 
     game_id = data['gameId']
     red_team_won = data['teams'][0]['win']
@@ -177,32 +171,41 @@ def process_json(data):
     red_team_bans = get_champion_ban_list(data['teams'][1]['bans'])
 
     blue_participants, red_participants = filter_by_team(data['participants'])
-    red_per_role = sort_per_role(red_participants)
-    blue_per_role = sort_per_role(blue_participants)
+    red_success, red_per_role = sort_per_role(red_participants)
+    blue_success, blue_per_role = sort_per_role(blue_participants)
 
-    print([game_id] + red_team_bans + red_per_role + blue_team_bans + blue_per_role + [red_team_won])
-    print("----------------------")
-    if red_per_role and blue_per_role:
-        return [game_id] + red_team_bans + red_per_role + blue_team_bans + blue_per_role + [red_team_won]
+    if red_success and blue_success:
+        return True, [game_id] + red_team_bans + red_per_role + blue_team_bans + blue_per_role + [red_team_won]
     else:
-        return []
+        return False, [game_id] + red_team_bans + red_per_role + blue_team_bans + blue_per_role + [red_team_won]
 
 
 def get_matches_by_id(match_id):
     url = "{}/lol/match/v4/matches/{}".format(base_url, match_id)
     r = requests.get(url=url, headers=header)
     if r.status_code != 200:
-        return []
+        return False, []
     return process_json(r.json())
 
 
-def upload_file_to_gcs():
-    pass
+def upload_folder_gcs(success_rate, file_to_upload, path_to_upload, bucket_name="dodge-bot"):
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    print(path_to_upload)
+    blob = bucket.blob(path_to_upload+file_to_upload)
+    blob.metadata = {"success_rate": success_rate}
+    blob.upload_from_filename(file_to_upload)
 
 
-processBlob = get_file_to_process()
+processBlob, file = get_file_to_process()
 if processBlob:
-    read_and_process_csv()
-    # update_metadata(processBlob)
+    rate = read_and_process_csv(file)
+    update_metadata(processBlob)
+    upload_path = processBlob.name.split("/")
+    upload_folder_gcs(
+        rate, "PROCESSED-" + file,
+        '{}/{}/{}/'.format(upload_path[0], upload_path[1], "MATCH-DETAILS")
+    )
+
 else:
     logger.info("All files for the current blob are processed!")
