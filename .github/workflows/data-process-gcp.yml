@@ -6,11 +6,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - id: deploy
-        uses: google-github-actions/deploy-cloud-functions@main
-        with:
-          name: hello-gh
-          runtime: python38
-          credentials: ${{ secrets.GCP_FUNCTION_CI }}
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          source_dir: ./data-mining/match-data/hello_gcp.py
+    - uses: actions/checkout@v2
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        version: '290.0.1'
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_FUNCTION_CI }}
+        export_default_credentials: true
+    - run: gcloud info
