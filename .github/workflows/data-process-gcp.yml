@@ -13,4 +13,7 @@ jobs:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_FUNCTION_CI }}
         export_default_credentials: true
-    - run: gcloud info
+    - run: gcloud functions deploy hello_gcp \
+        --entry-point hello_gcp --runtime python38 \
+        --trigger-http --allow-unauthenticated \
+        --source=./data-mining/match-data/
