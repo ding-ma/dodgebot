@@ -21,7 +21,7 @@ tiers = ["II", "III"]
 past_days = 2  # scrape past 3 days of data, including today's
 if elo in ["MASTER", "GRANDMASTER", "CHALLENGER"]:
     tiers = ["I"]
-    past_days = 10  # master+ we can get more data as that their is less volatile
+    past_days = 20  # master+ we can get more data as that their is less volatile
 
 days_to_scrape = date.today() - timedelta(days=past_days)
 epoch_ms = int(time.mktime(days_to_scrape.timetuple())) * 1000

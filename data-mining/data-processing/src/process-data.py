@@ -87,7 +87,6 @@ def read_and_process_csv(file):
             else:
                 fails += 1
         if i % 99 == 0:
-            break
             time.sleep(125)
     return success / success + fails
 
