@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - id: deploy function
+      - id: deploy
         uses: google-github-actions/deploy-cloud-functions@main
         with:
           name: hello-gh
