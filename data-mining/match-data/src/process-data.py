@@ -5,10 +5,11 @@ import time
 from datetime import datetime
 
 import requests
-from dotenv import load_dotenv
 from google.cloud import storage
 
-load_dotenv("..//env/.env.na1")  # loads the env file for local development
+# from dotenv import load_dotenv
+
+# load_dotenv("..//env/.env.na1")  # loads the env file for local development
 
 region = os.environ.get('HOST').split(".")[0].upper()
 host = os.environ.get('HOST')
@@ -42,8 +43,7 @@ def get_file_to_process(bucket_name='dodge-bot-processed-data'):
     """Since all files have 70k entries, we will simply process 1 file from there everyday and download it"""
     client = storage.Client()
     for elo in elos:
-        # todo change path when matches are cleaned
-        for blob in client.list_blobs(bucket_name, prefix='{}/{}/MATCHES'.format(region, elo)):
+        for blob in client.list_blobs(bucket_name, prefix='{}/{}/'.format(region, elo)):
             file_name = blob.name.split("/")[-1]
             if blob.metadata is not None:
                 if blob.metadata['processed'] == 'No':
@@ -65,7 +65,7 @@ def read_and_process_csv(file):
     file_in = open(file, "r", encoding="utf8")
     reader = csv.reader(file_in, delimiter=",")
 
-    file_success = open("{}-{}".format("PROCESSED", file), "w")
+    file_success = open("{}-{}".format("MATCH", file), "w")
     writer_success = csv.writer(file_success)
     writer_success.writerow([
         'GAME_ID', 'RedBan1', 'RedBan2', 'RedBan3', 'RedBan4', 'RedBan5',
@@ -73,13 +73,12 @@ def read_and_process_csv(file):
         'BlueBan1', 'BlueBan2', 'BlueBan3', 'BlueBan4', 'BlueBan5',
         'BlueTop', 'BlueJg', 'BlueMid', 'BlueAdc', 'BlueSup', 'redTeamWin'
     ])
-    fails = 0
-    success = 0
-
-    logger.info("Starting to process file")
+    fails = 1
+    success = 1
+    row_count = sum(1 for _ in reader)
+    logger.info("Starting to process file " + file)
     for i, line in enumerate(reader, start=1):
         success, match_data = get_matches_by_id(line[0])
-        print(i, line[0], success, match_data)
         if match_data:
             if success:
                 writer_success.writerow(match_data)
@@ -88,7 +87,9 @@ def read_and_process_csv(file):
                 fails += 1
         if i % 99 == 0:
             time.sleep(125)
-    return success / success + fails
+        if i % 1000 == 0:
+            logger.info("Processed line of {}/{}".format(i, row_count))
+    return success / (success + fails)
 
 
 def process_json(data):
@@ -187,12 +188,13 @@ def get_matches_by_id(match_id):
     return process_json(r.json())
 
 
-def upload_folder_gcs(success_rate, file_to_upload, path_to_upload, bucket_name="dodge-bot-processed-data"):
+def upload_folder_gcs(success_rate, file_to_upload, path_to_upload, bucket_name="dodge-bot-match-data"):
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(path_to_upload+file_to_upload)
+    blob = bucket.blob(path_to_upload + file_to_upload)
     blob.metadata = {"success_rate": success_rate}
     blob.upload_from_filename(file_to_upload)
+    logger.info("File uploaded to dodge-bot-match-data/{}/{}".format(path_to_upload, file_to_upload))
 
 
 processBlob, file = get_file_to_process()
@@ -201,9 +203,8 @@ if processBlob:
     update_metadata(processBlob)
     upload_path = processBlob.name.split("/")
     upload_folder_gcs(
-        rate, "PROCESSED-" + file,
-        '{}/{}/{}/'.format(upload_path[0], upload_path[1], "MATCH-DETAILS")
+        rate, "MATCH-" + file,
+        '{}/{}/'.format(upload_path[0], upload_path[1])
     )
-
 else:
     logger.info("All files for the current blob are processed!")
