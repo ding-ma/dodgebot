@@ -60,7 +60,7 @@ def resize_and_clean(event, context):
         df_remainder_split.to_csv(base_path + remainder_file_name, encoding='utf-8', index=False)
 
         blob_70k_upload_path = "{}/{}/".format(region, tier)
-        blob_70k = upload_bucket.blob(blob_70k_upload_path + df_70k_filename)
+        blob_70k = processed_bucket.blob(blob_70k_upload_path + df_70k_filename)
         blob_70k.metadata = {'processed': 'No'}
         blob_70k.upload_from_filename(base_path + df_70k_filename)
         print("uploaded to processed bucket", blob_70k_upload_path + df_70k_filename)
