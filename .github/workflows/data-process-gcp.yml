@@ -13,4 +13,4 @@ jobs:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_FUNCTION_CI }}
         export_default_credentials: true
-    - run: gcloud functions deploy hello_gcp --entry-point hello_gcp --runtime python38 --trigger-http --allow-unauthenticated --source=./data-mining/match-data/
+    - run: gcloud functions deploy resize_and_clean --entry-point resize_and_clean --runtime python38 --trigger-resource dodge-bot --trigger-event google.storage.object.finalize --source=./data-mining/match-data/
