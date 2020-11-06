@@ -75,8 +75,8 @@ def resize_and_clean(event, context):
         print("upload file to tmp bucket", combined_df.shape)
 
 
-mock_event = {
-    'bucket': 'dodge-bot-testing',
-    'name': 'KR/IRON/MATCHES/20201019-KR-IRON.csv'
-}
-resize_and_clean(mock_event, '')
+# mock_event = {
+#     'bucket': 'dodge-bot-testing',
+#     'name': 'KR/IRON/MATCHES/20201019-KR-IRON.csv'
+# }
+# resize_and_clean(mock_event, '')
