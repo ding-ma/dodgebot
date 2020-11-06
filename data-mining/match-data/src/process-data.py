@@ -190,7 +190,6 @@ def get_matches_by_id(match_id):
 def upload_folder_gcs(success_rate, file_to_upload, path_to_upload, bucket_name="dodge-bot"):
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
-    print(path_to_upload)
     blob = bucket.blob(path_to_upload+file_to_upload)
     blob.metadata = {"success_rate": success_rate}
     blob.upload_from_filename(file_to_upload)

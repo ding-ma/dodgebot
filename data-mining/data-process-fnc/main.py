@@ -7,21 +7,6 @@ import pandas as pd
 MAX_SIZE = 70000
 
 
-def set_blob_metadata(blob_name, bucket_name="dodge-bot"):
-    """Set a blob's metadata."""
-    # bucket_name = 'your-bucket-name'
-    # blob_name = 'your-object-name'
-
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.get_blob(blob_name)
-    metadata = {'processed': 'No'}
-    blob.metadata = metadata
-
-    print("The metadata for the blob {} is {}".format(blob.name, blob.metadata))
-    blob.patch()
-
-
 def resize_and_clean(event, context):
     """Background Cloud Function to be triggered by Cloud Storage.
        This generic function logs relevant data when a file is changed.
@@ -53,20 +38,36 @@ def resize_and_clean(event, context):
     remainder_bucket = client.get_bucket("dodge-bot-remainder")
     remainder_file_name = '{}-{}.csv'.format(region, tier)
     remainder_blob = remainder_bucket.get_blob(remainder_file_name)
-    remainder_blob.download_to_filename(base_path + remainder_file_name)
+    remainder_blob.download_to_filename(base_path + remainder_file_name + "-DOWNLOADED")
 
-    uploaded_df = pd.read_csv(base_path + uploaded_file_name)
-    print(uploaded_file_name, uploaded_df.shape)
-
+    uploaded_df = pd.read_csv(base_path + uploaded_file_name + "-DOWNLOADED")
     remainder_df = pd.read_csv(base_path + remainder_file_name)
-    print(remainder_file_name, remainder_df.shape)
 
     uploaded_df.drop_duplicates(subset="GAME_ID", inplace=True)
     combined_df = pd.concat([uploaded_df, remainder_df])
-    print("combined", combined_df.shape)
 
     if combined_df.shape[0] > MAX_SIZE:
         df_70k = combined_df[:MAX_SIZE]
         df_remainder_split = combined_df[MAX_SIZE:]
-        print(df_70k.shape)
-        print(df_remainder_split.shape)
+        df_70k_filename = uploaded_file_name + "-PROCESSED.csv"
+        df_remainder_split_file_name = remainder_file_name + ".csv"
+
+        df_70k.to_csv(base_path + df_70k_filename, encoding='utf-8')
+        df_remainder_split.to_csv(df_remainder_split_file_name, encoding='utf-8')
+
+        blob_70k_upload_path = "/{}/{}/{}/".format(region, tier, "MATCHES-DETAIL")
+        blob_70k = upload_bucket.blob(blob_70k_upload_path + df_70k_filename)
+        blob_70k.metadata = {'processed': 'No'}
+        blob_70k.upload_from_filename(base_path + df_70k_filename)
+
+        blob_remainder = remainder_bucket.blob(df_remainder_split_file_name)
+        blob_remainder.upload_from_filename(base_path + df_remainder_split_file_name)
+        print(df_70k.shape, df_remainder_split.shape)
+    else:
+        df_combined_file_name = remainder_file_name + ".csv"
+        combined_df.to_csv(base_path + df_combined_file_name)
+
+        combined_blob = remainder_bucket.blob(df_combined_file_name)
+        combined_blob.upload_from_filename(base_path + df_combined_file_name)
+        print(combined_df.shape)
+
