@@ -27,6 +27,7 @@ def resize_and_clean(event, context):
 
     client = storage.Client()
     upload_bucket = client.get_bucket(event['bucket'])
+    processed_bucket = client.get_bucket("dodge-bot-processed-data")
     uploaded_blob = upload_bucket.get_blob(event['name'])
     uploaded_file_name = uploaded_blob.name.split("/")[-1]
     uploaded_blob.download_to_filename(base_path + "DOWNLOAD-" + uploaded_file_name)
@@ -58,11 +59,11 @@ def resize_and_clean(event, context):
         df_70k.to_csv(base_path + df_70k_filename, encoding='utf-8', index=False)
         df_remainder_split.to_csv(base_path + remainder_file_name, encoding='utf-8', index=False)
 
-        blob_70k_upload_path = "{}/{}/{}/".format(region, tier, "MATCHES-DETAIL")
+        blob_70k_upload_path = "{}/{}/".format(region, tier)
         blob_70k = upload_bucket.blob(blob_70k_upload_path + df_70k_filename)
         blob_70k.metadata = {'processed': 'No'}
         blob_70k.upload_from_filename(base_path + df_70k_filename)
-        print("uploaded to", blob_70k_upload_path + df_70k_filename)
+        print("uploaded to processed bucket", blob_70k_upload_path + df_70k_filename)
 
         blob_remainder = remainder_bucket.blob(remainder_file_name)
         blob_remainder.upload_from_filename(base_path + remainder_file_name)
