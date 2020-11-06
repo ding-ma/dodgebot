@@ -13,5 +13,5 @@ jobs:
         service_account_key: ${{ secrets.GCP_FUNCTION_CI }}
         export_default_credentials: true
       # todo remove testing once function is stable
-#    - run: gcloud functions deploy resize_and_clean --entry-point resize_and_clean --runtime python38 --trigger-resource dodge-bot --trigger-event google.storage.object.finalize --source=./data-mining/data-process-fnc/ --memory=256MB
-    - run: gcloud functions deploy resize_and_clean_testing --entry-point resize_and_clean --runtime python38 --trigger-resource dodge-bot-testing --trigger-event google.storage.object.finalize --source=./data-mining/data-process-fnc/ --memory=256MB
+#    - run: gcloud functions deploy resize_and_clean --entry-point resize_and_clean --runtime python38 --trigger-resource dodge-bot --trigger-event google.storage.object.finalize --source=./data-mining/data-process-fnc/ --memory=512MB
+    - run: gcloud functions deploy resize_and_clean_testing --entry-point resize_and_clean --runtime python38 --trigger-resource dodge-bot-testing --trigger-event google.storage.object.finalize --source=./data-mining/data-process-fnc/ --memory=512MB
