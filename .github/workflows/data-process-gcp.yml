@@ -13,6 +13,6 @@ jobs:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_FUNCTION_CI }}
         export_default_credentials: true
-    - run: gcloud functions deploy resize_and_clean --entry-point resize_and_clean --runtime python38 --trigger-resource dodge-bot --trigger-event google.storage.object.finalize --source=./data-mining/data-process-fnc/
-# todo remove testing once function is stable
+      # todo remove testing once function is stable
+#    - run: gcloud functions deploy resize_and_clean --entry-point resize_and_clean --runtime python38 --trigger-resource dodge-bot --trigger-event google.storage.object.finalize --source=./data-mining/data-process-fnc/
     - run: gcloud functions deploy resize_and_clean_testing --entry-point resize_and_clean --runtime python38 --trigger-resource dodge-bot-testing --trigger-event google.storage.object.finalize --source=./data-mining/data-process-fnc/
