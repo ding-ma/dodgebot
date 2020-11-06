@@ -3,7 +3,7 @@ name: Docker Image - Riot Scraper Process Data
 on:
   push:
     paths:
-      - 'data-mining/data-processing/**'
+      - 'data-mining/match-data/**'
 
 jobs:
   build:
@@ -35,8 +35,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: ./data-mining/data-processing
-          file: ./data-mining/data-processing/Dockerfile
+          context: ./data-mining/match-data
+          file: ./data-mining/match-data/Dockerfile
           platforms: linux/amd64
           push: true
           tags:  ghcr.io/ding-ma/riot-process-data-scraper:latest
