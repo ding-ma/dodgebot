@@ -28,8 +28,6 @@ def resize_and_clean(event, context):
     uploaded_blob = upload_bucket.get_blob(event['name'])
     uploaded_file_name = uploaded_blob.name.split("/")[-1]
     uploaded_blob.download_to_filename(base_path + "DOWNLOAD-" + uploaded_file_name)
-    uploaded_blob.metadata = {'processed': 'Yes', 'by': 'cloud_fnc'}
-    uploaded_blob.patch()
 
     paths = uploaded_blob.name.split("/")[:-1]
     region = paths[0]
@@ -71,3 +69,6 @@ def resize_and_clean(event, context):
         combined_blob = remainder_bucket.blob(remainder_file_name)
         combined_blob.upload_from_filename(base_path + remainder_file_name)
         print("upload file to tmp bucket", combined_df.shape)
+
+    uploaded_blob.metadata = {'processed': 'Yes', 'by': 'cloud_fnc'}
+    uploaded_blob.patch()
