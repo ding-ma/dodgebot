@@ -34,12 +34,26 @@ def resize_and_clean(event, context):
         None; the output is written to Stackdriver Logging
     """
 
-    print('Event ID: {}'.format(context.event_id))
-    print('Event type: {}'.format(context.event_type))
     print('Bucket: {}'.format(event['bucket']))
     print('File: {}'.format(event['name']))
-    print('Metageneration: {}'.format(event['metageneration']))
-    print('Created: {}'.format(event['timeCreated']))
-    print('Updated: {}'.format(event['updated']))
-    print(pd.__version__)
+
+    client = storage.Client()
+    upload_bucket = client.get_bucket(event['bucket'])
+    uploaded_blob = upload_bucket.get_blob(event['name'])
+    uploaded_file_name = uploaded_blob.name.split("/")[-1]
+    uploaded_blob.download_to_filename(uploaded_file_name)
+    paths = uploaded_blob.name.split("/")[:-1]
+    region = paths[0]
+    tier = paths[1]
+
+    remainder_bucket = client.get_bucket("dodge-bot-remainder")
+    remainder_file_name = '{}-{}.csv'.format(region, tier)
+    remainder_blob = remainder_bucket.get_blob(remainder_file_name)
+    remainder_blob.download_to_filename(remainder_file_name)
+
+    uploaded_df = pd.read_csv(uploaded_file_name)
+    print(uploaded_df.describe())
+
+    remainder_df = pd.read_csv(remainder_file_name)
+    print(remainder_df.describe())
 
