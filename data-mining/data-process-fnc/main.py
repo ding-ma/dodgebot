@@ -52,7 +52,7 @@ def resize_and_clean(event, context):
         df_70k_filename = "PROCESSED-"+uploaded_file_name
 
         df_70k.to_csv(base_path + df_70k_filename, encoding='utf-8')
-        df_remainder_split.to_csv(remainder_file_name, encoding='utf-8')
+        df_remainder_split.to_csv(base_path +remainder_file_name, encoding='utf-8')
 
         blob_70k_upload_path = "/{}/{}/{}/".format(region, tier, "MATCHES-DETAIL")
         blob_70k = upload_bucket.blob(blob_70k_upload_path + df_70k_filename)
