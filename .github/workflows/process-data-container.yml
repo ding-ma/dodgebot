@@ -3,7 +3,7 @@ name: Docker Image - Riot Scraper Process Data
 on:
   push:
     paths:
-      - 'data-mining/data-processing/**'
+      - 'data-mining/match-data/**'
 
 jobs:
   build:
@@ -30,13 +30,13 @@ jobs:
           pip install --upgrade pip
           sudo -H pip install -U pipenv
           pipenv install
-          pipenv lock -r > data-processing/requirements.txt
+          pipenv lock -r > match-data/requirements.txt
         working-directory: ./data-mining
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: ./data-mining/data-processing
-          file: ./data-mining/data-processing/Dockerfile
+          context: ./data-mining/match-data
+          file: ./data-mining/match-data/Dockerfile
           platforms: linux/amd64
           push: true
           tags:  ghcr.io/ding-ma/riot-process-data-scraper:latest
