@@ -23,7 +23,7 @@ def resize_and_clean(event, context):
 
     print('Bucket: {}'.format(event['bucket']))
     print('File: {}'.format(event['name']))
-    base_path = "/tmp/"
+    base_path = "tmp/"
 
     client = storage.Client()
     upload_bucket = client.get_bucket(event['bucket'])
@@ -42,12 +42,13 @@ def resize_and_clean(event, context):
     remainder_blob = remainder_bucket.get_blob(remainder_file_name)
     remainder_blob.download_to_filename(base_path + "DOWNLOAD-" + remainder_file_name)
 
-    uploaded_df = pd.read_csv(base_path + "DOWNLOAD-" + uploaded_file_name, index_col=0)
-    remainder_df = pd.read_csv(base_path + "DOWNLOAD-" + remainder_file_name, index_col=0)
+    uploaded_df = pd.read_csv(base_path + "DOWNLOAD-" + uploaded_file_name)
+    remainder_df = pd.read_csv(base_path + "DOWNLOAD-" + remainder_file_name)
 
     #  more logic to preprocess can be added here
     combined_df = pd.concat([uploaded_df, remainder_df])
     combined_df.drop_duplicates(subset="GAME_ID", inplace=True)
+    combined_df.drop(list(combined_df.filter(regex='Unnamed')), axis=1, inplace=True)
 
     if combined_df.shape[0] > MAX_SIZE:
         df_70k = combined_df[:MAX_SIZE]
@@ -74,8 +75,8 @@ def resize_and_clean(event, context):
         print("upload file to tmp bucket", combined_df.shape)
 
 
-# mock_event = {
-#     'bucket': 'dodge-bot-testing',
-#     'name': 'KR/IRON/MATCHES/KR_DIAMOND_MATCHES_20201021-KR-DIAMOND.csv'
-# }
-# resize_and_clean(mock_event, '')
+mock_event = {
+    'bucket': 'dodge-bot-testing',
+    'name': 'KR/IRON/MATCHES/20201019-KR-IRON.csv'
+}
+resize_and_clean(mock_event, '')
