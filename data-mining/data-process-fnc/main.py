@@ -42,8 +42,8 @@ def resize_and_clean(event, context):
     remainder_blob = remainder_bucket.get_blob(remainder_file_name)
     remainder_blob.download_to_filename(base_path + "DOWNLOAD-" + remainder_file_name)
 
-    uploaded_df = pd.read_csv(base_path + "DOWNLOAD-" + uploaded_file_name)
-    remainder_df = pd.read_csv(base_path + "DOWNLOAD-" + remainder_file_name)
+    uploaded_df = pd.read_csv(base_path + "DOWNLOAD-" + uploaded_file_name, index_col=0)
+    remainder_df = pd.read_csv(base_path + "DOWNLOAD-" + remainder_file_name, index_col=0)
 
     #  more logic to preprocess can be added here
     combined_df = pd.concat([uploaded_df, remainder_df])
@@ -54,8 +54,8 @@ def resize_and_clean(event, context):
         df_remainder_split = combined_df[MAX_SIZE:]
         df_70k_filename = "PROCESSED-" + uploaded_file_name
 
-        df_70k.to_csv(base_path + df_70k_filename, encoding='utf-8')
-        df_remainder_split.to_csv(base_path + remainder_file_name, encoding='utf-8')
+        df_70k.to_csv(base_path + df_70k_filename, encoding='utf-8', index=False)
+        df_remainder_split.to_csv(base_path + remainder_file_name, encoding='utf-8', index=False)
 
         blob_70k_upload_path = "{}/{}/{}/".format(region, tier, "MATCHES-DETAIL")
         blob_70k = upload_bucket.blob(blob_70k_upload_path + df_70k_filename)
@@ -67,7 +67,7 @@ def resize_and_clean(event, context):
         blob_remainder.upload_from_filename(base_path + remainder_file_name)
         print("uploading file to both bucket", df_70k.shape, df_remainder_split.shape)
     else:
-        combined_df.to_csv(base_path + remainder_file_name)
+        combined_df.to_csv(base_path + remainder_file_name, index=False)
 
         combined_blob = remainder_bucket.blob(remainder_file_name)
         combined_blob.upload_from_filename(base_path + remainder_file_name)
@@ -76,6 +76,6 @@ def resize_and_clean(event, context):
 
 # mock_event = {
 #     'bucket': 'dodge-bot-testing',
-#     'name': 'KR/IRON/MATCHES/kr-2222222222.csv'
+#     'name': 'KR/IRON/MATCHES/KR_DIAMOND_MATCHES_20201021-KR-DIAMOND.csv'
 # }
 # resize_and_clean(mock_event, '')
