@@ -23,7 +23,7 @@ def resize_and_clean(event, context):
 
     print('Bucket: {}'.format(event['bucket']))
     print('File: {}'.format(event['name']))
-    base_path = "tmp/"
+    base_path = "/tmp/"
 
     client = storage.Client()
     upload_bucket = client.get_bucket(event['bucket'])
