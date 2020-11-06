@@ -38,7 +38,7 @@ header = {
 }
 
 
-def get_file_to_process(bucket_name='dodge-bot'):
+def get_file_to_process(bucket_name='dodge-bot-processed-data'):
     """Since all files have 70k entries, we will simply process 1 file from there everyday and download it"""
     client = storage.Client()
     for elo in elos:
@@ -187,7 +187,7 @@ def get_matches_by_id(match_id):
     return process_json(r.json())
 
 
-def upload_folder_gcs(success_rate, file_to_upload, path_to_upload, bucket_name="dodge-bot"):
+def upload_folder_gcs(success_rate, file_to_upload, path_to_upload, bucket_name="dodge-bot-processed-data"):
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(path_to_upload+file_to_upload)
