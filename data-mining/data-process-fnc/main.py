@@ -41,7 +41,7 @@ def resize_and_clean(event, context):
     upload_bucket = client.get_bucket(event['bucket'])
     uploaded_blob = upload_bucket.get_blob(event['name'])
     uploaded_file_name = uploaded_blob.name.split("/")[-1]
-    uploaded_blob.download_to_filename(uploaded_file_name)
+    uploaded_blob.download_to_filename("/tmp/"+uploaded_file_name)
     paths = uploaded_blob.name.split("/")[:-1]
     region = paths[0]
     tier = paths[1]
@@ -49,11 +49,11 @@ def resize_and_clean(event, context):
     remainder_bucket = client.get_bucket("dodge-bot-remainder")
     remainder_file_name = '{}-{}.csv'.format(region, tier)
     remainder_blob = remainder_bucket.get_blob(remainder_file_name)
-    remainder_blob.download_to_filename(remainder_file_name)
+    remainder_blob.download_to_filename("/tmp/"+remainder_file_name)
 
-    uploaded_df = pd.read_csv(uploaded_file_name)
+    uploaded_df = pd.read_csv("/tmp/"+uploaded_file_name)
     print(uploaded_df.describe())
 
-    remainder_df = pd.read_csv(remainder_file_name)
+    remainder_df = pd.read_csv("/tmp/"+remainder_file_name)
     print(remainder_df.describe())
 
