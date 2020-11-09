@@ -5,7 +5,7 @@ import csv
 
 load_dotenv(".env.na1")  # loads the env file for local development
 client = storage.Client()
-bucket = client.get_bucket("dodge-bot-processed-data")
+bucket = client.get_bucket("dodge-bot-match-data")
 MAX_SIZE = 70000
 
 regions = [
@@ -41,6 +41,18 @@ def create_empty_folders():
             blob = bucket.blob('{}/{}/'.format(region.split(".")[0].upper(), elo))
             blob.upload_from_string('', content_type='application/x-www-form-urlencoded;charset=UTF-8')
 
+
+def reset_meta_data():
+    client = storage.Client()
+    for elo in elos:
+        for region in regions:
+            for blob in client.list_blobs("dodge-bot-processed-data", prefix='{}/{}/'.format(region.split(".")[0].upper(), elo)):
+                if ".csv" in blob.name:
+                    blob.metadata = {"processed":"No"}
+                    blob.patch()
+                else:
+                    blob.metadata = {}
+                    blob.patch()
 
 def generate_empty_csv():
     remainder_bucket = client.get_bucket("dodge-bot-remainder")
@@ -126,16 +138,16 @@ def resize_and_clean(event, context):
         print("upload file to tmp bucket", combined_df.shape)
 
 
-for region in regions:
-    for elo in elos:
-        if elo in "IRON" and region in "br1":
-            continue
-        for blob in client.list_blobs("dodge-bot",
-                                      prefix='{}/{}/MATCHES/'.format(region.split(".")[0].upper(), elo)):
-            if ".csv" in blob.name:
-                print(blob)
-                e = {
-                    "bucket": blob.bucket.name,
-                    "name": blob.name
-                }
-                resize_and_clean(e, '')
+# for region in regions:
+#     for elo in elos:
+#         if elo in "IRON" and region in "br1":
+#             continue
+#         for blob in client.list_blobs("dodge-bot",
+#                                       prefix='{}/{}/MATCHES/'.format(region.split(".")[0].upper(), elo)):
+#             if ".csv" in blob.name:
+#                 print(blob)
+#                 e = {
+#                     "bucket": blob.bucket.name,
+#                     "name": blob.name
+#                 }
+#                 resize_and_clean(e, '')

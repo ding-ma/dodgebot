@@ -3,13 +3,14 @@ import logging
 import os
 import time
 from datetime import datetime
+import random
 
 import requests
 from google.cloud import storage
 
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
-# load_dotenv("..//env/.env.na1")  # loads the env file for local development
+load_dotenv("..//env/.env.na1")  # loads the env file for local development
 
 region = os.environ.get('HOST').split(".")[0].upper()
 host = os.environ.get('HOST')
@@ -22,6 +23,8 @@ elos = [
     'PLATINUM',
     'DIAMOND'
 ]
+
+random.shuffle(elos)
 
 logger = logging.getLogger(region)
 handler = logging.StreamHandler()
@@ -45,7 +48,7 @@ def get_file_to_process(bucket_name='dodge-bot-processed-data'):
     for elo in elos:
         for blob in client.list_blobs(bucket_name, prefix='{}/{}/'.format(region, elo)):
             file_name = blob.name.split("/")[-1]
-            if blob.metadata is not None:
+            if blob.metadata is not None and ".csv" in blob.name:
                 if blob.metadata['processed'] == 'No':
                     blob.download_to_filename(file_name)
                     return blob, file_name
@@ -56,16 +59,17 @@ def update_metadata(blob):
     """Update Metadata of that blob to say it was processed"""
     blob.metadata = {'processed': 'Yes'}
     blob.patch()
+    logger.info("Metadata updated for {}".format(blob.name))
 
 
-def read_and_process_csv(file):
+def read_and_process_csv(f):
     # redTeamWon 0 = RedTeamLost, 1 = RedTeamWon
     # teamId 100 = blueside, 200=redside
 
-    file_in = open(file, "r", encoding="utf8")
+    file_in = open(f, "r", encoding="utf8")
     reader = csv.reader(file_in, delimiter=",")
 
-    file_success = open("{}-{}".format("MATCH", file), "w")
+    file_success = open("{}-{}".format("MATCH", f), "w", newline='')
     writer_success = csv.writer(file_success)
     writer_success.writerow([
         'GAME_ID', 'RedBan1', 'RedBan2', 'RedBan3', 'RedBan4', 'RedBan5',
@@ -75,8 +79,7 @@ def read_and_process_csv(file):
     ])
     fails = 1
     success = 1
-    row_count = sum(1 for _ in reader)
-    logger.info("Starting to process file " + file)
+    logger.info("Starting to process file " + f)
     for i, line in enumerate(reader, start=1):
         success, match_data = get_matches_by_id(line[0])
         if match_data:
@@ -87,8 +90,9 @@ def read_and_process_csv(file):
                 fails += 1
         if i % 99 == 0:
             time.sleep(125)
-        if i % 1000 == 0:
-            logger.info("Processed line of {}/{}".format(i, row_count))
+        if i % 5000 == 0:
+            logger.info("Processed line of {}/{}".format(i, 70000))
+    file_success.close()
     return success / (success + fails)
 
 
@@ -200,11 +204,11 @@ def upload_folder_gcs(success_rate, file_to_upload, path_to_upload, bucket_name=
 processBlob, file = get_file_to_process()
 if processBlob:
     rate = read_and_process_csv(file)
-    update_metadata(processBlob)
     upload_path = processBlob.name.split("/")
     upload_folder_gcs(
         rate, "MATCH-" + file,
         '{}/{}/'.format(upload_path[0], upload_path[1])
     )
+    update_metadata(processBlob)
 else:
     logger.info("All files for the current blob are processed!")
