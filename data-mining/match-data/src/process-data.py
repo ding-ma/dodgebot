@@ -8,9 +8,9 @@ import random
 import requests
 from google.cloud import storage
 
-from dotenv import load_dotenv
-
-load_dotenv("..//env/.env.na1")  # loads the env file for local development
+# from dotenv import load_dotenv
+#
+# load_dotenv("..//env/.env.na1")  # loads the env file for local development
 
 region = os.environ.get('HOST').split(".")[0].upper()
 host = os.environ.get('HOST')
