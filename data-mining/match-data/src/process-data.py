@@ -90,8 +90,8 @@ def read_and_process_csv(f):
                 fails += 1
         if i % 99 == 0:
             time.sleep(125)
-        if i % 5000 == 0:
-            logger.info("Processed line of {}/{}".format(i, 70000))
+        if i % 1400 == 0:
+            logger.info("Processed line of {}/{}".format(i, 35000))
     file_success.close()
     return success / (success + fails)
 
@@ -201,6 +201,7 @@ def upload_folder_gcs(success_rate, file_to_upload, path_to_upload, bucket_name=
     logger.info("File uploaded to dodge-bot-match-data/{}/{}".format(path_to_upload, file_to_upload))
 
 
+# todo check if 35k works, if not we need to implement some form of feedback loop
 processBlob, file = get_file_to_process()
 if processBlob:
     rate = read_and_process_csv(file)
