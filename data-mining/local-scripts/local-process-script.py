@@ -5,8 +5,8 @@ import csv
 
 load_dotenv(".env.na1")  # loads the env file for local development
 client = storage.Client()
-bucket = client.get_bucket("dodge-bot-match-data")
-MAX_SIZE = 70000
+bucket = client.get_bucket("dodge-bot-processed-data")
+MAX_SIZE = 35000
 
 regions = [
     'br1.api.riotgames.com',
@@ -46,13 +46,15 @@ def reset_meta_data():
     client = storage.Client()
     for elo in elos:
         for region in regions:
-            for blob in client.list_blobs("dodge-bot-processed-data", prefix='{}/{}/'.format(region.split(".")[0].upper(), elo)):
+            for blob in client.list_blobs("dodge-bot-processed-data",
+                                          prefix='{}/{}/'.format(region.split(".")[0].upper(), elo)):
                 if ".csv" in blob.name:
-                    blob.metadata = {"processed":"No"}
+                    blob.metadata = {"processed": "No"}
                     blob.patch()
                 else:
                     blob.metadata = {}
                     blob.patch()
+
 
 def generate_empty_csv():
     remainder_bucket = client.get_bucket("dodge-bot-remainder")
@@ -138,16 +140,33 @@ def resize_and_clean(event, context):
         print("upload file to tmp bucket", combined_df.shape)
 
 
-# for region in regions:
-#     for elo in elos:
-#         if elo in "IRON" and region in "br1":
-#             continue
-#         for blob in client.list_blobs("dodge-bot",
-#                                       prefix='{}/{}/MATCHES/'.format(region.split(".")[0].upper(), elo)):
-#             if ".csv" in blob.name:
-#                 print(blob)
-#                 e = {
-#                     "bucket": blob.bucket.name,
-#                     "name": blob.name
-#                 }
-#                 resize_and_clean(e, '')
+def split_process_data_to_35k(blob_to_split):
+    download_file_name = blob_to_split.name.split("/")[-1]
+    upload_path = blob_to_split.name.split("/")[0] + "/" + blob_to_split.name.split("/")[1] + "/"
+    blob_to_split.download_to_filename("tmp/" + download_file_name)
+    df = pd.read_csv("tmp/" + download_file_name)
+    first_split = df[:MAX_SIZE]
+    second_split = df[MAX_SIZE:]
+    first_split.to_csv("tmp/" + "1-" + download_file_name, index=False)
+    second_split.to_csv("tmp/" + "2-" + download_file_name, index=False)
+
+    first_split_blob = bucket.blob(upload_path + "1-"+download_file_name)
+    first_split_blob.metadata = {'processed': 'No'}
+
+    second_split_blob = bucket.blob(upload_path + "2-"+download_file_name)
+    second_split_blob.metadata = {'processed': 'No'}
+
+    first_split_blob.upload_from_filename("tmp/1-"+download_file_name)
+    second_split_blob.upload_from_filename("tmp/2-"+download_file_name)
+    blob_to_split.delete()
+
+
+for region in regions:
+    for elo in elos:
+        if elo in "IRON" and region in "br1":
+            continue
+        for blob in client.list_blobs("dodge-bot-processed-data",
+                                      prefix='{}/{}/'.format(region.split(".")[0].upper(), elo)):
+            if ".csv" in blob.name:
+                print(blob)
+                split_process_data_to_35k(blob)

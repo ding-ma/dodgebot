@@ -1,7 +1,7 @@
 from google.cloud import storage
 import pandas as pd
 
-MAX_SIZE = 70000
+MAX_SIZE = 35000
 
 
 def resize_and_clean(event, context):
