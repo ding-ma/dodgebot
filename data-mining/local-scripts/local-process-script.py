@@ -150,23 +150,22 @@ def split_process_data_to_35k(blob_to_split):
     first_split.to_csv("tmp/" + "1-" + download_file_name, index=False)
     second_split.to_csv("tmp/" + "2-" + download_file_name, index=False)
 
-    first_split_blob = bucket.blob(upload_path + "1-"+download_file_name)
+    first_split_blob = bucket.blob(upload_path + "1-" + download_file_name)
     first_split_blob.metadata = {'processed': 'No'}
 
-    second_split_blob = bucket.blob(upload_path + "2-"+download_file_name)
+    second_split_blob = bucket.blob(upload_path + "2-" + download_file_name)
     second_split_blob.metadata = {'processed': 'No'}
 
-    first_split_blob.upload_from_filename("tmp/1-"+download_file_name)
-    second_split_blob.upload_from_filename("tmp/2-"+download_file_name)
+    first_split_blob.upload_from_filename("tmp/1-" + download_file_name)
+    second_split_blob.upload_from_filename("tmp/2-" + download_file_name)
     blob_to_split.delete()
 
-
-for region in regions:
-    for elo in elos:
-        if elo in "IRON" and region in "br1":
-            continue
-        for blob in client.list_blobs("dodge-bot-processed-data",
-                                      prefix='{}/{}/'.format(region.split(".")[0].upper(), elo)):
-            if ".csv" in blob.name:
-                print(blob)
-                split_process_data_to_35k(blob)
+# for region in regions:
+#     for elo in elos:
+#         if elo in "IRON" and region in "br1":
+#             continue
+#         for blob in client.list_blobs("dodge-bot-processed-data",
+#                                       prefix='{}/{}/'.format(region.split(".")[0].upper(), elo)):
+#             if ".csv" in blob.name:
+#                 print(blob)
+#                 split_process_data_to_35k(blob)

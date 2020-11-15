@@ -46,7 +46,9 @@ def get_file_to_process(bucket_name='dodge-bot-processed-data'):
     """Since all files have 70k entries, we will simply process 1 file from there everyday and download it"""
     client = storage.Client()
     for elo in elos:
-        for blob in client.list_blobs(bucket_name, prefix='{}/{}/'.format(region, elo)):
+        blobs = list(client.list_blobs(bucket_name, prefix='{}/{}/'.format(region, elo)))
+        random.shuffle(blobs)
+        for blob in blobs:
             file_name = blob.name.split("/")[-1]
             if blob.metadata is not None and ".csv" in blob.name:
                 if blob.metadata['processed'] == 'No':
@@ -55,11 +57,11 @@ def get_file_to_process(bucket_name='dodge-bot-processed-data'):
     return None, None
 
 
-def update_metadata(blob):
+def update_metadata(blob, status):
     """Update Metadata of that blob to say it was processed"""
-    blob.metadata = {'processed': 'Yes'}
+    blob.metadata = {'processed': status}
     blob.patch()
-    logger.info("Metadata updated for {}".format(blob.name))
+    logger.info("Metadata updated for {} to {}".format(blob.name, status))
 
 
 def read_and_process_csv(f):
@@ -93,7 +95,7 @@ def read_and_process_csv(f):
         if i % 1400 == 0:
             logger.info("Processed line of {}/{}".format(i, 35000))
     file_success.close()
-    return success / (success + fails)
+    return success / fails
 
 
 def process_json(data):
@@ -204,12 +206,13 @@ def upload_folder_gcs(success_rate, file_to_upload, path_to_upload, bucket_name=
 # todo check if 35k works, if not we need to implement some form of feedback loop
 processBlob, file = get_file_to_process()
 if processBlob:
+    update_metadata(processBlob, "InProgress")
     rate = read_and_process_csv(file)
     upload_path = processBlob.name.split("/")
     upload_folder_gcs(
         rate, "MATCH-" + file,
         '{}/{}/'.format(upload_path[0], upload_path[1])
     )
-    update_metadata(processBlob)
+    update_metadata(processBlob, "Yes")
 else:
     logger.info("All files for the current blob are processed!")
