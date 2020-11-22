@@ -152,6 +152,9 @@ def process_json(data):
                 extra_process.append((lane, role, cs_at_10, champion))
             champions_played.append(champion)
 
+        if len(extra_process) != 2:
+            return False, champions_played
+
         bot_1 = extra_process[0]
         bot_2 = extra_process[1]
         if bot_1[2] > bot_2[2]: # if cs of bot1 is > bot 2, it is the adc
