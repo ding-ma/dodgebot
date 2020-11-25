@@ -1,8 +1,8 @@
-name: Docker Image - Riot Scraper Process Data
+name: Docker Beta Image - Riot Scraper Process Data
 
 on:
   push:
-    branches:
+    branches-ignore:
       - master
     paths:
       - 'data-mining/match-data/**'
@@ -41,4 +41,4 @@ jobs:
           file: ./data-mining/match-data/Dockerfile
           platforms: linux/amd64
           push: true
-          tags:  ghcr.io/ding-ma/riot-process-data-scraper:latest
+          tags:  ghcr.io/ding-ma/riot-process-data-scraper:beta
