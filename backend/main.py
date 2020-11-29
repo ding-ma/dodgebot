@@ -8,6 +8,7 @@ app = Flask(__name__)
 # Load model from file
 model = load_model("model.h5")
 
+# Predicts winner of match
 @app.route('/predictWinner')
 def predictWinner():
     data = request.get_json()
