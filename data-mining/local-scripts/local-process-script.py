@@ -5,7 +5,6 @@ import csv
 
 load_dotenv(".env.na1")  # loads the env file for local development
 client = storage.Client()
-bucket = client.get_bucket("dodge-bot-processed-data")
 MAX_SIZE = 35000
 
 regions = [
@@ -36,6 +35,7 @@ elos = [
 
 
 def create_empty_folders():
+    bucket = client.get_bucket("dodge-bot-match-data")
     for region in regions:
         for elo in elos:
             blob = bucket.blob('{}/{}/'.format(region.split(".")[0].upper(), elo))
@@ -43,7 +43,6 @@ def create_empty_folders():
 
 
 def reset_meta_data():
-    client = storage.Client()
     for elo in elos:
         for region in regions:
             for blob in client.list_blobs("dodge-bot-processed-data",
@@ -55,6 +54,7 @@ def reset_meta_data():
                     blob.metadata = {}
                     blob.patch()
 
+reset_meta_data()
 
 def generate_empty_csv():
     remainder_bucket = client.get_bucket("dodge-bot-remainder")
@@ -89,7 +89,6 @@ def resize_and_clean(event, context):
     print('File: {}'.format(event['name']))
     base_path = "/tmp/"
 
-    client = storage.Client()
     upload_bucket = client.get_bucket(event['bucket'])
     processed_bucket = client.get_bucket("dodge-bot-processed-data")
     uploaded_blob = upload_bucket.get_blob(event['name'])
@@ -141,6 +140,8 @@ def resize_and_clean(event, context):
 
 
 def split_process_data_to_35k(blob_to_split):
+    bucket = client.get_bucket("dodge-bot-match-data")
+
     download_file_name = blob_to_split.name.split("/")[-1]
     upload_path = blob_to_split.name.split("/")[0] + "/" + blob_to_split.name.split("/")[1] + "/"
     blob_to_split.download_to_filename("tmp/" + download_file_name)

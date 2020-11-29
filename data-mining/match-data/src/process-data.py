@@ -148,7 +148,7 @@ def process_json(data):
                 champions_per_lane[1] = champion
             elif "MIDDLE" in lane:
                 champions_per_lane[2] = champion
-            else:
+            else: # this is for botlane
                 extra_process.append((lane, role, cs_at_10, champion))
             champions_played.append(champion)
 
@@ -157,12 +157,16 @@ def process_json(data):
 
         bot_1 = extra_process[0]
         bot_2 = extra_process[1]
-        if bot_1[2] > bot_2[2]:
+        if bot_1[2] > bot_2[2]: # if cs of bot1 is > bot 2, it is the adc
             champions_per_lane[3] = bot_1[3]
             champions_per_lane[4] = bot_2[3]
         else:
             champions_per_lane[3] = bot_2[3]
             champions_per_lane[4] = bot_1[3]
+
+        if None in champions_per_lane:
+            return False, champions_played
+
         return True, champions_per_lane
 
     game_id = data['gameId']
