@@ -1,12 +1,16 @@
 FROM python:3.8
-# todo: optimize to python:3.8-alpine
-WORKDIR /backend
-ADD . /backend
+# todo: optimize to python:3.8-alpine, this image is 2.67GB
+
+WORKDIR /code
+
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
 
 # todo: generate requirements.txt from CI pipeline
-RUN pip install pipenv
-RUN pipenv lock --requirements > requirements.txt
-
-
+COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
-CMD ["python","main.py"]
+
+EXPOSE 5000
+COPY . .
+
+CMD ["flask", "run"]

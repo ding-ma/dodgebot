@@ -3,9 +3,10 @@
 To run the backend locally run the following commands:
 
 ```
-docker image build -t dodge-bot .
+docker compose up
 ```
 
-```
-docker run -p 6666:5000 -d dodge-bot
-```
+Visit `localhost:5555` to view the application
+
+# todo
+Look at https://hub.docker.com/r/tensorflow/serving, our flask backend can call this
