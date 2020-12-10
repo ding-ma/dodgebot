@@ -1,3 +1,7 @@
+"""
+Process the match Id files and reconstructs the the matches
+"""
+
 import csv
 import logging
 import os
@@ -43,7 +47,7 @@ header = {
 
 
 def get_file_to_process(bucket_name='dodge-bot-processed-data'):
-    """Since all files have 70k entries, we will simply process 1 file from there everyday and download it"""
+    """Since all files have 35k entries, we will simply process 1 file from there everyday and download it"""
     client = storage.Client()
     for elo in elos:
         blobs = list(client.list_blobs(bucket_name, prefix='{}/{}/'.format(region, elo)))
@@ -65,12 +69,18 @@ def update_metadata(blob, status):
 
 
 def read_and_process_csv(f):
+    """
+    Reads and processes the csv file
+    :param f: file name
+    :return:
+    """
     # redTeamWon 0 = RedTeamLost, 1 = RedTeamWon
     # teamId 100 = blueside, 200=redside
 
     file_in = open(f, "r", encoding="utf8")
     reader = csv.reader(file_in, delimiter=",")
 
+    # creates result csv file
     file_success = open("{}-{}".format("MATCH", f), "w", newline='')
     writer_success = csv.writer(file_success)
     writer_success.writerow([
@@ -79,9 +89,13 @@ def read_and_process_csv(f):
         'BlueBan1', 'BlueBan2', 'BlueBan3', 'BlueBan4', 'BlueBan5',
         'BlueTop', 'BlueJg', 'BlueMid', 'BlueAdc', 'BlueSup', 'redTeamWin'
     ])
+
+    # log how many matches were ideal matches
     fails = 1
     success = 1
     logger.info("Starting to process file " + f)
+
+    # goes line by line from the 35k file and does the request to Riot Game API
     for i, line in enumerate(reader, start=1):
         success, match_data = get_matches_by_id(line[0])
         if match_data:
@@ -90,6 +104,7 @@ def read_and_process_csv(f):
                 success += 1
             else:
                 fails += 1
+        #  Sleep needed not to go over rate limit
         if i % 99 == 0:
             time.sleep(125)
         if i % 1400 == 0:
@@ -99,7 +114,17 @@ def read_and_process_csv(f):
 
 
 def process_json(data):
+    """
+    Process the result JSON from API call
+    :param data: json fle
+    :return: match detail (red and blue team pick/bans)
+    """
     def filter_by_team(participants):
+        """
+        Filters participants by team
+        :param participants: JSON request
+        :return: list of participants
+        """
         red, blue = [], []
         for participant in participants:
             if participant['teamId'] == 100:
@@ -109,6 +134,11 @@ def process_json(data):
         return blue, red
 
     def get_champion_ban_list(ban_map):
+        """
+        Get banned champion of the team
+        :param ban_map: team id
+        :return: banned champion list
+        """
         lst = []
         for ban in ban_map:
             lst.append(ban['championId'])
@@ -191,6 +221,11 @@ def process_json(data):
 
 
 def get_matches_by_id(match_id):
+    """
+    Request to get match detail based on match id
+    :param match_id: match id
+    :return: array of banned and pick champion per team
+    """
     url = "{}/lol/match/v4/matches/{}".format(base_url, match_id)
     r = requests.get(url=url, headers=header)
     if r.status_code != 200:
@@ -199,6 +234,14 @@ def get_matches_by_id(match_id):
 
 
 def upload_folder_gcs(success_rate, file_to_upload, path_to_upload, bucket_name="dodge-bot-match-data"):
+    """
+    Uploads the file to GCP
+    :param success_rate: how many games were idea
+    :param file_to_upload: file name to upload
+    :param path_to_upload: its path
+    :param bucket_name: defaults to dodge-bot-match-data bucket
+    :return:
+    """
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(path_to_upload + file_to_upload)
@@ -207,8 +250,11 @@ def upload_folder_gcs(success_rate, file_to_upload, path_to_upload, bucket_name=
     logger.info("File uploaded to dodge-bot-match-data/{}/{}".format(path_to_upload, file_to_upload))
 
 
-# todo check if 35k works, if not we need to implement some form of feedback loop
+# Driver Code
+# Step one get a file to process
 processBlob, file = get_file_to_process()
+
+# If such file exist for that region, process it
 if processBlob:
     update_metadata(processBlob, "InProgress")
     rate = read_and_process_csv(file)

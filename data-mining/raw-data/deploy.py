@@ -1,3 +1,7 @@
+"""
+Script used to restart the containers on GCP. It will not work locally.
+"""
+
 import sys
 from datetime import datetime, timedelta
 import os
