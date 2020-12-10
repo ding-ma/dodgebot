@@ -26,6 +26,6 @@ def create_champion_array(data):
     return [data["redTop"], data["redJungle"], data["redMid"], data["redAdc"], data["redSupport"], data["blueTop"],
             data["blueJungle"], data["blueMid"], data["blueAdc"], data["blueSupport"]]
 
-# todo: change flask to production WSGI server
+# TODO: change flask to production WSGI server
 if __name__ == "__main__":
     app.run(debug=True)
