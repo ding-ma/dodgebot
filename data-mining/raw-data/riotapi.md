@@ -1,6 +1,6 @@
-# Mine data from Riot API
+# Process to mine data from Riot API
 
-1- get user list per rank [here](https://developer.riotgames.com/apis#league-exp-v4/GET_getLeagueEntries)
+1- Get user list per rank [here](https://developer.riotgames.com/apis#league-exp-v4/GET_getLeagueEntries)
 
 sample response:
 ```

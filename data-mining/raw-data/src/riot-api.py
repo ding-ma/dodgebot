@@ -30,13 +30,14 @@ folder_name = os.path.join(region, elo)
 time_stamp = datetime.now().strftime("%Y%m%d")
 
 base_url = "https://{}/lol".format(host)
-header = {
+header = {  # Request header
     "Accept-Language": "en-GB,en;q=0.9,en-US;q=0.8,fr;q=0.7",
     "Accept-Charset": "application/x-www-form-urlencoded; charset=UTF-8",
     "Origin": "https://developer.riotgames.com",
     "X-Riot-Token": os.environ.get('API_KEY')
 }
 
+# Logger set up
 logger = logging.getLogger(region)
 handler = logging.StreamHandler()
 formatter = logging.Formatter('%(asctime)s [%(name)-3s] %(message)s')
@@ -46,6 +47,12 @@ logger.setLevel(logging.DEBUG)
 
 
 def upload_folder_gcs(source_folder, bucket_name="dodge-bot"):
+    """
+    Uploads the entire data to GCP
+    :param source_folder: target folder
+    :param bucket_name: bucket ot upload to, defaults to dodge-bot
+    :return:
+    """
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
 
@@ -59,11 +66,20 @@ def upload_folder_gcs(source_folder, bucket_name="dodge-bot"):
 
 
 def make_folder(p):
+    """
+    Creates folder within container
+    :param p: path to crease
+    :return:
+    """
     if not os.path.exists(p):
         os.makedirs(p)
 
 
 def get_account_list():
+    """
+    Gets list of account on Riot game website
+    :return:
+    """
     base_path = os.path.join(folder_name, "SUMMONER")
     make_folder(base_path)
     api_counter = 0
@@ -96,6 +112,13 @@ def get_account_list():
 
 
 def merge_sequentially(l1, l2, acc):
+    """
+    merges 2 lists sequentially
+    :param l1: first list
+    :param l2: second list
+    :param acc: accumulator
+    :return: merged list
+    """
     if l1:
         x, xs = l1[0], l1[1:]
         return merge_sequentially(l2, xs, acc + [x])
@@ -104,6 +127,11 @@ def merge_sequentially(l1, l2, acc):
 
 
 def get_summoner_id(sum_id):
+    """
+    Gets encrypted accountId from riot api server
+    :param sum_id: summerId from the list of player
+    :return:
+    """
     url = '{}/summoner/v4/summoners/{}'.format(base_url, sum_id)
     try:
         data = requests.get(url=url, headers=header)
@@ -112,8 +140,11 @@ def get_summoner_id(sum_id):
         return None
 
 
-# todo: need to be more fault tolerant
 def get_matches():
+    """
+    Process the list of players for their matches
+    :return:
+    """
     base_path = os.path.join(folder_name, "SUMMONER")
     tier2_path = os.path.join(base_path, tiers[0])
     try:
@@ -146,6 +177,7 @@ def get_matches():
             logger.warning('API Key expired!')
             break
 
+        # read player list
         for accounts in json.load(open(file)):
 
             # if our key is expired
@@ -166,10 +198,12 @@ def get_matches():
             try:
                 data = requests.get(url=url, headers=header)
 
+                # Needed to not exceed request limit
                 api_counter += 1
                 if api_counter % 49 == 0:
                     time.sleep(125)
 
+                # only HTTP.200 is valid
                 if data.status_code != 200:
                     continue
 
@@ -177,6 +211,7 @@ def get_matches():
                     logger.warning('API Key expired!')
                     break
 
+                # Process return data for the matches
                 for match in data.json()['matches']:
                     try:
                         writer.writerow(
@@ -189,6 +224,7 @@ def get_matches():
             except:
                 continue
 
+    #  close file and upload it to GCP
     csv_file.close()
     upload_folder_gcs(match_path)
 

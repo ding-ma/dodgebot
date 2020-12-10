@@ -1,3 +1,7 @@
+"""
+Restarts the container with the new API key. Only works on GCP
+"""
+
 import sys
 from datetime import datetime, timedelta
 import os
@@ -16,9 +20,12 @@ regions = [
     'tr1.api.riotgames.com',
     'ru.api.riotgames.com'
 ]
+
+# reads from API key from CLI
 if len(sys.argv) != 2:
     raise KeyError("Script requires API_KEY argument")
 
+# adds 24h for expiry and uses .env.common to generate all the other keys
 file = open(os.path.join("env", ".env.common"), "r")
 data = file.read().splitlines()
 file.close()

@@ -1,3 +1,6 @@
+"""
+Geneates .env file for each region based on the master .env file
+"""
 import os
 
 regions = [
