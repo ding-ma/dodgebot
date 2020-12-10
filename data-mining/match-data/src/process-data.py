@@ -30,6 +30,7 @@ elos = [
 
 random.shuffle(elos)
 
+# logger setup
 logger = logging.getLogger(region)
 handler = logging.StreamHandler()
 formatter = logging.Formatter('%(asctime)s [%(name)-3s] %(message)s')
@@ -37,6 +38,7 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
+# request formation
 base_url = "https://{}".format(host)
 header = {
     "Accept-Language": "en-GB,en;q=0.9,en-US;q=0.8,fr;q=0.7",
@@ -55,6 +57,7 @@ def get_file_to_process(bucket_name='dodge-bot-processed-data'):
         for blob in blobs:
             file_name = blob.name.split("/")[-1]
             if blob.metadata is not None and ".csv" in blob.name:
+                # find one file that has not been processed and csv type
                 if blob.metadata['processed'] == 'No':
                     blob.download_to_filename(file_name)
                     return blob, file_name
@@ -182,6 +185,7 @@ def process_json(data):
                 extra_process.append((lane, role, cs_at_10, champion))
             champions_played.append(champion)
 
+        # this means there we no 2 botlaner
         if len(extra_process) != 2:
             return False, champions_played
 
@@ -202,6 +206,7 @@ def process_json(data):
     game_id = data['gameId']
     red_team_won = data['teams'][0]['win']
 
+    # parses to binary value
     if red_team_won == "Fail":
         red_team_won = 0
     else:
@@ -214,6 +219,7 @@ def process_json(data):
     red_success, red_per_role = sort_per_role(red_participants)
     blue_success, blue_per_role = sort_per_role(blue_participants)
 
+    # return if both lists are ok
     if red_success and blue_success:
         return True, [game_id] + red_team_bans + red_per_role + blue_team_bans + blue_per_role + [red_team_won]
     else:
