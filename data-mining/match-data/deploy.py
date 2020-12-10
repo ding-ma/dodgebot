@@ -29,17 +29,19 @@ if len(sys.argv) != 2:
 file = open(os.path.join("env", ".env.common"), "r")
 data = file.read().splitlines()
 file.close()
+
+# calculates 24h-5min since every key lasts 24h
 tmr = datetime.now(pytz.utc) + timedelta(days=1) - timedelta(minutes=5)
 apiExpireDate = tmr.astimezone(pytz.timezone("PST8PDT")).strftime("%Y-%m-%d-%H:%M")
 data[0] = "API_KEY={}".format(sys.argv[1])
 data[2] = "KEY_EXPIRE={}".format(apiExpireDate)
 
-
+# reads from common env file
 modifiedCommonEnv = open(os.path.join("env", ".env.common"), "w")
 modifiedCommonEnv.writelines(line + '\n' for line in data)
 modifiedCommonEnv.close()
 
-
+# produce all env files for the containers
 common = open(os.path.join("env", ".env.common")).read()
 for region in regions:
     fileName = region.split(".")
