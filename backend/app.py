@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 
 # Load model from file
-model = tf.keras.models.load_model(os.path.join("model", "gold_model.h5"))
+model = tf.keras.models.load_model(os.path.join("models", "model.h5"))
 
 # Predicts winner of match
 @app.route('/predictWinner')
