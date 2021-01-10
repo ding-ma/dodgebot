@@ -6,6 +6,8 @@ import sys
 from datetime import datetime, timedelta
 import os
 import pytz
+from subprocess import Popen
+
 
 tiers = [
     'IRON',
@@ -35,7 +37,11 @@ modifiedCommonEnv = open(os.path.join("env", ".env.common"), "w")
 modifiedCommonEnv.writelines(line + '\n' for line in data)
 modifiedCommonEnv.close()
 
-os.system('docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:$PWD" -w="$PWD" docker/compose:1.24.0 down')
-os.system("python3 generateEnv.py")
-os.system('docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:$PWD" -w="$PWD" docker/compose:1.24.0 pull')
-os.system('docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:$PWD" -w="$PWD" docker/compose:1.24.0 up -d')
+down = Popen(['sudo', 'docker-compose', 'down'])
+down.wait()
+env = Popen(['python3', 'generateEnv.py'])
+env.wait()
+pull = Popen(['sudo', 'docker-compose', 'pull'])
+pull.wait()
+up = Popen(['sudo', 'docker-compose', 'up', '-d'])
+up.wait()
