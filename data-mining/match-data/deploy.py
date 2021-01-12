@@ -50,10 +50,10 @@ for region in regions:
     f.write("HOST={}\n{}".format(region, common))
     f.close()
 
-# following lines are to run on GCP container VMs
-down = Popen(['sudo', 'docker-compose', 'down'])
-down.wait()
-pull = Popen(['sudo', 'docker-compose', 'pull'])
-pull.wait()
-up = Popen(['sudo', 'docker-compose', 'up', '-d'])
-up.wait()
+# # following lines are to run on GCP container VMs
+# down = Popen(['sudo', 'docker-compose', 'down'])
+# down.wait()
+# pull = Popen(['sudo', 'docker-compose', 'pull'])
+# pull.wait()
+# up = Popen(['sudo', 'docker-compose', 'up', '-d'])
+# up.wait()

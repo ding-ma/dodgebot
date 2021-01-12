@@ -12,9 +12,9 @@ import random
 import requests
 from google.cloud import storage
 
-# from dotenv import load_dotenv
-#
-# load_dotenv("..//env/.env.na1")  # loads the env file for local development
+from dotenv import load_dotenv
+
+load_dotenv("..//env/.env.na1")  # loads the env file for local development
 
 region = os.environ.get('HOST').split(".")[0].upper()
 host = os.environ.get('HOST')
@@ -79,10 +79,10 @@ def read_and_process_csv(f):
     """
     # redTeamWon 0 = RedTeamLost, 1 = RedTeamWon
     # teamId 100 = blueside, 200=redside
-
+    
     file_in = open(f, "r", encoding="utf8")
     reader = csv.reader(file_in, delimiter=",")
-
+    
     # creates result csv file
     file_success = open("{}-{}".format("MATCH", f), "w", newline='')
     writer_success = csv.writer(file_success)
@@ -92,50 +92,104 @@ def read_and_process_csv(f):
         'BlueBan1', 'BlueBan2', 'BlueBan3', 'BlueBan4', 'BlueBan5',
         'BlueTop', 'BlueJg', 'BlueMid', 'BlueAdc', 'BlueSup', 'redTeamWin'
     ])
-
+    
     # log how many matches were ideal matches
     fails = 1
     success = 1
     logger.info("Starting to process file " + f)
-
+    
     # goes line by line from the 35k file and does the request to Riot Game API
     for i, line in enumerate(reader, start=1):
-        success, match_data = get_matches_by_id(line[0])
+        match_data = get_matches_by_id(line[0])
         if match_data:
-            if success:
-                writer_success.writerow(match_data)
-                success += 1
-            else:
-                fails += 1
+            writer_success.writerow(match_data)
+            success += 1
+        else:
+            fails += 1
         #  Sleep needed not to go over rate limit
         if i % 99 == 0:
             time.sleep(125)
         if i % 1400 == 0:
             logger.info("Processed line of {}/{}".format(i, 35000))
+        
+        if i == 1400*3:
+            break
+    
     file_success.close()
     return success / fails
 
 
-def process_json(data):
+def process_data(data):
     """
     Process the result JSON from API call
     :param data: json fle
     :return: match detail (red and blue team pick/bans)
     """
-    def filter_by_team(participants):
-        """
-        Filters participants by team
-        :param participants: JSON request
-        :return: list of participants
-        """
-        red, blue = [], []
-        for participant in participants:
-            if participant['teamId'] == 100:
-                blue.append(participant)
+    
+    # discard data if it is a rematch
+    # returns 1 if teamOne won, 0 is teamTwo won
+    def get_winner(game_data):
+        if game_data['teams'][0]['win'] == 'Win':
+            return 1
+        else:
+            return 0
+    
+    # returns dict with key = role, value = (championId, cs)
+    def get_players(player):
+        players = {}
+        
+        # there are always 2 BOTTOM roles, we have to decide which one is adc (take higher cs at 10 mins)
+        first_bot_champion_id = -1
+        first_bot_minions = -1
+        
+        # get teamOne player roles and championId
+        for player in player:
+            role = player['timeline']['lane']
+            # get minions killed and championId
+            minions_killed = player['timeline']['creepsPerMinDeltas']['0-10']
+            champion_id = player['championId']
+            
+            # place in dictionary
+            if role != "BOTTOM":
+                players[role] = (champion_id, minions_killed)
+            elif first_bot_champion_id == -1:
+                first_bot_champion_id = champion_id
+                first_bot_minions = minions_killed
+            # set higher cs to ADC, lower to SUPPORT
+            elif minions_killed > first_bot_minions:
+                players['ADC'] = (champion_id, minions_killed)
+                players['SUPPORT'] = (first_bot_champion_id, first_bot_minions)
             else:
-                red.append(participant)
-        return blue, red
-
+                players['SUPPORT'] = (champion_id, minions_killed)
+                players['ADC'] = (first_bot_champion_id, first_bot_minions)
+                
+                # return dictionary
+        return players
+    
+    # make array [t1TOP, t1JUNGLE, t1MIDDLE, t1ADC, t1SUPPORT,t2TOP, t2JUNGLE, t2MIDDLE, t2ADC, t2SUPPORT, winner]
+    def create_game(team_one_players, team_one_ban, team_two_players, team_two_ban, winner):
+        game = []
+        # append teamOne
+        game.append(team_one_players['TOP'][0])
+        game.append(team_one_players['JUNGLE'][0])
+        game.append(team_one_players['MIDDLE'][0])
+        game.append(team_one_players['ADC'][0])
+        game.append(team_one_players['SUPPORT'][0])
+        game += team_one_ban
+        
+        # append teamTwo
+        game.append(team_two_players['TOP'][0])
+        game.append(team_two_players['JUNGLE'][0])
+        game.append(team_two_players['MIDDLE'][0])
+        game.append(team_two_players['ADC'][0])
+        game.append(team_two_players['SUPPORT'][0])
+        game += team_two_ban
+        
+        # append winner
+        game.append(winner)
+        
+        return game
+    
     def get_champion_ban_list(ban_map):
         """
         Get banned champion of the team
@@ -146,84 +200,25 @@ def process_json(data):
         for ban in ban_map:
             lst.append(ban['championId'])
         return lst
+    
+    if data['gameDuration'] < 900:
+        return []
+    
+    winner = get_winner(data)
+    participants = data['participants']
+    team_data = data['teams']
+    
+    team_blue_players = get_players(participants[:5])
+    team_blue_bans = get_champion_ban_list(team_data[0]['bans'])
 
-    def sort_per_role(team):
-        """
-        return convention:
-        [0] = top
-        [1] = jungle
-        [2] = middle
-        [3] = duo carry (adc)
-        [4] = duo support
-
-        adc and supports are calculated by the number of CS before 10 min
-        Whoever is highest will get ADC role
-
-        :param team: team list
-        :return: sorted team list with the champion ID
-        """
-
-        extra_process = []
-        champions_per_lane = [None] * 5
-        champions_played = []
-        # strips down the json to what we need
-        for participant in team:
-            lane = participant['timeline']['lane']
-            role = participant['timeline']['role']
-            champion = participant['championId']
-            try:
-                cs_at_10 = participant['timeline']['creepsPerMinDeltas']['0-10']
-            except KeyError:
-                cs_at_10 = 0
-            if "TOP" in lane:
-                champions_per_lane[0] = champion
-            elif "JUNGLE" in lane:
-                champions_per_lane[1] = champion
-            elif "MIDDLE" in lane:
-                champions_per_lane[2] = champion
-            else: # this is for botlane
-                extra_process.append((lane, role, cs_at_10, champion))
-            champions_played.append(champion)
-
-        # this means there we no 2 botlaner
-        if len(extra_process) != 2:
-            return False, champions_played
-
-        bot_1 = extra_process[0]
-        bot_2 = extra_process[1]
-        if bot_1[2] > bot_2[2]: # if cs of bot1 is > bot 2, it is the adc
-            champions_per_lane[3] = bot_1[3]
-            champions_per_lane[4] = bot_2[3]
-        else:
-            champions_per_lane[3] = bot_2[3]
-            champions_per_lane[4] = bot_1[3]
-
-        if None in champions_per_lane:
-            return False, champions_played
-
-        return True, champions_per_lane
-
-    game_id = data['gameId']
-    red_team_won = data['teams'][0]['win']
-
-    # parses to binary value
-    if red_team_won == "Fail":
-        red_team_won = 0
-    else:
-        red_team_won = 1
-
-    blue_team_bans = get_champion_ban_list(data['teams'][0]['bans'])
-    red_team_bans = get_champion_ban_list(data['teams'][1]['bans'])
-
-    blue_participants, red_participants = filter_by_team(data['participants'])
-    red_success, red_per_role = sort_per_role(red_participants)
-    blue_success, blue_per_role = sort_per_role(blue_participants)
-
-    # return if both lists are ok
-    if red_success and blue_success:
-        return True, [game_id] + red_team_bans + red_per_role + blue_team_bans + blue_per_role + [red_team_won]
-    else:
-        return False, [game_id] + red_team_bans + red_per_role + blue_team_bans + blue_per_role + [red_team_won]
+    team_red_players = get_players(participants[5:])
+    team_red_bans = get_champion_ban_list(team_data[1]['bans'])
+    
+    if len(team_blue_players.keys()) == 5 and len(team_red_players.keys()) == 5:
+        game = create_game(team_blue_players, team_blue_bans, team_red_players, team_red_bans, winner)
+        return game
+    
+    return []
 
 
 def get_matches_by_id(match_id):
@@ -235,8 +230,8 @@ def get_matches_by_id(match_id):
     url = "{}/lol/match/v4/matches/{}".format(base_url, match_id)
     r = requests.get(url=url, headers=header)
     if r.status_code != 200:
-        return False, []
-    return process_json(r.json())
+        return []
+    return process_data(r.json())
 
 
 def upload_folder_gcs(success_rate, file_to_upload, path_to_upload, bucket_name="dodge-bot-match-data"):
