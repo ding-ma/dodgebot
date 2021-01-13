@@ -102,7 +102,7 @@ def read_and_process_csv(f):
     for i, line in enumerate(reader, start=1):
         match_data = get_matches_by_id(line[0])
         if match_data:
-            writer_success.writerow(match_data)
+            writer_success.writerow([line[0]]+match_data)
             success += 1
         else:
             fails += 1
@@ -164,7 +164,7 @@ def process_data(data):
         return players
     
     # make array [t1TOP, t1JUNGLE, t1MIDDLE, t1ADC, t1SUPPORT,t2TOP, t2JUNGLE, t2MIDDLE, t2ADC, t2SUPPORT, winner]
-    def create_game(team_one_players, team_one_ban, team_two_players, team_two_ban, winner):
+    def create_game(team_one_players, team_one_ban, team_two_players, team_two_ban, win_team):
         game = []
         # append teamOne
         game.append(team_one_players['TOP'][0])
@@ -183,7 +183,7 @@ def process_data(data):
         game += team_two_ban
         
         # append winner
-        game.append(winner)
+        game.append(win_team)
         
         return game
     
