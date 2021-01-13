@@ -111,9 +111,6 @@ def read_and_process_csv(f):
             time.sleep(125)
         if i % 1400 == 0:
             logger.info("Processed line of {}/{}".format(i, 35000))
-        
-        if i == 1400*3:
-            break
     
     file_success.close()
     return success / fails

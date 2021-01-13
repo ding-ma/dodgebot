@@ -28,6 +28,6 @@ fi
 
 for i in "${!ips[@]}"; do
   echo -e "${RED}executing on ${ips[i]} ${NC}"
-  ssh $username@"${ips[i]}" "bash -s ${apiKey[i]} $config" < match-data.sh
+  ssh -o StrictHostKeyChecking=no $username@"${ips[i]}" "bash -s ${apiKey[i]} $config" < match-data.sh
   echo -e "\n"
 done
