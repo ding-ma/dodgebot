@@ -10,13 +10,13 @@ rg_api1=""
 rg_api2=""
 
 # if the VMs don't restart, the IP remains the same. (ephemeral ip address)
-vm_ip2=""
 vm_ip1=""
+vm_ip2=""
 
 # This can be extended to N VM instances
 # MAKE SURE they are the same length
 ips=( "$vm_ip1" "$vm_ip2" )
-apiKey=( "$rg_api1" "$rg_api2")
+apiKey=( "$rg_api1" "$rg_api2" )
 
 RED='\033[0;31m'
 NC='\033[0m' # No Color

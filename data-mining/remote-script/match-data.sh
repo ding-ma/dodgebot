@@ -36,5 +36,8 @@ else
   echo "Today's Config"
   cat env/.env.common
   echo "=================="
+  sleep 10
+  #  check that containers are running
+  sudo docker-compose ps
 fi
 

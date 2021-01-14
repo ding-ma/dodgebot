@@ -224,11 +224,16 @@ def get_matches_by_id(match_id):
     :param match_id: match id
     :return: array of banned and pick champion per team
     """
-    url = "{}/lol/match/v4/matches/{}".format(base_url, match_id)
-    r = requests.get(url=url, headers=header)
-    if r.status_code != 200:
+    try:
+        url = "{}/lol/match/v4/matches/{}".format(base_url, match_id)
+        r = requests.get(url=url, headers=header)
+        if r.status_code != 200:
+            return []
+        return process_data(r.json())
+    # ConnectionError happens if the server is down.
+    # There might be other exceptions so we will keep it broad for now
+    except:
         return []
-    return process_data(r.json())
 
 
 def upload_folder_gcs(success_rate, file_to_upload, path_to_upload, bucket_name="dodge-bot-match-data"):
