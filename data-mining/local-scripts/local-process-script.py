@@ -43,16 +43,17 @@ def create_empty_folders():
             blob.upload_from_string('', content_type='application/x-www-form-urlencoded;charset=UTF-8')
 
 
-def reset_meta_data():
+def reset_meta_data_prod():
     """removes all meta data of a bucket. this was used for testing the cloud funciton"""
     for elo in elos:
         for region in regions:
             for blob in client.list_blobs("dodge-bot-processed-data",
                                           prefix='{}/{}/'.format(region.split(".")[0].upper(), elo)):
                 if ".csv" in blob.name:
-                    # simply reset it to no and patch it
-                    blob.metadata = {"processed": "No"}
-                    blob.patch()
+                    if blob.metadata == "InProgress":
+                        # simply reset it to no and patch it
+                        blob.metadata = {"processed": "No"}
+                        blob.patch()
                 else:
                     blob.metadata = {}
                     blob.patch()
@@ -191,12 +192,12 @@ def split_process_data_to_35k(blob_to_split):
 
 
 # iterate on all region.elo for split the fiels
-for region in regions:
-    for elo in elos:
-        if elo in "IRON" and region in "br1":
-            continue
-        for blob in client.list_blobs("dodge-bot-processed-data",
-                                      prefix='{}/{}/'.format(region.split(".")[0].upper(), elo)):
-            if ".csv" in blob.name:
-                print(blob)
-                split_process_data_to_35k(blob)
+# for region in regions:
+#     for elo in elos:
+#         if elo in "IRON" and region in "br1":
+#             continue
+#         for blob in client.list_blobs("dodge-bot-processed-data",
+#                                       prefix='{}/{}/'.format(region.split(".")[0].upper(), elo)):
+#             if ".csv" in blob.name:
+#                 print(blob)
+#                 split_process_data_to_35k(blob)

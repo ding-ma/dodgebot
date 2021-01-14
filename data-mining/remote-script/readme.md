@@ -18,3 +18,8 @@ Now that you are authenticated, you can run the script across multiple VMs.
 ### Source
 * https://cloud.google.com/compute/docs/instances/connecting-advanced#linux-and-macos
 * https://cloud.google.com/compute/docs/instances/managing-instance-access#add_oslogin_keys
+
+## Scripts
+* `setup.sh SCRIPT`: For loop that ssh into every VM with the script to execute
+* `scrape.sh API_KEY TYPE`: Takes in Riot Game API Key and the type of scraper we want to do
+* `get-logs.sh TYPE`: Simple script to get the logs of all containers.

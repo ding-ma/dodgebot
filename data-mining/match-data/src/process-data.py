@@ -94,15 +94,15 @@ def read_and_process_csv(f):
     ])
     
     # log how many matches were ideal matches
-    fails = 1
-    success = 1
+    fails = 0
+    success = 0
     logger.info("Starting to process file " + f)
     
     # goes line by line from the 35k file and does the request to Riot Game API
     for i, line in enumerate(reader, start=1):
         match_data = get_matches_by_id(line[0])
         if match_data:
-            writer_success.writerow([line[0]]+match_data)
+            writer_success.writerow([line[0]] + match_data)
             success += 1
         else:
             fails += 1
@@ -113,7 +113,7 @@ def read_and_process_csv(f):
             logger.info("Processed line of {}/{}".format(i, 35000))
     
     file_success.close()
-    return success / fails
+    return success, fails
 
 
 def process_data(data):
@@ -207,7 +207,7 @@ def process_data(data):
     
     team_blue_players = get_players(participants[:5])
     team_blue_bans = get_champion_ban_list(team_data[0]['bans'])
-
+    
     team_red_players = get_players(participants[5:])
     team_red_bans = get_champion_ban_list(team_data[1]['bans'])
     
@@ -230,16 +230,18 @@ def get_matches_by_id(match_id):
         if r.status_code != 200:
             return []
         return process_data(r.json())
-    # ConnectionError happens if the server is down.
+    # ConnectionError happens if the server is down.- hypothesis
     # There might be other exceptions so we will keep it broad for now
     except:
+        # give it a small pause before retrying new ones
+        time.sleep(15)
         return []
 
 
-def upload_folder_gcs(success_rate, file_to_upload, path_to_upload, bucket_name="dodge-bot-match-data"):
+def upload_folder_gcs(stats: tuple, file_to_upload, path_to_upload, bucket_name="dodge-bot-match-data"):
     """
     Uploads the file to GCP
-    :param success_rate: how many games were idea
+    :param stats: (success, failure) Expect around 45% success rate
     :param file_to_upload: file name to upload
     :param path_to_upload: its path
     :param bucket_name: defaults to dodge-bot-match-data bucket
@@ -248,7 +250,7 @@ def upload_folder_gcs(success_rate, file_to_upload, path_to_upload, bucket_name=
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(path_to_upload + file_to_upload)
-    blob.metadata = {"success_rate": success_rate}
+    blob.metadata = {"success": stats[0], "failure": stats[1]}
     blob.upload_from_filename(file_to_upload)
     logger.info("File uploaded to dodge-bot-match-data/{}/{}".format(path_to_upload, file_to_upload))
 
