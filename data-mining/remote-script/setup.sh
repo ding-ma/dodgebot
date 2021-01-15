@@ -13,21 +13,27 @@ config="match"
 username="ma_ding_dm_gmail_com"
 
 # not a big deal if the key are exposed as they expire in 24h
-rg_api1="RGAPI-e288727f-acdc-4120-a160-367cceba01be" # baw
-rg_api2="RGAPI-8af0eb13-312a-4198-a3f1-6745a02b3827" # learn
-rg_api3="RGAPI-876d7e92-0cae-44fa-9f55-8a5903824257" # mcgill
-rg_api4="RGAPI-cbf023cb-2cc1-436a-a6b1-7f5b6f6bb271" # qjoj
+rg_api1="RGAPI-7e1fa0ac-d724-4a72-941a-d2f063dee3fc" # baw
+rg_api2="RGAPI-94c6007d-5c37-4db9-98c7-c3cce07a67f3" # learn
+rg_api3="RGAPI-5783a768-1ca4-43b9-8266-162061337ba8" # mcgill
+rg_api4="RGAPI-d94591ae-6afd-4cb5-adf7-3f1cf7942c4c" # qjoj
+rg_api5="RGAPI-d7239401-1107-4ef8-911d-525acb0576d6" # haru
+rg_api6="RGAPI-80eb98e6-26d9-4656-9cfc-66b6ea0718b9" # antho
+rg_api7="RGAPI-da55a2d4-9e93-4b7e-bdf4-52f71a1e052a" # melissa
 
 # if the VMs don't restart, the IP remains the same. (ephemeral ip address)
-vm_ip1="104.197.128.123"
-vm_ip2="34.123.92.253"
-vm_ip3="34.72.216.171"
-vm_ip4="35.193.111.14"
+vm_ip1="34.123.89.13"
+vm_ip2="35.193.85.80"
+vm_ip3="34.121.176.68"
+vm_ip4="34.122.159.114"
+vm_ip5="134.123.201.23"
+vm_ip6="35.202.161.74"
+vm_ip7="35.239.148.227"
 
 # This can be extended to N VM instances
 # MAKE SURE they are the same length
-ips=( "$vm_ip1" "$vm_ip2" "$vm_ip3" "$vm_ip4" )
-apiKey=( "$rg_api1" "$rg_api2" "$rg_api3" "$rg_api4" )
+ips=( "$vm_ip1" "$vm_ip2" "$vm_ip3" "$vm_ip4" "$vm_ip5" "$vm_ip6" "$vm_ip7" )
+apiKey=( "$rg_api1" "$rg_api2" "$rg_api3" "$rg_api4" "$rg_api5" "$rg_api6" "$rg_api7" )
 
 RED='\033[0;31m'
 NC='\033[0m' # No Color
