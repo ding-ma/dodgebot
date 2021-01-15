@@ -1,4 +1,4 @@
-name: Deploy function to GCP
+name: Deploy Match Process Function to GCP
 
 on:
   push:

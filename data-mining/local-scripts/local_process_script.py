@@ -3,7 +3,7 @@ from google.cloud import storage
 import pandas as pd
 import csv
 
-load_dotenv(".env.na1")  # loads the env file for local development
+load_dotenv(".env")  # loads the env file for local development
 client = storage.Client()
 MAX_SIZE = 35000
 
@@ -50,7 +50,7 @@ def reset_meta_data_prod():
             for blob in client.list_blobs("dodge-bot-processed-data",
                                           prefix='{}/{}/'.format(region.split(".")[0].upper(), elo)):
                 if ".csv" in blob.name:
-                    if blob.metadata == "InProgress":
+                    if blob.metadata['processed'] == "InProgress":
                         # simply reset it to no and patch it
                         blob.metadata = {"processed": "No"}
                         blob.patch()
@@ -58,7 +58,7 @@ def reset_meta_data_prod():
                     blob.metadata = {}
                     blob.patch()
 
-# reset_meta_data()
+# reset_meta_data_prod()
 
 def generate_empty_csv():
     """create empty file with the same row  that we will have. used the remainder bucket"""

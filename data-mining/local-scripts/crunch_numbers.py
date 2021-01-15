@@ -6,7 +6,7 @@ import csv
 # import pandas as pd
 
 
-load_dotenv(".env.na1")
+load_dotenv(".env")
 client = storage.Client()
 
 regions = [
