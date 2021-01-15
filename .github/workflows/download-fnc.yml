@@ -18,4 +18,4 @@ jobs:
         service_account_key: ${{ secrets.GCP_FUNCTION_CI }}
         export_default_credentials: true
     - run: gcloud functions deploy to_download_for_ding --entry-point download_file --runtime python38 --trigger-resource dodge-bot-match-data --trigger-event google.storage.object.finalize --source=./data-mining/download-fnc/ --memory=128MB --set-env-vars NAME=ding
-#    - run: gcloud functions deploy resize_and_clean --entry-point resize_and_clean --runtime python38 --trigger-resource dodge-bot --trigger-event google.storage.object.finalize --source=./data-mining/data-process-fnc/ --memory=256MB
+    - run: gcloud functions deploy to_download_for_basta --entry-point download_file --runtime python38 --trigger-resource dodge-bot-match-data --trigger-event google.storage.object.finalize --source=./data-mining/download-fnc/ --memory=128MB --set-env-vars NAME=basta
