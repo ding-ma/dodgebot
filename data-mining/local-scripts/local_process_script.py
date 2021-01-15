@@ -43,6 +43,15 @@ def create_empty_folders():
             blob.upload_from_string('', content_type='application/x-www-form-urlencoded;charset=UTF-8')
 
 
+def download_all_files():
+    for region in regions:
+        for elo in elos:
+            for blob in client.list_blobs("dodge-bot-match-data",
+                                          prefix='{}/{}/'.format(region.split(".")[0].upper(), elo)):
+                if ".csv" in blob.name:
+                    print(region, elo, blob.name.split("/")[-1])
+                    blob.download_to_filename("data/" + blob.name.split("/")[-1])
+
 def reset_meta_data_prod():
     """removes all meta data of a bucket. this was used for testing the cloud funciton"""
     for elo in elos:
