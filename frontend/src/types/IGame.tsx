@@ -1,4 +1,6 @@
-//TODO: Enforce type safety with the numbers that only appears in the JSON
+//TODO might need to export some for dashboard. TBD
+
+import {ChampionID} from "./IChampion";
 
 /**
  * Picks for the team
@@ -9,12 +11,13 @@
  * adc -> ad carry
  * sup -> support
  */
-interface Pick {
-    top: number;
-    jg: number;
-    mid: number;
-    adc: number;
-    sup: number;
+
+interface Roles {
+    top: ChampionID;
+    jg: ChampionID;
+    mid: ChampionID;
+    adc: ChampionID;
+    sup: ChampionID;
 }
 
 /**
@@ -22,21 +25,22 @@ interface Pick {
  * Use -1 as no ban
  */
 interface Ban {
-    ban1: number,
-    ban2: number,
-    ban3: number,
-    ban4: number,
-    ban5: number
+    ban1: ChampionID,
+    ban2: ChampionID,
+    ban3: ChampionID,
+    ban4: ChampionID,
+    ban5: ChampionID
 }
 
 /**
  * Each team has picks and bans
  */
 interface Team {
-    picks: Pick;
+    roles: Roles;
     bans: Ban;
 }
 
+type elo = "IRO"|"BRONZE"|"SILVER"|"GOLD"|"PLATINUM"|"DIAMOND"|"MASTER"|"GRAND-MASTER"|"CHALLENGER"
 
 /**
  * A game is made of two teams (red and blue)
@@ -44,4 +48,5 @@ interface Team {
 export interface IGame {
     blueTeam: Team;
     redTeam: Team;
+    elo: elo;
 }

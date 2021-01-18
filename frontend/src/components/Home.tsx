@@ -1,30 +1,16 @@
 import React from 'react';
 import cover from "../images/League_Cover.jpg";
 import {IGame} from "../types/IGame";
-import {IWinRate} from "../types/IWinRate";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function sampleFunction() {
-    // example of type safety with fetch
+    /*
+     example of type safety with fetch
+     any number not in the list will not type check!
+     */
     const myGame: IGame = {
         "blueTeam":{
-            "picks":{
-                "top":2,
-                "mid":2,
-                "jg":3,
-                "adc":4,
-                "sup":5
-            },
-            "bans":{
-                "ban1":-1,
-                "ban2":2,
-                "ban3":3,
-                "ban4":5,
-                "ban5":7
-            }
-        },
-        "redTeam":{
-            "picks":{
+            "roles":{
                 "top":1,
                 "mid":2,
                 "jg":3,
@@ -32,33 +18,51 @@ function sampleFunction() {
                 "sup":5
             },
             "bans":{
-                "ban1":-1,
+                "ban1":875,
                 "ban2":2,
                 "ban3":3,
                 "ban4":5,
                 "ban5":7
             }
-        }
-    };
-    fetch("the url", {
-        method: "post",
-        headers: {
-            'Content-Type': 'application/json',
         },
-        body:JSON.stringify(
-            myGame
-        )
-    }).then(
-        async r => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const rsp: IWinRate = await r.json()
-        //    process rsp
-        }
-    )
+        "redTeam":{
+            "roles":{
+                "top":1,
+                "mid":2,
+                "jg":3,
+                "adc":4,
+                "sup":5
+            },
+            "bans":{
+                "ban1":0,
+                "ban2":2,
+                "ban3":3,
+                "ban4":5,
+                "ban5":7
+            }
+        },
+        "elo": "DIAMOND"
+    };
+    console.log(JSON.stringify(myGame))
+    
+    // fetch("the url", {
+    //     method: "post",
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body:JSON.stringify(myGame)
+    // }).then(
+    //     async r => {
+    //         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    //         const rsp: IWinRate = await r.json()
+    //     //    process rsp
+    //     }
+    // )
 }
 
 
 export default function Home() {
+    sampleFunction();
     return <header className="App-header">
         <img src={cover} alt="logo"/>
         <p>
