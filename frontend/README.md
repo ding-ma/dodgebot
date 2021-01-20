@@ -5,6 +5,8 @@
 
 ## To Run
 
+rename `sample.env` to `.env`. Rewrite the endpoints as needed.
+
 * `npm i`
 * `npm start`
 * `npm build` only works on the CI server (UNIX machines only)
