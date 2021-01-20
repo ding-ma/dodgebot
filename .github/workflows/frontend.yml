@@ -4,13 +4,13 @@ on:
   push:
     branches:
       - master
-    paths:
-     - 'frontend/**'
+#     paths:
+#      - 'frontend/**'
 
 env:
-  - REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
-  - REACT_APP_FEEDBACK_URL: ${{ secrets.REACT_APP_FEEDBACK_URL }}
-  - REACT_APP_LOGIN_URL: ${{ secrets.REACT_APP_LOGIN_URL }}
+ REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
+ REACT_APP_FEEDBACK_URL: ${{ secrets.REACT_APP_FEEDBACK_URL }}
+ REACT_APP_LOGIN_URL: ${{ secrets.REACT_APP_LOGIN_URL }}
 
 jobs:
   build:
