@@ -40,7 +40,7 @@ interface Team {
     bans: Ban;
 }
 
-type elo = "IRO"|"BRONZE"|"SILVER"|"GOLD"|"PLATINUM"|"DIAMOND"|"MASTER"|"GRAND-MASTER"|"CHALLENGER"
+type elo = "IRON"|"BRONZE"|"SILVER"|"GOLD"|"PLATINUM"|"DIAMOND"|"MASTER"|"GRANDMASTER"|"CHALLENGER"
 
 /**
  * A game is made of two teams (red and blue)

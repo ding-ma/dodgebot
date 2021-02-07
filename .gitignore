@@ -6,3 +6,4 @@ GCP_KEY.json
 *.iml
 *.csv
 *.zip
+!template.csv

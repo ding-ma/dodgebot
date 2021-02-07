@@ -60,6 +60,7 @@ def reset_meta_data_prod():
                                           prefix='{}/{}/'.format(region.split(".")[0].upper(), elo)):
                 if ".csv" in blob.name:
                     if blob.metadata['processed'] == "InProgress":
+                        print(blob.name)
                         # simply reset it to no and patch it
                         blob.metadata = {"processed": "No"}
                         blob.patch()

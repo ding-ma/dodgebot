@@ -1,0 +1,20 @@
+name: Deploy Continous Collection Function to GCP
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'continuous-collection/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_FUNCTION_CI }}
+          export_default_credentials: true
+      - run: gcloud functions deploy continous-collection --entry-point append_to_collection --runtime python38 --trigger-http --allow-unauthenticated --source=./continuous-collection/ --memory=128M
