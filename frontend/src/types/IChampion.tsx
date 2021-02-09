@@ -4,7 +4,7 @@ import {KeyToChamp} from "../constants/KeyToChampion";
 /**
  * List of Champion IDs
  */
-export type ChampionID = typeof ChampToKey[keyof typeof ChampToKey]
+export type ChampionID = typeof ChampToKey[keyof typeof ChampToKey] | null
 
 /**
  * List of Champion Name (Strings)
