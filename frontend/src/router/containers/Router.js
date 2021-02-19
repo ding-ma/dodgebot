@@ -1,10 +1,14 @@
 import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import firebase from 'firebase';
-import Layout from '../../global/containers/Layout'
+import Layout from '../../global/containers/Layout';
 import Stats from "../../pages/Stats/containers/Stats";
-import Home from "../../pages/Home";
-// import LoginForm from '../../pages/Login/components/LoginForm';
+import Welcome from "../../pages/Welcome/containers/Welcome";
+import Login from "../../pages/Login/containers/Login"
+import Register from "../../pages/Register/containers/Register"
+import ResetPwd from "../../pages/ResetPassword";
+import NotFound from '../../pages/NotFound';
+
 
 const Router = () => {
     if (!firebase.apps.length) {
@@ -24,9 +28,12 @@ const Router = () => {
             <Layout>
                 <Switch>
 
-                    <Route path="/stats" component={Stats}/>
-                    <Route path="/" component={Home}/>
-                    {/*<Route exact path="/login" component={LoginForm}/>*/}
+                    <Route exact path="/" component={Welcome}/>
+                    <Route exact path="/stats" component={Stats}/>
+                    <Route exact path="/login" component={Login}/>
+                    <Route exact path="/register" component={Register}/>
+                    <Route exact path="/reset" component={ResetPwd}/>
+                    <Route component={NotFound}/>
 
                 </Switch>
             </Layout>

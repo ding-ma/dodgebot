@@ -21,7 +21,9 @@
     "firebase": "^8.2.7",
     "axios": "^0.21.1",
     "@material-ui/core": "^4.11.3",
-    "@material-ui/icons": "^4.11.2"
+    "@material-ui/icons": "^4.11.2",
+    "web-vitals": "^0.2.4",
+    "prop-types": "^15.7.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -46,7 +48,5 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "prop-types": "^15.7.2"
-  }
+  "devDependencies": {}
 }

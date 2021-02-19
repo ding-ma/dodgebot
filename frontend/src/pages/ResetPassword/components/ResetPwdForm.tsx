@@ -4,25 +4,24 @@ import {useHistory} from 'react-router-dom';
 import {Button, TextField, Typography} from '@material-ui/core';
 import {useGlobalContext} from '../../../context';
 
-const LoginForm = () => {
-    const {account} = useGlobalContext();
+
+const ResetPwdForm = () => {
+    const { account } = useGlobalContext();
     const history = useHistory();
     
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     
     const handleSubmit = () => {
         firebase
             .auth()
-            .signInWithEmailAndPassword(email, password)
+            .sendPasswordResetEmail(email)
             .then(() => {
-                //TODO change to player home once it is implemented
-                history.push('/')
+                history.push('/login')
             })
             .catch((err) => {
                 console.log(err);
-                setErrorMessage('The email or password is incorrect!');
+                setErrorMessage('Invalid Email');
             });
     };
     
@@ -40,26 +39,17 @@ const LoginForm = () => {
                 color="primary"
                 error={errorMessage.length > 0}
             />
-            <TextField
-                label="Password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.currentTarget.value)}
-                className=""
-                variant="outlined"
-                color="primary"
-                error={errorMessage.length > 0}
-            />
+            
             <Button
                 variant="contained"
                 color="primary"
                 className=""
                 onClick={() => handleSubmit()}
             >
-                Sign in
+                Reset
             </Button>
         </form>
     );
 };
 
-export default LoginForm;
+export default ResetPwdForm;
