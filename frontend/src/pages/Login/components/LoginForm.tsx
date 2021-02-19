@@ -12,12 +12,14 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     
-    const handleSubmit = () => {
+    const handleSubmitEmailPwd = () => {
         firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
             .then(() => {
                 //TODO change to player home once it is implemented
+                // @ts-ignore
+                console.log("email auth",account.currentUser)
                 history.push('/')
             })
             .catch((err) => {
@@ -25,6 +27,22 @@ const LoginForm = () => {
                 setErrorMessage('The email or password is incorrect!');
             });
     };
+    
+    const handleSubmitGoogleAuth = () => {
+        const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+        firebase
+            .auth()
+            .signInWithPopup(googleAuthProvider)
+            .then(() => {
+                // @ts-ignore
+                console.log("google auth",account.currentUser)
+                history.push('/')
+            })
+            .catch((err) => {
+            console.log(err);
+            setErrorMessage('Something went wrong with OAuth!');
+        });
+    }
     
     return (
         <form className="login-form">
@@ -54,9 +72,18 @@ const LoginForm = () => {
                 variant="contained"
                 color="primary"
                 className=""
-                onClick={() => handleSubmit()}
+                onClick={() => handleSubmitEmailPwd()}
             >
                 Sign in
+            </Button>
+    
+            <Button
+                variant="contained"
+                color="primary"
+                className=""
+                onClick={() => handleSubmitGoogleAuth() }
+            >
+                Sign in with Google
             </Button>
         </form>
     );

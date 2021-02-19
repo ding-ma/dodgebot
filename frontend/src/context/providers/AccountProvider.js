@@ -16,13 +16,16 @@ export const AccountContextProvider = ({ children }) => {
         const getUserInfo = async () => {
             if (currentAccount) {
                 try {
-                    const user = await firebase
-                        .firestore()
-                        .doc(currentAccount.uid)
-                        .get();
-                    if (user.exists) {
-                        setCurrentUser(user.data());
-                    }
+                    setCurrentUser(currentAccount.uid);
+                    console.log("account provider",currentAccount)
+                    // const user = await firebase
+                    //     .firestore()
+                    //     .collection('users')
+                    //     .doc(currentAccount.uid)
+                    //     .get();
+                    // if (user.exists) {
+                    //     setCurrentUser(user.data());
+                    // }
                 } catch (err) {
                     console.log(err);
                 }
