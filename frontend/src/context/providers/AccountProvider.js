@@ -4,28 +4,31 @@ import PropTypes from 'prop-types';
 
 const AccountContext = createContext(null);
 
-export const AccountContextProvider = ({ children }) => {
+export const AccountContextProvider = ({children}) => {
     const [currentAccount, setCurrentAccount] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
-    
+
     useEffect(() => {
         firebase.auth().onAuthStateChanged(setCurrentAccount);
     }, []);
-    
+
     useEffect(() => {
         const getUserInfo = async () => {
             if (currentAccount) {
                 try {
-                    setCurrentUser(currentAccount.uid);
-                    console.log("account provider",currentAccount)
-                    // const user = await firebase
-                    //     .firestore()
-                    //     .collection('users')
-                    //     .doc(currentAccount.uid)
-                    //     .get();
-                    // if (user.exists) {
-                    //     setCurrentUser(user.data());
-                    // }
+
+                    const userProfile = await firebase
+                        .firestore()
+                        .collection(currentAccount.uid)
+                        .doc('profile')
+                        .get();
+
+                    if (userProfile.exists) {
+                        setCurrentUser(userProfile.data());
+                    } else {
+                        setCurrentUser(null);
+                    }
+
                 } catch (err) {
                     console.log(err);
                 }
@@ -33,9 +36,9 @@ export const AccountContextProvider = ({ children }) => {
         };
         getUserInfo();
     }, [currentAccount]);
-    
+
     return (
-        <AccountContext.Provider value={{ currentAccount, currentUser }}>
+        <AccountContext.Provider value={{currentAccount, currentUser}}>
             {children}
         </AccountContext.Provider>
     );

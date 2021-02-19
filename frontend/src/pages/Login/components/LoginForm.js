@@ -11,16 +11,21 @@ const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    
+
+    const determineNewUser = () => {
+        if(account.currentUser == null){
+            history.push('/new')
+        } else{
+            history.push('/dashboard')
+        }
+    }
+
     const handleSubmitEmailPwd = () => {
         firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
-            .then(() => {
-                //TODO change to player home once it is implemented
-                // @ts-ignore
-                console.log("email auth",account.currentUser)
-                history.push('/')
+            .then(async () => {
+                await determineNewUser()
             })
             .catch((err) => {
                 console.log(err);
@@ -29,14 +34,11 @@ const LoginForm = () => {
     };
     
     const handleSubmitGoogleAuth = () => {
-        const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
         firebase
             .auth()
-            .signInWithPopup(googleAuthProvider)
-            .then(() => {
-                // @ts-ignore
-                console.log("google auth",account.currentUser)
-                history.push('/')
+            .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+            .then(async () => {
+                await determineNewUser()
             })
             .catch((err) => {
             console.log(err);
