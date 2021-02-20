@@ -7,15 +7,15 @@ import {useGlobalContext} from '../../../context';
 const LoginForm = () => {
     const {account} = useGlobalContext();
     const history = useHistory();
-    
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
     const determineNewUser = () => {
-        if(account.currentUser == null){
+        if (account.currentUser == null) {
             history.push('/new')
-        } else{
+        } else {
             history.push('/dashboard')
         }
     }
@@ -32,7 +32,7 @@ const LoginForm = () => {
                 setErrorMessage('The email or password is incorrect!');
             });
     };
-    
+
     const handleSubmitGoogleAuth = () => {
         firebase
             .auth()
@@ -41,11 +41,11 @@ const LoginForm = () => {
                 await determineNewUser()
             })
             .catch((err) => {
-            console.log(err);
-            setErrorMessage('Something went wrong with OAuth!');
-        });
+                console.log(err);
+                setErrorMessage('Something went wrong with OAuth!');
+            });
     }
-    
+
     return (
         <form className="login-form">
             <Typography className="" color="error">
@@ -78,12 +78,12 @@ const LoginForm = () => {
             >
                 Sign in
             </Button>
-    
+
             <Button
                 variant="contained"
                 color="primary"
                 className=""
-                onClick={() => handleSubmitGoogleAuth() }
+                onClick={() => handleSubmitGoogleAuth()}
             >
                 Sign in with Google
             </Button>

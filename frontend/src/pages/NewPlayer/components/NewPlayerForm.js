@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {Button, InputLabel, MenuItem, Select, TextField, Typography} from '@material-ui/core';
-
+import firebase from "firebase";
+import {useGlobalContext} from "../../../context";
 
 const NewPlayerForm = () => {
-
+    const {account} = useGlobalContext();
     const history = useHistory();
 
     const [summonerName, setSummonerName] = useState('')
@@ -16,18 +17,31 @@ const NewPlayerForm = () => {
     const elos = ['Unranked', 'Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'GrandMaster', 'Challenger']
     const [elo, setElo] = useState('')
 
-
     const tiers = ['I', 'II', 'III', 'IV']
     const [tier, setTier] = useState('')
 
     const [errorMessage, setErrorMessage] = useState('');
 
-    const handleRegisterAccount = () => {
+    const handleRegisterAccount = async () => {
         if (summonerName === '' || region === '' || elo === '' || tier === '') {
             setErrorMessage('One of your fields is empty!')
             return
         }
-        console.log(region, elo, tier, summonerName)
+        const {currentUser, updateCurrentUser} = firebase.auth();
+        const profile = {
+            'elo': elo,
+            'region': region,
+            'summonerName': summonerName,
+            'tier': tier
+        }
+        await firebase.firestore()
+            .collection(currentUser.uid)
+            .doc('profile')
+            .set(profile);
+
+        account.currentUser = profile;
+        setSummonerError(false);
+        history.push('/dashboard')
     }
 
     return (

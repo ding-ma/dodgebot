@@ -8,7 +8,7 @@ const Dashboard = () =>{
     console.log(account.currentUser)
     return(
       <div>
-          Welcome back {account.currentUser['summonerName']}!
+          Welcome {account.currentUser['summonerName']}!
       </div>
     );
 }
