@@ -4,13 +4,14 @@ import {useGlobalContext} from '../../context';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
     const { account } = useGlobalContext();
+    console.log("in private route", account);
 
     return (
         <Route
             {...rest}
             render={(props) => {
                 if (!account.currentAccount) {
-                    return <Redirect to="/login" />;
+                    return <Redirect to="/" />;
                 }
 
                 return <Component {...props} />;

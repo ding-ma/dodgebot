@@ -24,7 +24,7 @@ interface Roles {
  * Bans for the team
  * Use -1 as no ban
  */
-interface Ban {
+interface Bans {
     ban1: ChampionID,
     ban2: ChampionID,
     ban3: ChampionID,
@@ -37,7 +37,7 @@ interface Ban {
  */
 interface Team {
     roles: Roles;
-    bans: Ban;
+    bans: Bans;
 }
 
 type elo = "IRON"|"BRONZE"|"SILVER"|"GOLD"|"PLATINUM"|"DIAMOND"|"MASTER"|"GRANDMASTER"|"CHALLENGER"
@@ -49,4 +49,5 @@ export interface IGame {
     blueTeam: Team;
     redTeam: Team;
     elo: elo;
+    date: Date
 }

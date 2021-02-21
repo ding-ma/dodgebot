@@ -39,6 +39,22 @@ const NewPlayerForm = () => {
             .doc('profile')
             .set(profile);
 
+        await firebase.firestore()
+            .collection(currentUser.uid)
+            .doc('predictions')
+            .set({});
+
+        await firebase.firestore()
+            .collection(currentUser.uid)
+            .doc('favorites')
+            .set({
+                'top': [],
+                'jg': [],
+                'mid': [],
+                'adc': [],
+                'sup': []
+            });
+
         account.currentUser = profile;
         setSummonerError(false);
         history.push('/dashboard')
