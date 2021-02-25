@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useGlobalContext} from "../../../context";
-import {useHistory} from "react-router-dom";
+// import {useHistory} from "react-router-dom";
 import NavBar from "../components/NavBar"
 import firebase from "firebase";
 
@@ -8,7 +8,7 @@ const Dashboard = () => {
     //TODO: change account-example to account.currentAccount['uid'] after
 
     const {account} = useGlobalContext();
-    const history = useHistory();
+    // const history = useHistory();
 
     const [matchHistory, setMatchesHistory] = useState([]);
     const [favChampions, setFavChampions] = useState({});
@@ -110,10 +110,12 @@ const Dashboard = () => {
         setFavChampions(champ.data())
     }
 
+    /*eslint-disable */
     useEffect(() => {
         fetchMatches();
         fetchFavChampions();
     }, [])
+    /*eslint-enable */
 
     return (
         <div>

@@ -1,12 +1,12 @@
 import React from 'react';
 import {Box, Typography} from '@material-ui/core';
-import {useHistory} from "react-router-dom";
-import {useGlobalContext} from "../../../context";
+// import {useHistory} from "react-router-dom";
+// import {useGlobalContext} from "../../../context";
 import NewPlayerForm from "../components/NewPlayerForm";
 
 const NewPlayer = () => {
-    const {account} = useGlobalContext();
-    const history = useHistory();
+    // const {account} = useGlobalContext();
+    // const history = useHistory();
     
     return (
         <Box>

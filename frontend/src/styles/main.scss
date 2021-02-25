@@ -1,0 +1,18 @@
+@import '../global/styles/layout.scss';
+
+
+@import "../pages/Login/styles/login";
+
+html * {
+  font-family: 'Roboto';
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow: auto;
+}
+
+*:focus {
+  outline: none;
+}

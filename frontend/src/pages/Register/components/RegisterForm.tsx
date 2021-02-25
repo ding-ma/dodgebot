@@ -51,9 +51,9 @@ const RegisterForm = () => {
     };
     
     return (
-        <form className="register-form">
+        <form className="login-footer">
             {errorMessage && (
-                <Typography className="" color="error">
+                <Typography className="login" color="error">
                     {errorMessage}
                 </Typography>
             )}
@@ -62,7 +62,7 @@ const RegisterForm = () => {
                 label="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.currentTarget.value)}
-                className=""
+                className="login-form__input"
                 variant="outlined"
                 color="primary"
                 error={emailError}
@@ -74,7 +74,7 @@ const RegisterForm = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.currentTarget.value)}
-                className=""
+                className="login-form__input"
                 variant="outlined"
                 color="primary"
                 helperText="Password must be at least 8 characters long"
@@ -85,7 +85,7 @@ const RegisterForm = () => {
                 type="password"
                 value={confirm}
                 onChange={(e) => setConfirm(e.currentTarget.value)}
-                className=""
+                className="login-form__input"
                 variant="outlined"
                 color="primary"
                 error={confirmError}
@@ -93,7 +93,7 @@ const RegisterForm = () => {
             <Button
                 variant="contained"
                 color="primary"
-                className=""
+                className="login-form__button"
                 onClick={() => handleSubmit()}
             >
                 Sign up

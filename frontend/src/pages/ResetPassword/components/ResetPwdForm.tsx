@@ -27,14 +27,14 @@ const ResetPwdForm = () => {
     
     return (
         <form className="login-form">
-            <Typography className="" color="error">
+            <Typography className="reset-form__error" color="error">
                 {errorMessage}
             </Typography>
             <TextField
                 label="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.currentTarget.value)}
-                className=""
+                className="login-form__input"
                 variant="outlined"
                 color="primary"
                 error={errorMessage.length > 0}
@@ -43,7 +43,7 @@ const ResetPwdForm = () => {
             <Button
                 variant="contained"
                 color="primary"
-                className=""
+                className="login-form__button"
                 onClick={() => handleSubmit()}
             >
                 Reset

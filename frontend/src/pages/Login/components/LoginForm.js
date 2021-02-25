@@ -3,6 +3,7 @@ import firebase from 'firebase';
 import {useHistory} from 'react-router-dom';
 import {Button, TextField, Typography} from '@material-ui/core';
 import {useGlobalContext} from '../../../context';
+import "../styles/login.scss"
 
 const LoginForm = () => {
     const {account} = useGlobalContext();
@@ -48,14 +49,14 @@ const LoginForm = () => {
 
     return (
         <form className="login-form">
-            <Typography className="" color="error">
+            <Typography className="login-form__error" color="error">
                 {errorMessage}
             </Typography>
             <TextField
                 label="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.currentTarget.value)}
-                className=""
+                className="login-form__input"
                 variant="outlined"
                 color="primary"
                 error={errorMessage.length > 0}
@@ -65,7 +66,7 @@ const LoginForm = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.currentTarget.value)}
-                className=""
+                className="login-form__input"
                 variant="outlined"
                 color="primary"
                 error={errorMessage.length > 0}
@@ -73,7 +74,7 @@ const LoginForm = () => {
             <Button
                 variant="contained"
                 color="primary"
-                className=""
+                className="login-form__button"
                 onClick={() => handleSubmitEmailPwd()}
             >
                 Sign in
@@ -82,7 +83,7 @@ const LoginForm = () => {
             <Button
                 variant="contained"
                 color="primary"
-                className=""
+                className="login-form__button"
                 onClick={() => handleSubmitGoogleAuth()}
             >
                 Sign in with Google

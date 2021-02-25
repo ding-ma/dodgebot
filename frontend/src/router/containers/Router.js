@@ -11,6 +11,7 @@ import NotFound from '../../pages/NotFound';
 import NewPlayer from "../../pages/NewPlayer";
 import Dashboard from "../../pages/Dashboard";
 import PrivateRoute from "../components/PrivateRoute";
+import ResetPasswordCallBack from '../../pages/ResetPassword/containers/ResetPwdCallBack';
 
 const Router = () => {
     if (!firebase.apps.length) {
@@ -35,6 +36,7 @@ const Router = () => {
                     <Route exact path="/login" component={Login}/>
                     <Route exact path="/register" component={Register}/>
                     <Route exact path="/reset" component={ResetPwd}/>
+                    <Route exact path="/confirm" component={ResetPasswordCallBack} />
                     <PrivateRoute exact path="/new" component={NewPlayer}/>
                     <PrivateRoute exact path='/dashboard' component={Dashboard}/>
 

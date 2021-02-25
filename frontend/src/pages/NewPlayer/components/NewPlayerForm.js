@@ -27,7 +27,7 @@ const NewPlayerForm = () => {
             setErrorMessage('One of your fields is empty!')
             return
         }
-        const {currentUser, updateCurrentUser} = firebase.auth();
+        const {currentUser} = firebase.auth();
         const profile = {
             'elo': elo,
             'region': region,

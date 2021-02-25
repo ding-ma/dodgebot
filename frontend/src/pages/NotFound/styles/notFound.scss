@@ -1,0 +1,21 @@
+.not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    bottom: 50px;
+
+&__icon.MuiSvgIcon-root {
+     font-size: 15rem;
+ }
+
+&__header {
+     text-align: center;
+     margin: 50px 0;
+ }
+
+&__text {
+     text-align: center;
+     margin: 2em 0;
+ }
+}

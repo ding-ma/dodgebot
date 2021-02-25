@@ -1,0 +1,48 @@
+$leag-color: #c79b3b;
+
+
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  &__input.MuiTextField-root {
+    margin: 10px 0;
+    width: 70%;
+  }
+
+  &__button.MuiButton-root {
+    margin: 10px 0;
+    width: 60%;
+    min-width: 200px;
+    height: 3em;
+    padding: 18.5px 14px;
+    background-color: $leag-color;
+    &:hover{
+      background-color: black;
+    }
+  }
+}
+
+.login {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  max-width: 600px;
+  height: 500px;
+  flex-direction: column;
+  padding: 1em 2em;
+  justify-content: center;
+  text-align: center;
+}
+
+.login-footer {
+  &__text {
+    text-align: center;
+    color: $leag-color;
+  }
+}
