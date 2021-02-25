@@ -2,11 +2,11 @@ import React, {useState} from 'react';
 import firebase from 'firebase';
 import {useHistory} from 'react-router-dom';
 import {Button, TextField, Typography} from '@material-ui/core';
-import {useGlobalContext} from '../../../context';
+// import {useGlobalContext} from '../../../context';
 
 
 const ResetPwdForm = () => {
-    const { account } = useGlobalContext();
+    // const { account } = useGlobalContext();
     const history = useHistory();
     
     const [email, setEmail] = useState('');
