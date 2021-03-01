@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {Button, InputLabel, MenuItem, Select, TextField, Typography} from '@material-ui/core';
 import firebase from "firebase";
-import {useGlobalContext} from "../../../context";
+// import {useGlobalContext} from "../../../context";
 
 const NewPlayerForm = () => {
-    const {account} = useGlobalContext();
+    // const {account} = useGlobalContext();
     const history = useHistory();
 
     const [summonerName, setSummonerName] = useState('')
@@ -55,7 +55,7 @@ const NewPlayerForm = () => {
                 'sup': []
             });
 
-        account.currentUser = profile;
+        // account.currentUser = profile;
         setSummonerError(false);
         history.push('/dashboard')
     }

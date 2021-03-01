@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {useGlobalContext} from "../../../context";
+// import {useGlobalContext} from "../../../context";
 // import {useHistory} from "react-router-dom";
 import firebase from "firebase";
 
 const Dashboard = () => {
     //TODO: change account-example to account.currentAccount['uid'] after
 
-    const {account} = useGlobalContext();
+    // const {account} = useGlobalContext();
     // const history = useHistory();
 
     const [matchHistory, setMatchesHistory] = useState([]);
@@ -39,7 +39,6 @@ const Dashboard = () => {
 
     const renderMatches = () => {
         return matchHistory.map((match) => {
-            console.log(match)
             return (
                 <div>
                     <ul>
@@ -118,24 +117,25 @@ const Dashboard = () => {
 
     return (
         <div>
-            <h1>Welcome <u>{account.currentUser['summonerName']}</u>!</h1>
+            here is your dashboard
+            {/*<h1>Welcome <u>{account.currentUser['summonerName']}</u>!</h1>*/}
 
-            <ul>
-                <li>Region: {account.currentUser['region']}</li>
-                <li>Elo: {account.currentUser['elo']}</li>
-                <li>Tier: {account.currentUser['tier']}</li>
-            </ul>
+            {/*<ul>*/}
+            {/*    <li>Region: {account.currentUser['region']}</li>*/}
+            {/*    <li>Elo: {account.currentUser['elo']}</li>*/}
+            {/*    <li>Tier: {account.currentUser['tier']}</li>*/}
+            {/*</ul>*/}
 
-            <h2>Past Matches</h2>
-            {matchHistory !== [] && renderMatches()}
+            {/*<h2>Past Matches</h2>*/}
+            {/*{matchHistory !== [] && renderMatches()}*/}
 
 
-            <h2>Favorite Champions</h2>
-            {JSON.stringify(favChampions, null, 2)}
-            {Object.keys(favChampions).length > 0 && renderFavChampions()}
+            {/*<h2>Favorite Champions</h2>*/}
+            {/*{JSON.stringify(favChampions, null, 2)}*/}
+            {/*{Object.keys(favChampions).length > 0 && renderFavChampions()}*/}
 
-            <h2>Settings</h2>
-            {JSON.stringify(account.currentUser, null, 2)}
+            {/*<h2>Settings</h2>*/}
+            {/*{JSON.stringify(account.currentUser, null, 2)}*/}
 
         </div>
     );

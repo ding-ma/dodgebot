@@ -2,11 +2,11 @@ import React, {useState} from 'react';
 import firebase from 'firebase';
 import {useHistory} from 'react-router-dom';
 import {Button, TextField, Typography} from '@material-ui/core';
-import {useGlobalContext} from '../../../context';
+// import {useGlobalContext} from '../../../context';
 import "../styles/login.scss"
 
 const LoginForm = () => {
-    const {account} = useGlobalContext();
+    // const {account} = useGlobalContext();
     const history = useHistory();
 
     const [email, setEmail] = useState('');
@@ -14,11 +14,12 @@ const LoginForm = () => {
     const [errorMessage, setErrorMessage] = useState('');
 
     const determineNewUser = () => {
-        if (account.currentUser == null) {
-            history.push('/new')
-        } else {
-            history.push('/dashboard')
-        }
+        history.push('/dashboard')
+        // if (account.currentUser == null) {
+        //     history.push('/new')
+        // } else {
+        //     history.push('/dashboard')
+        // }
     }
 
     const handleSubmitEmailPwd = () => {

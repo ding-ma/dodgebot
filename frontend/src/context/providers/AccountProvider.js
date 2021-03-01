@@ -1,25 +1,42 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
-import firebase from 'firebase';
-import PropTypes from 'prop-types';
+import React, {createContext, useEffect, useState} from "react";
+import firebase from "firebase";
 
-const AccountContext = createContext(null);
+export const AuthContext = createContext();
 
-export const AccountContextProvider = ({children}) => {
-    const [currentAccount, setCurrentAccount] = useState(null);
+export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
+    const [currentLeagAccount, setCurrentLeagAccoun] = useState(null);
+    const [pending, setPending] = useState(true);
+
+    useEffect(()=>{
+        firebase.initializeApp({
+            apiKey: "AIzaSyBXM-gu-99JxDtSMr02ZBBAUfDdWnI1vxk",
+            authDomain: "dodge-bot.firebaseapp.com",
+            databaseURL: "https://dodge-bot.firebaseio.com",
+            projectId: "dodge-bot",
+            storageBucket: "dodge-bot.appspot.com",
+            messagingSenderId: "692707592061",
+            appId: "1:692707592061:web:d72d5b9c419155cddfae14"
+        });
+    }, [])
 
     useEffect(() => {
-        firebase.auth().onAuthStateChanged(setCurrentAccount);
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+
+        firebase.auth().onAuthStateChanged((user) => {
+            setCurrentUser(user)
+            setPending(false)
+        });
     }, []);
 
     useEffect(() => {
         const getUserInfo = async () => {
-            if (currentAccount) {
+            if (currentUser) {
                 try {
 
                     const userProfile = await firebase
                         .firestore()
-                        .collection(currentAccount.uid)
+                        .collection(currentUser.uid)
                         .doc('profile')
                         .get();
 
@@ -35,17 +52,18 @@ export const AccountContextProvider = ({children}) => {
             }
         };
         getUserInfo();
-    }, [currentAccount]);
+    }, [currentUser])
+    if(pending){
+        return <>Loading...</>
+    }
 
     return (
-        <AccountContext.Provider value={{currentAccount, currentUser}}>
+        <AuthContext.Provider
+            value={{
+                currentUser, currentLeagAccount
+            }}
+        >
             {children}
-        </AccountContext.Provider>
+        </AuthContext.Provider>
     );
 };
-
-AccountContextProvider.propTypes = {
-    children: PropTypes.node.isRequired,
-};
-
-export const useAccountContext = () => useContext(AccountContext);

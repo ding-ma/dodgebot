@@ -18,19 +18,33 @@ const useStyles = makeStyles({
         color: `white`
     },
     navBar: {
-        background : '#c79b3b'
+        background: '#c79b3b'
     },
     home: {
         fill: 'white'
     }
 });
 
-const navLinks = [
-    { title: `Stats`, path: `/stats` },
-    { title: `Login`, path: `/login` },
-];
 
 const Header = () => {
+    
+    const renderLoginLogout = () => {
+        const loginStatus = localStorage.getItem('login');
+        if (loginStatus === 'true') {
+            return <a href='/' key='Logout' className={classes.linkText}>
+                <ListItem button>
+                    <ListItemText primary='Logout'/>
+                </ListItem>
+            </a>
+            
+        } else {
+            return <a href='/login' key='Login' className={classes.linkText}>
+                <ListItem button>
+                    <ListItemText primary='Login'/>
+                </ListItem>
+            </a>
+        }
+    }
     const classes = useStyles();
     
     return (
@@ -47,13 +61,15 @@ const Header = () => {
                         aria-labelledby="main navigation"
                         className={classes.navDisplayFlex}
                     >
-                        {navLinks.map(({ title, path }) => (
-                            <a href={path} key={title} className={classes.linkText}>
-                                <ListItem button>
-                                    <ListItemText primary={title} />
-                                </ListItem>
-                            </a>
-                        ))}
+                        
+                        <a href='/stats' key='Stats' className={classes.linkText}>
+                            <ListItem button>
+                                <ListItemText primary='Stats'/>
+                            </ListItem>
+                        </a>
+                        
+                        {renderLoginLogout()}
+                    
                     </List>
                 </Container>
             </Toolbar>
