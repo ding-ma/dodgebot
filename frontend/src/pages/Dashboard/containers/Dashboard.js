@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useGlobalContext} from "../../../context";
 // import {useHistory} from "react-router-dom";
-import NavBar from "../components/NavBar"
 import firebase from "firebase";
 
 const Dashboard = () => {
@@ -119,7 +118,6 @@ const Dashboard = () => {
 
     return (
         <div>
-            <NavBar/>
             <h1>Welcome <u>{account.currentUser['summonerName']}</u>!</h1>
 
             <ul>
