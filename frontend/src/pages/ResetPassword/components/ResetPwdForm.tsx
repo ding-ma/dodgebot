@@ -17,7 +17,7 @@ const ResetPwdForm = () => {
             .auth()
             .sendPasswordResetEmail(email)
             .then(() => {
-                history.push('/login')
+                history.push('/')
             })
             .catch((err) => {
                 console.log(err);

@@ -11,7 +11,7 @@ const Register = () => (
         <div className="login-footer">
             <Typography color="inherit" className="login-footer__text">
                 Already have an account?{' '}
-                <Link color="primary" href="/login">
+                <Link color="primary" href="/">
                     Login
                 </Link>
             </Typography>

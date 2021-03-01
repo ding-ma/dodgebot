@@ -1,20 +1,22 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import firebase from 'firebase';
 import {useHistory} from 'react-router-dom';
 import {Button, TextField, Typography} from '@material-ui/core';
-// import {useGlobalContext} from '../../../context';
 import "../styles/login.scss"
+import {AuthContext} from "../../../context/providers/AccountProvider";
 
 const LoginForm = () => {
-    // const {account} = useGlobalContext();
     const history = useHistory();
+    const {currentUser} = useContext(AuthContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
     const determineNewUser = () => {
+        console.log('after login',currentUser)
         history.push('/dashboard')
+        // history.go(0)
         // if (account.currentUser == null) {
         //     history.push('/new')
         // } else {
@@ -26,8 +28,8 @@ const LoginForm = () => {
         firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
-            .then(async () => {
-                await determineNewUser()
+            .then(() => {
+                determineNewUser()
             })
             .catch((err) => {
                 console.log(err);
@@ -39,8 +41,8 @@ const LoginForm = () => {
         firebase
             .auth()
             .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-            .then(async () => {
-                await determineNewUser()
+            .then(() => {
+                determineNewUser()
             })
             .catch((err) => {
                 console.log(err);

@@ -12,7 +12,7 @@ const ResetPwd = () => (
         <div className="login-footer">
             <Typography color="inherit" className="login-footer__text">
                 Remember Password?{' '}
-                <Link color="primary" href="/login">
+                <Link color="primary" href="/">
                     Login
                 </Link>
             </Typography>

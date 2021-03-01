@@ -2,6 +2,7 @@ import * as React from "react";
 import {AppBar, Container, IconButton, List, ListItem, ListItemText, Toolbar} from "@material-ui/core";
 import {Home} from "@material-ui/icons";
 import {makeStyles} from "@material-ui/core/styles";
+import firebase from "firebase";
 
 const useStyles = makeStyles({
     navbarDisplayFlex: {
@@ -29,21 +30,24 @@ const useStyles = makeStyles({
 const Header = () => {
     
     const renderLoginLogout = () => {
-        const loginStatus = localStorage.getItem('login');
-        if (loginStatus === 'true') {
+        const user = firebase.auth().currentUser;
+        if (user) {
+            // User is signed in.
             return <a href='/' key='Logout' className={classes.linkText}>
                 <ListItem button>
-                    <ListItemText primary='Logout'/>
+                    <ListItemText primary='Logout' onClick={() => firebase.auth().signOut()}/>
                 </ListItem>
             </a>
-            
         } else {
-            return <a href='/login' key='Login' className={classes.linkText}>
+            // No user is signed in.
+            return <a href='/' key='Login' className={classes.linkText}>
                 <ListItem button>
                     <ListItemText primary='Login'/>
                 </ListItem>
             </a>
         }
+        
+        
     }
     const classes = useStyles();
     
@@ -52,7 +56,7 @@ const Header = () => {
             <Toolbar>
                 <Container maxWidth="md" className={classes.navbarDisplayFlex}>
                     <IconButton edge="start" color="inherit" aria-label="home">
-                        <a href='/'>
+                        <a href='/dashboard'>
                             <Home fontSize="large" className={classes.home}/>
                         </a>
                     </IconButton>

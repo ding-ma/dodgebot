@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import { Button, TextField, Typography } from '@material-ui/core';
+import React, {useState} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
+import {Button, TextField, Typography} from '@material-ui/core';
 import firebase from 'firebase';
 
 const ResetPasswordCallBack = () => {
@@ -29,7 +29,7 @@ const ResetPasswordCallBack = () => {
             .auth()
             .confirmPasswordReset(resetCode, pwd)
             .then(() => {
-                history.push('/login');
+                history.push('/');
             })
             .catch((err) => {
                 switch (err.code) {

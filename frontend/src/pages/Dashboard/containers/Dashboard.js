@@ -1,13 +1,12 @@
-import React, {useEffect, useState} from 'react';
-// import {useGlobalContext} from "../../../context";
-// import {useHistory} from "react-router-dom";
+import React, {useContext, useEffect, useState} from 'react';
+import {useHistory} from "react-router-dom";
 import firebase from "firebase";
+import {AuthContext} from "../../../context/providers/AccountProvider";
 
 const Dashboard = () => {
     //TODO: change account-example to account.currentAccount['uid'] after
-
-    // const {account} = useGlobalContext();
-    // const history = useHistory();
+    const {currentUser, currentLeagAccount} = useContext(AuthContext);
+    const history = useHistory();
 
     const [matchHistory, setMatchesHistory] = useState([]);
     const [favChampions, setFavChampions] = useState({});
@@ -118,6 +117,7 @@ const Dashboard = () => {
     return (
         <div>
             here is your dashboard
+            {JSON.stringify(currentUser)}
             {/*<h1>Welcome <u>{account.currentUser['summonerName']}</u>!</h1>*/}
 
             {/*<ul>*/}
