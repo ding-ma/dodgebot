@@ -51,9 +51,9 @@ const RegisterForm = () => {
     };
     
     return (
-        <form className="login-footer">
+        <form className="login-form">
             {errorMessage && (
-                <Typography className="login" color="error">
+                <Typography className="login-form__error" color="error">
                     {errorMessage}
                 </Typography>
             )}

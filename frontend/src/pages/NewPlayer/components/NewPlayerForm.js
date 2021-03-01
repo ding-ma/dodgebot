@@ -11,14 +11,14 @@ const NewPlayerForm = () => {
     const [summonerName, setSummonerName] = useState('')
     const [summonerError, setSummonerError] = useState(false)
 
-    const [region, setRegion] = useState('');
+    const [region, setRegion] = useState('North America');
     const regions = ['North America', 'Korea', 'Europe West', 'Europe East', 'Brazil'];
 
     const elos = ['Unranked', 'Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'GrandMaster', 'Challenger']
-    const [elo, setElo] = useState('')
+    const [elo, setElo] = useState('Silver')
 
     const tiers = ['I', 'II', 'III', 'IV']
-    const [tier, setTier] = useState('')
+    const [tier, setTier] = useState('I')
 
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -61,23 +61,20 @@ const NewPlayerForm = () => {
     }
 
     return (
-        <form className="register-form">
+        <form className="login-form">
             {errorMessage && (
-                <Typography className="" color="error">
+                <Typography className="login-form__error" color="error">
                     {errorMessage}
                 </Typography>
             )}
-
 
             <InputLabel htmlFor="">Region</InputLabel>
             <Select
                 required={true}
                 value={region}
                 onChange={(event) => setRegion(event.target.value)}
-                inputProps={{
-                    name: "Region",
-                    id: "age-simple"
-                }}
+                style={{ margin: '10px 0', width: '70%' }}
+                variant="outlined"
             >
                 {regions.map((value, index) => {
                     return <MenuItem key={index} value={value}>{value}</MenuItem>;
@@ -89,10 +86,8 @@ const NewPlayerForm = () => {
                 required={true}
                 value={elo}
                 onChange={(event) => setElo(event.target.value)}
-                inputProps={{
-                    name: "Elo",
-                    id: "age-simple"
-                }}
+                style={{ margin: '10px 0', width: '70%' }}
+                variant="outlined"
             >
                 {elos.map((value, index) => {
                     return <MenuItem key={index} value={value}>{value}</MenuItem>;
@@ -104,10 +99,8 @@ const NewPlayerForm = () => {
                 required={true}
                 value={tier}
                 onChange={(event) => setTier(event.target.value)}
-                inputProps={{
-                    name: "Tier",
-                    id: "age-simple"
-                }}
+                style={{ margin: '10px 0', width: '70%' }}
+                variant="outlined"
             >
                 {tiers.map((value, index) => {
                     return <MenuItem key={index} value={value}>{value}</MenuItem>;
@@ -119,7 +112,7 @@ const NewPlayerForm = () => {
                 required={true}
                 value={summonerName}
                 onChange={(e) => setSummonerName(e.currentTarget.value)}
-                className=""
+                className="login-form__input"
                 variant="outlined"
                 color="primary"
                 error={summonerError}
@@ -129,7 +122,7 @@ const NewPlayerForm = () => {
             <Button
                 variant="contained"
                 color="primary"
-                className=""
+                className="login-form__button"
                 onClick={() => handleRegisterAccount()}
             >
                 Register

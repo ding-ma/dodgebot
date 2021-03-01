@@ -1,16 +1,11 @@
 import React from 'react';
 import {Box, Typography} from '@material-ui/core';
-// import {useHistory} from "react-router-dom";
-// import {useGlobalContext} from "../../../context";
 import NewPlayerForm from "../components/NewPlayerForm";
 
 const NewPlayer = () => {
-    // const {account} = useGlobalContext();
-    // const history = useHistory();
-    
     return (
-        <Box>
-            <Typography variant="h3" className="">
+        <Box className="login">
+            <Typography variant="h3" className="login__header">
                 Welcome to DogeBot Summoner!
             </Typography>
             <Typography className="">
