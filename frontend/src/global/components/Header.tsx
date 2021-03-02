@@ -90,7 +90,7 @@ const Header = () => {
                         </a>
                         
                         {userLogin &&
-                        <a href='' key='Stats' className={classes.linkText}>
+                        <a href='/dashboard' key='Stats' className={classes.linkText}>
                             <ListItem button>
                                 <ListItemText primary='Predict'/>
                             </ListItem>
@@ -98,7 +98,7 @@ const Header = () => {
                         }
                         
                         {userLogin &&
-                        <a href='' key='Stats' className={classes.linkText}>
+                        <a href='/dashboard' key='Stats' className={classes.linkText}>
                             <ListItem button>
                                 <ListItemText primary='Settings'/>
                             </ListItem>
