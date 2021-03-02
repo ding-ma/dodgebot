@@ -1,11 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {useHistory} from "react-router-dom";
 import firebase from "firebase";
 import {AuthContext} from "../../../context/providers/AccountProvider";
 
 const Dashboard = () => {
     const {currentUser} = useContext(AuthContext);
-    const history = useHistory();
 
     const [leagueAccount, setLeagueAccount] = useState({})
     const [matchHistory, setMatchesHistory] = useState([]);
@@ -100,7 +98,7 @@ const Dashboard = () => {
             setMatchesHistory(predictions)
         }
         getUserAccount()
-    }, [])
+    }, [currentUser.uid])
 
     return (
         <div>
@@ -114,7 +112,8 @@ const Dashboard = () => {
             </ul>
 
             <h2>Past Matches</h2>
-            {/*{matchHistory !== [] && renderMatches()}*/}
+            {matchHistory !== [] && renderMatches()}
+            {matchHistory === [] && <div>No history!</div>}
 
 
             <h2>Favorite Champions</h2>

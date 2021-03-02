@@ -36,7 +36,7 @@ const NewPlayerForm = () => {
             .collection('users')
             .doc(currentUser.uid)
             .set({'profile': profile,
-                'predictions': {},
+                'predictions': [],
                 'favorites':{
                     'top': [],
                     'jg': [],
