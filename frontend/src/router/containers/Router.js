@@ -13,6 +13,8 @@ import ResetPasswordCallBack from '../../pages/ResetPassword/containers/ResetPwd
 import firebase from "firebase";
 import {AuthProvider} from "../../context/providers/AccountProvider";
 import Header from "../../global/components/Header";
+import Setting from "../../pages/Setting/containers/Setting";
+import Predictions from "../../pages/Prediction/containers/Preditions";
 
 const Router = () => {
     if (!firebase.apps.length) {
@@ -39,8 +41,9 @@ const Router = () => {
                         <Route exact path="/reset" component={ResetPwd}/>
                         <Route exact path="/confirm" component={ResetPasswordCallBack}/>
                         <PrivateRoute exact path="/new" component={NewPlayer}/>
-                        <PrivateRoute exact path='/dashboard' component={Dashboard}/>
-
+                        <PrivateRoute exact path="/dashboard" component={Dashboard}/>
+                        <PrivateRoute exact path="/settings" component={Setting}/>
+                        <PrivateRoute exact path="/predict" component={Predictions}/>
                         <Route component={NotFound}/>
 
                     </Switch>

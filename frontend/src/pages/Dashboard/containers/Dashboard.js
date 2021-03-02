@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import firebase from "firebase";
 import {AuthContext} from "../../../context/providers/AccountProvider";
 
+
 const Dashboard = () => {
     const {currentUser} = useContext(AuthContext);
 

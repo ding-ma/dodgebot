@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {createContext, useEffect, useState} from "react";
 import {AppBar, Container, IconButton, List, ListItem, ListItemText, Toolbar} from "@material-ui/core";
 import {Home} from "@material-ui/icons";
 import {makeStyles} from "@material-ui/core/styles";
@@ -27,6 +27,9 @@ const useStyles = makeStyles({
     }
 });
 
+const leagueAccountContext = createContext({});
+const matchHisotryContext = createContext([]);
+const favChampionContext = createContext({});
 
 const Header = () => {
     const [userLogin, setUserlogin] = useState(false);
@@ -90,7 +93,7 @@ const Header = () => {
                         </a>
                         
                         {userLogin &&
-                        <a href='/dashboard' key='Stats' className={classes.linkText}>
+                        <a href='/predict' key='predict' className={classes.linkText}>
                             <ListItem button>
                                 <ListItemText primary='Predict'/>
                             </ListItem>
@@ -98,7 +101,7 @@ const Header = () => {
                         }
                         
                         {userLogin &&
-                        <a href='/dashboard' key='Stats' className={classes.linkText}>
+                        <a href='/settings' key='settings' className={classes.linkText}>
                             <ListItem button>
                                 <ListItemText primary='Settings'/>
                             </ListItem>
