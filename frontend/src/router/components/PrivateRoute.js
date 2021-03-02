@@ -1,11 +1,9 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Redirect, Route} from 'react-router-dom';
 import firebase from "firebase";
-import {AuthContext} from "../../context/providers/AccountProvider"
 
 const PrivateRoute = ({component: Component, ...rest}) => {
-    const {currentUser} = useContext(AuthContext);
-    console.log("in private route current user", currentUser);
+
     const [state, setState] = useState('loading');
 
     useEffect(() => {
@@ -28,7 +26,7 @@ const PrivateRoute = ({component: Component, ...rest}) => {
         <Route
             {...rest}
             render={(props) => {
-                if (!currentUser) {
+                if (state === 'redirect') {
                     return <Redirect to="/"/>;
                 }
 

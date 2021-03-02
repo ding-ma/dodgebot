@@ -16,7 +16,7 @@ const LoginForm = () => {
     const determineNewUser = async () => {
         console.log("during login", currentUser)
         const usr = await firebase.auth().currentUser
-        const userAccount =await firebase
+        const userAccount = await firebase
             .firestore()
             .collection('users')
             .doc(usr.uid)
@@ -25,7 +25,7 @@ const LoginForm = () => {
         if (userAccount.exists) {
             history.push('/dashboard')
         } else {
-                history.push('/new')
+            history.push('/new')
         }
 
     }

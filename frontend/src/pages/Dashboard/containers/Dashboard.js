@@ -99,7 +99,7 @@ const Dashboard = () => {
             setMatchesHistory(predictions)
         }
         getUserAccount()
-    }, [currentUser.uid])
+    }, [])
 
     return (
         <div>

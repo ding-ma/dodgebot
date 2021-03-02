@@ -1,5 +1,5 @@
 import * as React from "react";
-import {createContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {AppBar, Container, IconButton, List, ListItem, ListItemText, Toolbar} from "@material-ui/core";
 import {Home} from "@material-ui/icons";
 import {makeStyles} from "@material-ui/core/styles";
@@ -27,13 +27,9 @@ const useStyles = makeStyles({
     }
 });
 
-const leagueAccountContext = createContext({});
-const matchHisotryContext = createContext([]);
-const favChampionContext = createContext({});
 
 const Header = () => {
     const [userLogin, setUserlogin] = useState(false);
-    
     
     //quick hack to render!
     useEffect(() => {
@@ -44,6 +40,7 @@ const Header = () => {
                 setUserlogin(false)
             }
         }
+        
         getAlerts()
         const interval = setInterval(() => getAlerts(), 500)
         return () => {
@@ -54,11 +51,15 @@ const Header = () => {
     const renderLoginLogout = () => {
         if (userLogin) {
             // User is signed in.
-            return <a href='/' key='Logout' className={classes.linkText}>
-                <ListItem button>
-                    <ListItemText primary='Logout' onClick={() => firebase.auth().signOut()}/>
-                </ListItem>
-            </a>
+            return (
+                <div className={classes.linkText} onClick={() => firebase.auth().signOut()}>
+                    <a href="/" key='Logout' className={classes.linkText}>
+                        <ListItem button>
+                            <ListItemText primary='Logout'/>
+                        </ListItem>
+                    </a>
+                </div>
+            )
         } else {
             // No user is signed in.
             return <a href='/' key='Login' className={classes.linkText}>

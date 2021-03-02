@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Box, Link, Typography} from '@material-ui/core';
 import LoginForm from '../components/LoginForm';
 import firebase from "firebase";
@@ -6,13 +6,18 @@ import {useHistory} from "react-router-dom";
 
 const Login = () => {
     const history = useHistory();
-    const currentUser = firebase.auth().currentUser
-
-    if (currentUser){
-        history.push('/dashboard')
-    }
     
-    return(
+    useEffect(() => {
+        (async function() {
+                const isUserLogged = await firebase.auth().currentUser;
+                if (isUserLogged){
+                    history.push("/dashboard")
+                }
+        })();
+    }, []);
+    
+    
+    return (
         <Box className="login">
             <Typography variant="h3" className="login__header">
                 Login
