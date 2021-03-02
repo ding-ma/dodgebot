@@ -4,10 +4,10 @@ import firebase from "firebase";
 import {AuthContext} from "../../../context/providers/AccountProvider";
 
 const Dashboard = () => {
-    //TODO: change account-example to account.currentAccount['uid'] after
-    const {currentUser, currentLeagAccount} = useContext(AuthContext);
+    const {currentUser} = useContext(AuthContext);
     const history = useHistory();
 
+    const [leagueAccount, setLeagueAccount] = useState({})
     const [matchHistory, setMatchesHistory] = useState([]);
     const [favChampions, setFavChampions] = useState({});
 
@@ -88,54 +88,39 @@ const Dashboard = () => {
         </div>
     }
 
-    const fetchMatches = async () => {
-        const matches = await firebase
-            .firestore()
-            .collection('account-example')
-            .doc('predictions')
-            .get();
-        setMatchesHistory(matches.data()['predictions'])
-        console.log(matchHistory)
-    }
-
-    const fetchFavChampions = async () => {
-        const champ = await firebase
-            .firestore()
-            .collection('account-example')
-            .doc('favorites')
-            .get()
-        setFavChampions(champ.data())
-    }
-
-    /*eslint-disable */
     useEffect(() => {
-        fetchMatches();
-        fetchFavChampions();
+        const getUserAccount = async () => {
+            const data = await firebase.firestore()
+                .collection('users')
+                .doc(currentUser.uid)
+                .get()
+            const {favorites, predictions, profile} = data.data()
+            setFavChampions(favorites)
+            setLeagueAccount(profile)
+            setMatchesHistory(predictions)
+        }
+        getUserAccount()
     }, [])
-    /*eslint-enable */
 
     return (
         <div>
-            here is your dashboard
-            {JSON.stringify(currentUser)}
-            {/*<h1>Welcome <u>{account.currentUser['summonerName']}</u>!</h1>*/}
 
-            {/*<ul>*/}
-            {/*    <li>Region: {account.currentUser['region']}</li>*/}
-            {/*    <li>Elo: {account.currentUser['elo']}</li>*/}
-            {/*    <li>Tier: {account.currentUser['tier']}</li>*/}
-            {/*</ul>*/}
+            <h1>Welcome <u>{leagueAccount.summonerName}</u>!</h1>
 
-            {/*<h2>Past Matches</h2>*/}
+            <ul>
+                <li>Region: {leagueAccount.region}</li>
+                <li>Elo: {leagueAccount.elo}</li>
+                <li>Tier: {leagueAccount.tier}</li>
+            </ul>
+
+            <h2>Past Matches</h2>
             {/*{matchHistory !== [] && renderMatches()}*/}
 
 
-            {/*<h2>Favorite Champions</h2>*/}
-            {/*{JSON.stringify(favChampions, null, 2)}*/}
-            {/*{Object.keys(favChampions).length > 0 && renderFavChampions()}*/}
+            <h2>Favorite Champions</h2>
+            {Object.keys(favChampions).length > 0 && renderFavChampions()}
 
-            {/*<h2>Settings</h2>*/}
-            {/*{JSON.stringify(account.currentUser, null, 2)}*/}
+            <h2>Settings</h2>
 
         </div>
     );

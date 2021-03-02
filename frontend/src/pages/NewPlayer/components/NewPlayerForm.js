@@ -2,10 +2,8 @@ import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {Button, InputLabel, MenuItem, Select, TextField, Typography} from '@material-ui/core';
 import firebase from "firebase";
-// import {useGlobalContext} from "../../../context";
 
 const NewPlayerForm = () => {
-    // const {account} = useGlobalContext();
     const history = useHistory();
 
     const [summonerName, setSummonerName] = useState('')
@@ -35,27 +33,19 @@ const NewPlayerForm = () => {
             'tier': tier
         }
         await firebase.firestore()
-            .collection(currentUser.uid)
-            .doc('profile')
-            .set(profile);
+            .collection('users')
+            .doc(currentUser.uid)
+            .set({'profile': profile,
+                'predictions': {},
+                'favorites':{
+                    'top': [],
+                    'jg': [],
+                    'mid': [],
+                    'adc': [],
+                    'sup': []
+                }
+            })
 
-        await firebase.firestore()
-            .collection(currentUser.uid)
-            .doc('predictions')
-            .set({});
-
-        await firebase.firestore()
-            .collection(currentUser.uid)
-            .doc('favorites')
-            .set({
-                'top': [],
-                'jg': [],
-                'mid': [],
-                'adc': [],
-                'sup': []
-            });
-
-        // account.currentUser = profile;
         setSummonerError(false);
         history.push('/dashboard')
     }

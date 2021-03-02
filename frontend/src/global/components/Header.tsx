@@ -28,9 +28,9 @@ const useStyles = makeStyles({
 
 
 const Header = () => {
+    const user = firebase.auth().currentUser;
     
     const renderLoginLogout = () => {
-        const user = firebase.auth().currentUser;
         if (user) {
             // User is signed in.
             return <a href='/' key='Logout' className={classes.linkText}>
@@ -56,9 +56,9 @@ const Header = () => {
             <Toolbar>
                 <Container maxWidth="md" className={classes.navbarDisplayFlex}>
                     <IconButton edge="start" color="inherit" aria-label="home">
-                        <a href='/dashboard'>
+                        {user && <a href='/dashboard'>
                             <Home fontSize="large" className={classes.home}/>
-                        </a>
+                        </a>}
                     </IconButton>
                     <List
                         component="nav"
@@ -68,7 +68,7 @@ const Header = () => {
                         
                         <a href='/stats' key='Stats' className={classes.linkText}>
                             <ListItem button>
-                                <ListItemText primary='Stats'/>
+                                <ListItemText primary='How it works'/>
                             </ListItem>
                         </a>
                         

@@ -13,23 +13,29 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
-    const determineNewUser = () => {
-        console.log('after login',currentUser)
-        history.push('/dashboard')
-        // history.go(0)
-        // if (account.currentUser == null) {
-        //     history.push('/new')
-        // } else {
-        //     history.push('/dashboard')
-        // }
+    const determineNewUser = async () => {
+        console.log("during login", currentUser)
+        const usr = await firebase.auth().currentUser
+        const userAccount =await firebase
+            .firestore()
+            .collection('users')
+            .doc(usr.uid)
+            .get();
+
+        if (userAccount.exists) {
+            history.push('/dashboard')
+        } else {
+                history.push('/new')
+        }
+
     }
 
-    const handleSubmitEmailPwd = () => {
+    const handleSubmitEmailPwd = async () => {
         firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
-            .then(() => {
-                determineNewUser()
+            .then(async () => {
+                await determineNewUser()
             })
             .catch((err) => {
                 console.log(err);
@@ -37,12 +43,12 @@ const LoginForm = () => {
             });
     };
 
-    const handleSubmitGoogleAuth = () => {
+    const handleSubmitGoogleAuth = async () => {
         firebase
             .auth()
             .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-            .then(() => {
-                determineNewUser()
+            .then(async () => {
+                await determineNewUser()
             })
             .catch((err) => {
                 console.log(err);
