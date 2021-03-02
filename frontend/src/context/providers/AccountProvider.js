@@ -8,7 +8,7 @@ export const AuthProvider = ({children}) => {
     const [pending, setPending] = useState(true);
 
     useEffect(() => {
-        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(() => {
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
             firebase.auth().onAuthStateChanged((user) => {
                 setCurrentUser(user)
                 setPending(false)
