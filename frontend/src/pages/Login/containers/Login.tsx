@@ -14,7 +14,7 @@ const Login = () => {
                     history.push("/dashboard")
                 }
         })();
-    }, []);
+    }, [history]);
     
     
     return (

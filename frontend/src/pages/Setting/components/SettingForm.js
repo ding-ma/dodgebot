@@ -11,7 +11,7 @@ const SettingForm = () => {
 
         const isPassword = currentUser.providerData[0].providerId === "password"
         const [summonerName, setSummonerName] = useState('')
-        const [password, setPassowrd] = useState('')
+        const [password, setPassword] = useState('')
 
         const [region, setRegion] = useState('North America');
         const regions = ['North America', 'Korea', 'Europe West', 'Europe East', 'Brazil'];
@@ -109,6 +109,7 @@ const SettingForm = () => {
                 <TextField
                     required={true}
                     value={password}
+                    onChange={(event) => setPassword(event.target.value)}
                     className="login-form__input"
                     variant="outlined"
                     color="primary"
