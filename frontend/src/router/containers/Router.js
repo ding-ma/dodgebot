@@ -15,6 +15,7 @@ import {AuthProvider} from "../../context/providers/AccountProvider";
 import Header from "../../global/components/Header";
 import Setting from "../../pages/Setting/containers/Setting";
 import Predictions from "../../pages/Prediction/containers/Preditions";
+import Favorites from "../../pages/Favorites/containers/Favorites";
 
 const Router = () => {
     if (!firebase.apps.length) {
@@ -44,6 +45,7 @@ const Router = () => {
                         <PrivateRoute exact path="/dashboard" component={Dashboard}/>
                         <PrivateRoute exact path="/settings" component={Setting}/>
                         <PrivateRoute exact path="/predict" component={Predictions}/>
+                        <PrivateRoute exact path="/favorites" component={Favorites}/>
                         <Route component={NotFound}/>
 
                     </Switch>

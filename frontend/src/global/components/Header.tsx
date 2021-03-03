@@ -74,7 +74,7 @@ const Header = () => {
     const classes = useStyles();
     
     return (
-        <AppBar position="sticky" className={classes.navBar}>
+        <AppBar position="relative" className={classes.navBar}>
             <Toolbar>
                 <Container maxWidth="md" className={classes.navbarDisplayFlex}>
                     <IconButton edge="start" color="inherit" aria-label="home">
@@ -100,11 +100,19 @@ const Header = () => {
                             </ListItem>
                         </a>
                         }
+    
+                        {userLogin &&
+                        <a href='/favorites' key='favorites' className={classes.linkText}>
+                            <ListItem button>
+                                <ListItemText primary='Favorites'/>
+                            </ListItem>
+                        </a>
+                        }
                         
                         {userLogin &&
                         <a href='/settings' key='settings' className={classes.linkText}>
                             <ListItem button>
-                                <ListItemText primary='Settings'/>
+                                <ListItemText primary='Account'/>
                             </ListItem>
                         </a>
                         }

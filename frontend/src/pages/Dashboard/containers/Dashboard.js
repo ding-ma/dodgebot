@@ -99,10 +99,10 @@ const Dashboard = () => {
             setMatchesHistory(predictions)
         }
         getUserAccount()
-    }, [])
+    }, [currentUser])
 
     return (
-        <div>
+        <div className="login">
 
             <h1>Welcome <u>{leagueAccount.summonerName}</u>!</h1>
 
@@ -120,7 +120,6 @@ const Dashboard = () => {
             <h2>Favorite Champions</h2>
             {Object.keys(favChampions).length > 0 && renderFavChampions()}
 
-            <h2>Settings</h2>
 
         </div>
     );
