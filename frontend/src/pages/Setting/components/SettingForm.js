@@ -3,6 +3,7 @@ import firebase from 'firebase';
 import {Button, InputLabel, MenuItem, Select, TextField, Typography} from '@material-ui/core';
 import {AuthContext} from "../../../context/providers/AccountProvider";
 import {useHistory} from "react-router-dom";
+import {store} from 'react-notifications-component';
 
 const SettingForm = () => {
         const history = useHistory()
@@ -62,6 +63,18 @@ const SettingForm = () => {
                         'tier': tier
                     }
                 })
+            store.addNotification({
+                title: "Changes saved!",
+                message: '  ',
+                type: "success",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000
+                }
+            });
             history.push("/dashboard")
         }
 

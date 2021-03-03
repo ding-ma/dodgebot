@@ -16,6 +16,8 @@ import Header from "../../global/components/Header";
 import Setting from "../../pages/Setting/containers/Setting";
 import Predictions from "../../pages/Prediction/containers/Preditions";
 import Favorites from "../../pages/Favorites/containers/Favorites";
+import ReactNotification from 'react-notifications-component'
+
 
 const Router = () => {
     if (!firebase.apps.length) {
@@ -32,6 +34,7 @@ const Router = () => {
 
     return (
         <AuthProvider>
+            <ReactNotification />
             <Header/>
             <BrowserRouter>
                 <Layout>

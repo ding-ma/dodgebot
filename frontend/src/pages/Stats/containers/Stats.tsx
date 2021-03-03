@@ -14,6 +14,7 @@ const TABLE_LIST = [
 export default function Stats() {
     
     return <div>
+       <h1> Place holders for now</h1>
         <BarChart
             width={600}
             height={300}

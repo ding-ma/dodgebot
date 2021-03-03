@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import firebase from "firebase";
 import {AuthContext} from "../../../context/providers/AccountProvider";
+import {store} from 'react-notifications-component';
 
 
 const Dashboard = () => {
@@ -8,7 +9,39 @@ const Dashboard = () => {
 
     const [leagueAccount, setLeagueAccount] = useState({})
     const [matchHistory, setMatchesHistory] = useState([]);
-    const [favChampions, setFavChampions] = useState({});
+
+    useEffect(() => {
+        const getUserAccount = async () => {
+            const data = await firebase.firestore()
+                .collection('users')
+                .doc(currentUser.uid)
+                .get()
+            const {predictions, profile} = data.data()
+            setLeagueAccount(profile)
+            setMatchesHistory(predictions)
+        }
+        getUserAccount()
+    }, [currentUser])
+
+    if(matchHistory.length ===0 ){
+        const notice = localStorage.getItem("notified")
+        if (notice !== "yes"){
+            store.addNotification({
+                title: "Welcome Summoner!",
+                message: "Select your favorite champions and start making predictions!",
+                type: "success",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000
+                }
+            });
+            localStorage.setItem("notified", "yes")
+        }
+
+    }
 
     const renderBans = (bans) => {
         return (
@@ -67,39 +100,8 @@ const Dashboard = () => {
         })
     }
 
-    const renderFavChampRole = (role) => {
-        return role.map((r) => {
-            return (
-                <div>
-                    <li>{r}</li>
-                </div>
-            )
-        })
-    }
 
-    const renderFavChampions = () => {
-        return <div>
-            <ul>ADC: {renderFavChampRole(favChampions.adc)}</ul>
-            <ul>Support: {renderFavChampRole(favChampions.sup)}</ul>
-            <ul>Mid: {renderFavChampRole(favChampions.mid)}</ul>
-            <ul>Jungle: {renderFavChampRole(favChampions.jg)}</ul>
-            <ul>Top: {renderFavChampRole(favChampions.top)}</ul>
-        </div>
-    }
 
-    useEffect(() => {
-        const getUserAccount = async () => {
-            const data = await firebase.firestore()
-                .collection('users')
-                .doc(currentUser.uid)
-                .get()
-            const {favorites, predictions, profile} = data.data()
-            setFavChampions(favorites)
-            setLeagueAccount(profile)
-            setMatchesHistory(predictions)
-        }
-        getUserAccount()
-    }, [currentUser])
 
     return (
         <div className="login">
@@ -113,13 +115,8 @@ const Dashboard = () => {
             </ul>
 
             <h2>Past Matches</h2>
-            {matchHistory !== [] && renderMatches()}
-            {matchHistory === [] && <div>No history!</div>}
-
-
-            <h2>Favorite Champions</h2>
-            {Object.keys(favChampions).length > 0 && renderFavChampions()}
-
+            {matchHistory.length !== 0  && renderMatches()}
+            {matchHistory.length === 0 && <div>No history!</div>}
 
         </div>
     );
