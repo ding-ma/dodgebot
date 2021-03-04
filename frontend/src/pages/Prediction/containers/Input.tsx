@@ -148,14 +148,23 @@ class Input extends React.Component<InputProps, {}> {
 
   render() {
     var imgSrc = this.props.champion == "" ? QuestionMark : `../ChampionIcons/` + this.props.champion + `Square.png`
+    var img = <img onClick={() => this.props.onClick()} src={imgSrc} style={{ height: "10vh", width: "10vh", border: "1px solid #5a4820", borderRadius: "2px" }}></img>
     return (
-      <div>
-        <div style={{ display: "flex" }}>
-          {this.props.isLeftSide ? <img src={imgSrc} style={{ height: "30px", width: "30px" }}></img> : null}
-          <div style={{ border: "1px solid black", height: "30px", width: "100px" }} onClick={() => this.props.onClick()}>{this.props.champion === "" ? "Click to Select" : this.props.champion}</div>
-          {!this.props.isLeftSide ? <img src={imgSrc} style={{ height: "30px", width: "30px" }}></img> : null}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", margin: "2%" }}>
+        {/* Display img on left of select button if right panel */}
+        {this.props.isLeftSide ? img : null}
 
+        {/* Select button */}
+        <div style={{ height: "55%", width: "50%", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid #5a4820", margin: "4%", borderRadius: "2px" }} onClick={() => this.props.onClick()}>
+          {/* Champ name */}
+          <p style={{ color: "#87742a" }}>
+            {this.props.champion === "" ? "Click to Select" : this.props.champion}
+          </p>
         </div>
+        
+        {/* Display img on right of select button if left panel */}
+        {!this.props.isLeftSide ? img : null}
+
       </div>
     );
   };

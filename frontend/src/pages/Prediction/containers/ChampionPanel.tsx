@@ -11,7 +11,7 @@ type ChampionPanelProps = {
 class ChampionPanel extends React.Component<ChampionPanelProps, {}> {
     render() {
         return (
-            <div>
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", width: "100%"}}>
                 <Input isLeftSide={this.props.isLeftSide} onClick={() => this.props.selectBox(0)} champion={this.props.champions[0]} />
                 <Input isLeftSide={this.props.isLeftSide} onClick={() => this.props.selectBox(1)} champion={this.props.champions[1]} />
                 <Input isLeftSide={this.props.isLeftSide} onClick={() => this.props.selectBox(2)} champion={this.props.champions[2]} />

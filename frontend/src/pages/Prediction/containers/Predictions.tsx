@@ -1,15 +1,22 @@
 import React from "react";
 import styled from "styled-components";
 import ChampionPanel from "./ChampionPanel";
+import InnerOval from "../../../images/Inner Oval.png"
+import OuterOval from "../../../images/Outer Oval.png"
+import OvalInside from "../../../images/Oval Inside.png"
+import PredictBox from "../../../images/Predict Box Text.png"
+import PredictBoxLeft from "../../../images/Predict Box Side.png"
+
+import './Predictions.css'
+import ChampionScroll from "./ChampionScroll";
 
 var selectingTeam: string | null = null
 var selectingRole: number | null = null
 
-var listOfChampions: string[] = [];
-
 type PredictionsState = {
   friendlyTeam: string[],
-  enemyTeam: string[]
+  enemyTeam: string[],
+
 }
 
 class Predictions extends React.Component<{}, PredictionsState> {
@@ -18,33 +25,26 @@ class Predictions extends React.Component<{}, PredictionsState> {
     super(props)
     this.state = {
       friendlyTeam: ["", "", "", "", ""],
-      enemyTeam: ["", "", "", "", ""]
+      enemyTeam: ["", "", "", "", ""],
     }
-    console.log(this.state)
-  }
-  componentWillMount() {
-    var listOfImages = (require.context('../../../../public/ChampionIcons/', false, /\.(png|jpe?g|svg)$/)).keys();
-    listOfImages = listOfImages.map((image: string) => image.replace("./", ""))
-    listOfChampions = listOfImages.map((image: string) => image.replace("Square.png", ""))
+
+    this.selectChamp = this.selectChamp.bind(this)
   }
 
+  // When selecting friendly champ
   selectingFriendly(number: number) {
     selectingTeam = "friendly"
     selectingRole = number
-    console.log(selectingTeam)
-    console.log(selectingRole)
-
   }
 
+  // When selecting enemy champ
   selectingEnemy(number: number) {
     selectingTeam = "enemy"
     selectingRole = number
   }
 
+  // Chooses champ
   selectChamp(champ: string) {
-    console.log(champ)
-    console.log(selectingTeam)
-    console.log(selectingRole)
     if (selectingTeam != null && selectingRole != null) {
       if (selectingTeam == "friendly") {
         var temp = this.state.friendlyTeam
@@ -63,89 +63,50 @@ class Predictions extends React.Component<{}, PredictionsState> {
     }
   }
 
+  // Predict Winner
+  predict() {
+    console.log("predict")
+  }
+
   render() {
     return (
-      <Container>
-        <Form>
-          {/* <div style={{display: "flex", backgroundImage:`url(${Background})`}}> */}
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
+      // Background
+      <div className="backgroundImg"  >
 
+        <div style={{ display: "flex", justifyContent: "center", margin: "6.5vh" }}>
+
+          {/* Friendly panel */}
+          <div style={{ width: "20%", display: "flex", justifyContent: "center" }}>
             <ChampionPanel isLeftSide={true} selectBox={this.selectingFriendly} champions={this.state.friendlyTeam}></ChampionPanel>
-            <div style={{ width: "800px", height: "500px", border: "1px solid black" }}>
+          </div>
 
-              <div style={{ height: "500px", display: "flex", flexWrap: "wrap", overflowY: "auto" }}>
-                {listOfChampions.map(
-                  (image: string, index: any) =>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                      <img style={{ height: "100px", width: "100px" }} key={index} src={`../ChampionIcons/` + image + `Square.png`} alt="info" onClick={() => this.selectChamp(image)}></img>
+          {/* Centre panel */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "60%", height: "85vh", marginTop: "4vh", position: "relative" }}>
 
-                      {image}
-                    </div>)
-                }
-              </div>
+            {/* Scroll Background */}
+            <img style={{ zIndex: 4, position: "absolute", width: "90%", height: "100%" }} src={OuterOval} className="centered" />
+            <img style={{ zIndex: 4, position: "absolute", width: "90%", height: "100%" }} src={InnerOval} className="centered" />
+            <img style={{ zIndex: 3, position: "absolute", width: "90%", height: "100%" }} src={OvalInside} className="centered" />
 
+            {/* Predict Button */}
+            <img style={{ zIndex: 6, position: "absolute", height: "7.5%", width: "25%", bottom: 0, left: "37.5%" }} src={PredictBox} onClick={this.predict}></img>
+            <img style={{ zIndex: 6, position: "absolute", height: "5.5%", width: "4.65%", bottom: "1.8%", left: "35%" }} src={PredictBoxLeft}></img>
+            <img style={{ transform: "scaleX(-1)", zIndex: 6, position: "absolute", height: "5.5%", width: "4.3%", bottom: "1.8%", left: "60.6%" }} src={PredictBoxLeft}></img>
 
-
-              <button>Predict</button>
+            {/* Scrollable list of champions with search bar */}
+            <div style={{ zIndex: 5, width: "100%" }}>
+              <ChampionScroll selectChamp={this.selectChamp}></ChampionScroll>
             </div>
+          </div>
+
+          {/* Enemy Panel */}
+          <div style={{ width: "20%", display: "flex", justifyContent: "center" }}>
             <ChampionPanel isLeftSide={false} selectBox={this.selectingEnemy} champions={this.state.enemyTeam}></ChampionPanel>
           </div>
-        </Form>
-      </Container>
+        </div>
+      </div>
     );
   };
 }
-
-
-
-
-
-
-
-const Form = styled.form`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  h3 {
-    color: #d7B568;
-    margin-bottom: 2rem;
-  }
-  button {
-    width: 75%;
-    max-width: 300px;
-    min-width: 250px;
-    height: 40px;
-    border: none;
-    margin: 1rem 0;
-    box-shadow: 0px 14px 9px -15px rgba(0, 0, 0, 0.25);
-    border-radius: 8px;
-    background-color: #74ccbe;
-    color: #010a13;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease-in;
-    &:hover {
-      transform: translateY(-3px);
-    }
-  }
-`;
-
-const Container = styled.div`
-  min-width: 550px;
-  backdrop-filter: blur(5px);
-  background-color: rgba(255, 255, 255, 0.1);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  padding: 0 2rem;
-  @media (max-width: 900px) {
-    width: 100vw;
-    position: absolute;
-    padding: 0;
-  }
-`;
 
 export default Predictions;
