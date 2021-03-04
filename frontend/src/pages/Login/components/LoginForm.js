@@ -13,29 +13,12 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
-    const determineNewUser = async () => {
-        console.log("during login", currentUser)
-        const usr = await firebase.auth().currentUser
-        const userAccount = await firebase
-            .firestore()
-            .collection('users')
-            .doc(usr.uid)
-            .get();
-
-        if (userAccount.exists) {
-            history.push('/dashboard')
-        } else {
-            history.push('/new')
-        }
-
-    }
-
     const handleSubmitEmailPwd = async () => {
         firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
             .then(async () => {
-                await determineNewUser()
+                history.push('/dashboard')
             })
             .catch((err) => {
                 console.log(err);
@@ -48,7 +31,7 @@ const LoginForm = () => {
             .auth()
             .signInWithPopup(new firebase.auth.GoogleAuthProvider())
             .then(async () => {
-                await determineNewUser()
+                history.push('/dashboard')
             })
             .catch((err) => {
                 console.log(err);

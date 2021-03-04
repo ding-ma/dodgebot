@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import {Button, TextField, Typography} from '@material-ui/core';
 import firebase from 'firebase';
+import {store} from 'react-notifications-component';
 
 const ResetPasswordCallBack = () => {
     const history = useHistory();
@@ -29,6 +30,18 @@ const ResetPasswordCallBack = () => {
             .auth()
             .confirmPasswordReset(resetCode, pwd)
             .then(() => {
+                store.addNotification({
+                    title: "Successfully changed!",
+                    message: "Login with your new password",
+                    type: "success",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000
+                    }
+                });
                 history.push('/');
             })
             .catch((err) => {

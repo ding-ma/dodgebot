@@ -29,7 +29,7 @@ const RegisterForm = () => {
                 setPasswordError(false);
                 setConfirmError(false);
                 setErrorMessage('');
-                history.push('/');
+                history.push('/new');
             } catch (err) {
                 switch (err.code) {
                     case 'auth/email-already-in-use':

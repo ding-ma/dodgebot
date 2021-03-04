@@ -16,7 +16,8 @@ const Dashboard = () => {
                 .collection('users')
                 .doc(currentUser.uid)
                 .get()
-            const {predictions, profile} = data.data()
+            const {profile} = data.data() || {}
+            const {predictions} = data.data() || []
             setLeagueAccount(profile)
             setMatchesHistory(predictions)
         }
