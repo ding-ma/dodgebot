@@ -1,13 +1,11 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import firebase from 'firebase';
 import {useHistory} from 'react-router-dom';
 import {Button, TextField, Typography} from '@material-ui/core';
 import "../styles/login.scss"
-import {AuthContext} from "../../../context/providers/AccountProvider";
 
 const LoginForm = () => {
     const history = useHistory();
-    const {currentUser} = useContext(AuthContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
