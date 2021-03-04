@@ -14,7 +14,7 @@ import firebase from "firebase";
 import {AuthProvider} from "../../context/providers/AccountProvider";
 import Header from "../../global/components/Header";
 import Setting from "../../pages/Setting/containers/Setting";
-import Predictions from "../../pages/Prediction/containers/Preditions";
+import Predictions from "../../pages/Prediction/containers/Predictions";
 import Favorites from "../../pages/Favorites/containers/Favorites";
 import ReactNotification from 'react-notifications-component'
 
