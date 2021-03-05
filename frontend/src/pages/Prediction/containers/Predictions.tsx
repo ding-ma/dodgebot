@@ -4,7 +4,7 @@ import ChampionPanel from "./ChampionPanel";
 import InnerOval from "../../../images/Inner Oval.png"
 import OuterOval from "../../../images/Outer Oval.png"
 import OvalInside from "../../../images/Oval Inside.png"
-import PredictBox from "../../../images/Predict Box Text.png"
+import PredictBox from "../../../images/Predict Box.png"
 import PredictBoxLeft from "../../../images/Predict Box Side.png"
 import { ChampToKey } from "C:/Users/Petar Basta/Documents/McGill/U4/ECSE 458/dodgebot/frontend/src/constants/ChampToKey"
 
@@ -115,7 +115,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
     var winPercentageFormatted = 0
     if (this.state.winPercentage != null) {
       winColor = this.state.winPercentage >= 0.5 ? "green" : "red"
-      winPercentageFormatted = Math.round(this.state.winPercentage * 1000) / 10 
+      winPercentageFormatted = Math.round(this.state.winPercentage * 1000) / 10
     }
 
 
@@ -125,11 +125,11 @@ class Predictions extends React.Component<{}, PredictionsState> {
       </div>
       :
       <div style={{ zIndex: 5, width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-        <p style={{ color: "#7b775b", textAlign: "center", fontSize: "30pt", fontFamily: "Courier New", margin: 0}}>You have a</p>
+        <p style={{ color: "#7b775b", textAlign: "center", fontSize: "30pt", fontFamily: "Courier New", margin: 0 }}>You have a</p>
         <p style={{ color: winColor, textAlign: "center", fontSize: "100pt", fontFamily: "Courier New", margin: 0 }}>{winPercentageFormatted}%</p>
         <p style={{ color: "#7b775b", textAlign: "center", fontSize: "30pt", fontFamily: "Courier New", margin: 0 }}>chance of winning</p>
 
-        <button className="resetBtn"  onClick={this.reset}>Reset</button>
+        <button className="resetBtn" onClick={this.reset}>Reset</button>
       </div>
 
     return (
@@ -153,15 +153,25 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
             {this.state.submitted ? resultsPage :
               (
-                <div style={{ zIndex: 5, width: "100%" }}>
-                  {/* Predict Button */}
-                  <img style={{ position: "absolute", height: "7.5%", width: "25%", bottom: 0, left: "37.5%" }} src={PredictBox} onClick={this.predict}></img>
-                  <img style={{ position: "absolute", height: "5.5%", width: "4.3%", bottom: "1.8%", left: "35.2%" }} src={PredictBoxLeft}></img>
-                  <img style={{ position: "absolute", height: "5.5%", width: "4.3%", bottom: "1.8%", left: "60.6%", transform: "scaleX(-1)" }} src={PredictBoxLeft}></img>
-
+                <div style={{ zIndex: 100, width: "100%"}}>
+                  
                   {/* Scrollable list of champions with search bar */}
                   <div>
                     <ChampionScroll selectChamp={this.selectChamp}></ChampionScroll>
+                  </div>
+                  <div style ={{height: "9vh",width: "100%", display: "flex", position: "relative", justifyContent: "center", alignItems: "flex-end"}}>
+
+
+
+                    {/* Predict Button */}
+                  <img style={{  width: "25%", height: "70%" }} src={PredictBox} onClick={this.predict}></img>
+                  <p onClick={this.predict} style={{zIndex: 100, fontWeight: "bold", textAlign: "center", position: "absolute", bottom: -18, color: "#b8bcbd", fontFamily: 'Garamond', fontSize: "22pt"}}>
+                    PREDICT
+                  </p>
+
+                  <img style={{ position: "absolute", height: "50%", width: "4.35%", bottom: "18%", left: "35.2%" }} src={PredictBoxLeft}></img>
+                  <img style={{ position: "absolute", height: "50%", width: "4.3%", bottom: "18%", left: "60.5%", transform: "scaleX(-1)" }} src={PredictBoxLeft}></img>
+
                   </div>
                 </div>
               )

@@ -48,12 +48,12 @@ class ChampionScroll extends React.Component<ChampionScrollProps, ChampionScroll
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
 
                 {/* Search bar */}
-                <div style={{ display: "flex", justifyContent: "flex-end", width: "100%", height: "20%" }}>
+                <div style={{ display: "flex", justifyContent: "flex-end", width: "100%", height: "5vh" }}>
                     <input style={{ color: "gray", width: "15%", height: "3vh", marginRight: "4%", textAlign: "center", border: "1px solid #3e7f75", background: "#0a1b23", borderRadius: "10px" }} placeholder="Search" value={this.state.searchValue} onChange={this.handleSearchChange}></input>
                 </div>
 
                 {/* Scrollable champ select */}
-                <div style={{ height: "70vh", width: "84vh", display: "flex", flexWrap: "wrap", overflowY: "auto", alignContent: "flex-start", marginTop: "3%" }}>
+                <div style={{ height: "70vh", width: "84vh", display: "flex", flexWrap: "wrap", overflowY: "auto", alignContent: "flex-start", marginTop: "1vh"}}>
                     {this.state.filteredListOfChamps.map(
                         (champName: string, index: any) =>
                             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", height: "12vh", marginRight: "2vh", marginLeft: "2vh", marginTop: "1vh", marginBottom: "1vh" }}>
