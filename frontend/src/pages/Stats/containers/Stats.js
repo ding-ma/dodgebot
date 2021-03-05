@@ -1,11 +1,28 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {MenuItem, Select} from "@material-ui/core";
-import StatsLoader from "../components/StatsLoader";
+import firebase from "firebase";
+import BarGraph from "../components/BarGraphs";
 
 export default function Stats() {
     const elos = ['Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond']
     const [elo, setElo] = useState('Silver')
-    
+    const [matchStats, setMatchStats] = useState({})
+
+    useEffect(()=>{
+        const getMatchHistory = async () =>{
+            const data = await firebase.firestore()
+                .collection('statistics')
+                .doc(elo)
+                .get()
+            setMatchStats(data.data())
+        }
+        getMatchHistory()
+    }, [elo])
+
+    if ( Object.keys(matchStats).length === 0){
+        return <div>Loading...</div>
+    }
+
     return <div className="login-form">
         <Select
             required={true}
@@ -19,7 +36,9 @@ export default function Stats() {
             })}
         </Select>
 
-        <StatsLoader elo={elo}/>
+        <BarGraph data={matchStats.blueBans}/>
+        <BarGraph data={matchStats.mostPopularAdc}/>
+        <BarGraph data={matchStats.mostPopularSup}/>
 
     </div>;
 }
