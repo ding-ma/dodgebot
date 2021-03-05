@@ -74,7 +74,7 @@ const Header = () => {
     const classes = useStyles();
     
     return (
-        <AppBar position="relative" className={classes.navBar}>
+        <AppBar position="fixed" style={{height: "6.5vh"}} className={classes.navBar}>
             <Toolbar>
                 <Container maxWidth="md" className={classes.navbarDisplayFlex}>
                     <IconButton edge="start" color="inherit" aria-label="home">
