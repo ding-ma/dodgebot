@@ -90,8 +90,8 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
             {/* Predict Button */}
             <img style={{ zIndex: 6, position: "absolute", height: "7.5%", width: "25%", bottom: 0, left: "37.5%" }} src={PredictBox} onClick={this.predict}></img>
-            <img style={{ zIndex: 6, position: "absolute", height: "5.5%", width: "4.65%", bottom: "1.8%", left: "35%" }} src={PredictBoxLeft}></img>
-            <img style={{ transform: "scaleX(-1)", zIndex: 6, position: "absolute", height: "5.5%", width: "4.3%", bottom: "1.8%", left: "60.6%" }} src={PredictBoxLeft}></img>
+            <img style={{ zIndex: 6, position: "absolute", height: "5.5%", width: "4.3%", bottom: "1.8%", left: "35.2%" }} src={PredictBoxLeft}></img>
+            <img style={{ zIndex: 6, position: "absolute", height: "5.5%", width: "4.3%", bottom: "1.8%", left: "60.6%", transform: "scaleX(-1)" }} src={PredictBoxLeft}></img>
 
             {/* Scrollable list of champions with search bar */}
             <div style={{ zIndex: 5, width: "100%" }}>
