@@ -6,7 +6,7 @@ import OuterOval from "../../../images/Outer Oval.png"
 import OvalInside from "../../../images/Oval Inside.png"
 import PredictBox from "../../../images/Predict Box.png"
 import PredictBoxLeft from "../../../images/Predict Box Side.png"
-import { ChampToKey } from "C:/Users/Petar Basta/Documents/McGill/U4/ECSE 458/dodgebot/frontend/src/constants/ChampToKey"
+import { ChampToKey } from "../../../constants/ChampToKey"
 
 import './Predictions.css'
 import ChampionScroll from "./ChampionScroll";
