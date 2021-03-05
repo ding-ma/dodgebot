@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {MenuItem, Select} from "@material-ui/core";
 import firebase from "firebase";
 import BarGraph from "../components/BarGraphs";
+import PieGraph from "../components/PieGraph";
 
 export default function Stats() {
     const elos = ['Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond']
@@ -37,8 +38,9 @@ export default function Stats() {
         </Select>
 
         <BarGraph data={matchStats.blueBans}/>
-        <BarGraph data={matchStats.mostPopularAdc}/>
-        <BarGraph data={matchStats.mostPopularSup}/>
+        {/*<BarGraph data={matchStats.mostPopularAdc}/>*/}
+        <PieGraph data={matchStats.redWin}/>
+        {/*<PieGraph data={matchStats.redWinBans}/>*/}
 
     </div>;
 }

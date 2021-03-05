@@ -1,17 +1,7 @@
 import React from 'react';
-import {Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis} from "recharts";
-import {KeyToChamp} from "../../../constants/KeyToChampion"
+import {Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis} from "recharts";
 import {InputLabel} from "@material-ui/core";
-
-const flatten = (json) => {
-    const tmp = []
-    json.data.forEach((e) => {
-        let {index, values} = e
-        tmp.push({"index": KeyToChamp[index], "value": values})
-    })
-    return tmp
-}
-
+import flatten from "./Flatten";
 
 export default function BarGraph({data}) {
 
@@ -29,7 +19,6 @@ export default function BarGraph({data}) {
             <XAxis dataKey="index"/>
             <YAxis/>
             <Tooltip/>
-            <Legend/>
             <Bar dataKey="value" fill="#8884d8" name="Number of bans"/>
         </BarChart>
     </div>
