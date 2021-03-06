@@ -1,7 +1,8 @@
 import React from "react";
-import styled from "styled-components";
+// import styled from "styled-components";
 import QuestionMark from '../../../images/QuestionMark.jpg'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const items = [
   { id: 1, case: 266, value: 'Aatrox', },
   { id: 2, case: 412, value: 'Thresh', },
@@ -147,8 +148,13 @@ type InputProps = {
 class Input extends React.Component<InputProps, {}> {
 
   render() {
-    var imgSrc = this.props.champion == "" ? QuestionMark : `../ChampionIcons/` + this.props.champion + `Square.png`
-    var img = <img onClick={() => this.props.onClick()} src={imgSrc} style={{ height: "10vh", width: "10vh", border: "1px solid #5a4820", borderRadius: "2px" }}></img>
+    const imgSrc = this.props.champion === "" ? QuestionMark : `../ChampionIcons/` + this.props.champion + `Square.png`;
+    const img = <img alt="" onClick={() => this.props.onClick()} src={imgSrc} style={{
+      height: "10vh",
+      width: "10vh",
+      border: "1px solid #5a4820",
+      borderRadius: "2px"
+    }}/>;
     return (
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", margin: "2%" }}>
         {/* Display img on left of select button if right panel */}

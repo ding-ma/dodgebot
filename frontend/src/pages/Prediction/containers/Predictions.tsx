@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+// import styled from "styled-components";
 import ChampionPanel from "./ChampionPanel";
 import InnerOval from "../../../images/Inner Oval.png"
 import OuterOval from "../../../images/Outer Oval.png"
@@ -53,20 +53,21 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
   // Chooses champ
   selectChamp(champ: string) {
+    let temp;
     if (ChampToKey[champ as keyof typeof ChampToKey] === undefined) {
       console.log(champ)
     }
 
     if (selectingTeam != null && selectingRole != null) {
-      if (selectingTeam == "friendly") {
-        var temp = this.state.friendlyTeam
+      if (selectingTeam === "friendly") {
+        temp = this.state.friendlyTeam;
         temp[selectingRole] = champ
         this.setState({
           friendlyTeam: temp
         })
       }
       else {
-        var temp = this.state.enemyTeam
+        temp = this.state.enemyTeam;
         temp[selectingRole] = champ
         this.setState({
           enemyTeam: temp
@@ -121,7 +122,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
     var resultsPage = this.state.isLoading ?
       <div style={{ zIndex: 5, width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-        <div className="loader"></div>
+        <div className="loader"/>
       </div>
       :
       <div style={{ zIndex: 5, width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
@@ -147,9 +148,9 @@ class Predictions extends React.Component<{}, PredictionsState> {
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "60%", height: "85vh", marginTop: "4vh", position: "relative" }}>
 
             {/* Centre panel background */}
-            <img style={{ zIndex: 4, position: "absolute", width: "90%", height: "100%" }} src={OuterOval} className="centered" />
-            <img style={{ zIndex: 4, position: "absolute", width: "90%", height: "100%" }} src={InnerOval} className="centered" />
-            <img style={{ zIndex: 3, position: "absolute", width: "90%", height: "100%" }} src={OvalInside} className="centered" />
+            <img style={{ zIndex: 4, position: "absolute", width: "90%", height: "100%" }} src={OuterOval} className="centered" alt=""/>
+            <img style={{ zIndex: 4, position: "absolute", width: "90%", height: "100%" }} src={InnerOval} className="centered" alt=""/>
+            <img style={{ zIndex: 3, position: "absolute", width: "90%", height: "100%" }} src={OvalInside} className="centered" alt=""/>
 
             {this.state.submitted ? resultsPage :
               (
@@ -157,20 +158,20 @@ class Predictions extends React.Component<{}, PredictionsState> {
                   
                   {/* Scrollable list of champions with search bar */}
                   <div>
-                    <ChampionScroll selectChamp={this.selectChamp}></ChampionScroll>
+                    <ChampionScroll selectChamp={this.selectChamp}/>
                   </div>
                   <div style ={{height: "9vh",width: "100%", display: "flex", position: "relative", justifyContent: "center", alignItems: "flex-end"}}>
 
 
 
                     {/* Predict Button */}
-                  <img style={{  width: "25%", height: "70%" }} src={PredictBox} onClick={this.predict}></img>
+                  <img style={{  width: "25%", height: "70%" }} src={PredictBox} onClick={this.predict} alt=""/>
                   <p onClick={this.predict} style={{zIndex: 100, fontWeight: "bold", textAlign: "center", position: "absolute", bottom: -18, color: "#b8bcbd", fontFamily: 'Garamond', fontSize: "22pt"}}>
                     PREDICT
                   </p>
 
-                  <img style={{ position: "absolute", height: "50%", width: "4.35%", bottom: "18%", left: "35.2%" }} src={PredictBoxLeft}></img>
-                  <img style={{ position: "absolute", height: "50%", width: "4.3%", bottom: "18%", left: "60.5%", transform: "scaleX(-1)" }} src={PredictBoxLeft}></img>
+                  <img style={{ position: "absolute", height: "50%", width: "4.35%", bottom: "18%", left: "35.2%" }} src={PredictBoxLeft} alt=""/>
+                  <img style={{ position: "absolute", height: "50%", width: "4.3%", bottom: "18%", left: "60.5%", transform: "scaleX(-1)" }} src={PredictBoxLeft} alt=""/>
 
                   </div>
                 </div>
