@@ -1,15 +1,15 @@
 import React from "react";
 // import styled from "styled-components";
-import ChampionPanel from "./ChampionPanel";
+import ChampionPanel from "../components/ChampionPanel";
 import InnerOval from "../../../images/Inner Oval.png"
 import OuterOval from "../../../images/Outer Oval.png"
 import OvalInside from "../../../images/Oval Inside.png"
 import PredictBox from "../../../images/Predict Box.png"
 import PredictBoxLeft from "../../../images/Predict Box Side.png"
-import { ChampToKey } from "../../../constants/ChampToKey"
+import {ChampToKey} from "../../../constants/ChampToKey"
 
-import './Predictions.css'
-import ChampionScroll from "./ChampionScroll";
+import '../styles/Predictions.css'
+import ChampionScroll from "../components/ChampionScroll";
 
 var selectingTeam: string | null = null
 var selectingRole: number | null = null
