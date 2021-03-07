@@ -17,6 +17,14 @@ function isEmpty(obj) {
     return Object.keys(obj).length === 0;
 }
 
+const displayRoleToDb = {
+    "Top Lane": "top",
+    "Jungle": "jg",
+    "Mid Lane": "mid",
+    "Bot Lane": "adc",
+    "Support": "sup"
+}
+
 let counter = 1;
 
 export default function ChampionTable({favoriteChampions}) {
@@ -63,13 +71,6 @@ export default function ChampionTable({favoriteChampions}) {
     }
 
     const handleNewChampion = async () => {
-        const displayRoleToDb = {
-            "Top Lane": "top",
-            "Jungle": "jg",
-            "Mid Lane": "mid",
-            "Bot Lane": "adc",
-            "Support": "sup"
-        }
 
         console.log(displayRoleToDb[role], ChampToKey[searchChampion], searchChampion)
         favoriteChampions[displayRoleToDb[role]].push(ChampToKey[searchChampion])
@@ -77,7 +78,6 @@ export default function ChampionTable({favoriteChampions}) {
             .collection('users')
             .doc(currentUser.uid)
             .update({'favorites': favoriteChampions})
-        setSearchChampion('')
 
         const {jg, top, adc, sup, mid} = favoriteChampions
         setData([
@@ -92,6 +92,58 @@ export default function ChampionTable({favoriteChampions}) {
             title: "Champion Added!",
             message: " ",
             type: "success",
+            insert: "top",
+            container: "top-right",
+            animationIn: ["animate__animated", "animate__fadeIn"],
+            animationOut: ["animate__animated", "animate__fadeOut"],
+            dismiss: {
+                duration: 5000
+            }
+        });
+
+    }
+
+
+    const handleDelete = async () => {
+        console.log(selectedItems)
+        const championsToDelete = selectedItems.map(e => {
+            return {"champion": ChampToKey[e.champion], "role": displayRoleToDb[e.role]}
+        })
+
+        let deleted = {}
+        for (let key in favoriteChampions) {
+            if (favoriteChampions.hasOwnProperty(key)) {
+                for (let i in championsToDelete) {
+                    if (championsToDelete[i].role === key){
+                        deleted[key] = favoriteChampions[key].filter(e => {
+                            return e !== championsToDelete[i].champion
+                        })
+                    }
+                }
+            }
+        }
+        console.log(deleted, championsToDelete)
+        const newFavorites = Object.assign({}, favoriteChampions, deleted)
+
+        const {jg, top, adc, sup, mid} = newFavorites
+
+        await firebase.firestore()
+            .collection('users')
+            .doc(currentUser.uid)
+            .update({'favorites': newFavorites})
+
+        setData([
+            ...flatten(top, 'Top Lane'),
+            ...flatten(jg, 'Jungle'),
+            ...flatten(adc, 'Bot Lane'),
+            ...flatten(mid, 'Mid Lane'),
+            ...flatten(sup, 'Support'),
+        ])
+
+        store.addNotification({
+            title: "Champion Deleted!",
+            message: " ",
+            type: "danger",
             insert: "top",
             container: "top-right",
             animationIn: ["animate__animated", "animate__fadeIn"],
@@ -142,6 +194,14 @@ export default function ChampionTable({favoriteChampions}) {
                 checkboxSelection={true}
                 onSelectionModelChange={e => selectItems(e.selectionModel)}
             />
+
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleDelete()}
+            >
+                Delete Selected
+            </Button>
         </div>
     );
 }
