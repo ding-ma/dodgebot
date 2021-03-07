@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {AuthContext} from "../../../context/providers/AccountProvider";
 import firebase from "firebase";
-import Champions from "../components/Champions";
+import ChampionTable from "../components/ChampionTable";
 
 const Favorites = () => {
     const {currentUser} = useContext(AuthContext);
@@ -22,7 +22,7 @@ const Favorites = () => {
     return (
         <div>
             <h2> Here are your favorite champions</h2>
-            <Champions champs={favChampions}/>
+            <ChampionTable favoriteChampions={favChampions}/>
         </div>
     )
 }
