@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import firebase from "firebase";
 import {AuthContext} from "../../../context/providers/AccountProvider";
 import {store} from 'react-notifications-component';
+import MatchCard from "../components/MatchCard";
 
 
 const Dashboard = () => {
@@ -118,6 +119,7 @@ const Dashboard = () => {
             <h2>Past Matches</h2>
             {matchHistory.length !== 0  && renderMatches()}
             {matchHistory.length === 0 && <div>No history!</div>}
+            <MatchCard/>
 
         </div>
     );

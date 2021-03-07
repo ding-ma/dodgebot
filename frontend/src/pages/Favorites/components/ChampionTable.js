@@ -2,8 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {DataGrid} from '@material-ui/data-grid';
 import {KeyToChamp} from "../../../constants/KeyToChampion";
 import {ChampToKey} from "../../../constants/ChampToKey";
-import {Button, MenuItem, Select, TextField} from "@material-ui/core";
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import {Button} from "@material-ui/core";
 import firebase from "firebase";
 import {AuthContext} from "../../../context/providers/AccountProvider";
 import {store} from 'react-notifications-component';
@@ -32,15 +31,6 @@ export default function ChampionTable({favoriteChampions}) {
 
     const [selectedItems, setSelectedItems] = useState([])
     const [data, setData] = useState([])
-    const [searchChampion, setSearchChampion] = useState('')
-    const [role, setRole] = useState('Top Lane')
-    const roles = ['Top Lane', 'Jungle', 'Mid Lane', 'Bot Lane', 'Support'];
-    const champions = Object.values(KeyToChamp).filter(e => {
-        return e !== "None"
-    })
-
-    const delay = ms => new Promise(res => setTimeout(res, ms));
-
     const flatten = (arr, name) => {
         let tmp = []
         for (let i = 0; i < arr.length; i++) {
@@ -66,51 +56,35 @@ export default function ChampionTable({favoriteChampions}) {
 
     const selectItems = (selected) => {
         let tmp = []
-        for (let i = 0; i < selected.length; i++) {
-            tmp.push(data[parseInt(selected[i]) - 1])
+        for (let i = 0; i < data.length; i++) {
+            for (let j = 0; j < selected.length; j++) {
+                if (data[i].id === parseInt(selected[j])) {
+                    tmp.push(data[i])
+                }
+            }
         }
         setSelectedItems(tmp)
     }
 
-    const handleNewChampion = async () => {
-
-        console.log(displayRoleToDb[role], ChampToKey[searchChampion], searchChampion)
-        favoriteChampions[displayRoleToDb[role]].push(ChampToKey[searchChampion])
-        await firebase.firestore()
-            .collection('users')
-            .doc(currentUser.uid)
-            .update({'favorites': favoriteChampions})
-
-        const {jg, top, adc, sup, mid} = favoriteChampions
-        setData([
-            ...flatten(top, 'Top Lane'),
-            ...flatten(jg, 'Jungle'),
-            ...flatten(adc, 'Bot Lane'),
-            ...flatten(mid, 'Mid Lane'),
-            ...flatten(sup, 'Support'),
-        ])
-
-        store.addNotification({
-            title: "Champion Added!",
-            message: " ",
-            type: "success",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-                duration: 5000
-            }
-        });
-
-        await delay(500);
-        window.location.reload();
-
-    }
-
-
     const handleDelete = async () => {
         console.log(selectedItems)
+        if(selectedItems.length === 0){
+            store.addNotification({
+                title: "You haven't selected anything!",
+                message: "Nothing was deleted",
+                type: "warning",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000
+                }
+            });
+            return;
+        }
+
+
         const championsToDelete = selectedItems.map(e => {
             return {"champion": ChampToKey[e.champion], "role": displayRoleToDb[e.role]}
         })
@@ -119,7 +93,7 @@ export default function ChampionTable({favoriteChampions}) {
         for (let key in favoriteChampions) {
             if (favoriteChampions.hasOwnProperty(key)) {
                 for (let i in championsToDelete) {
-                    if (championsToDelete[i].role === key){
+                    if (championsToDelete[i].role === key) {
                         deleted[key] = favoriteChampions[key].filter(e => {
                             return e !== championsToDelete[i].champion
                         })
@@ -127,7 +101,6 @@ export default function ChampionTable({favoriteChampions}) {
                 }
             }
         }
-        console.log(deleted, championsToDelete)
         const newFavorites = Object.assign({}, favoriteChampions, deleted)
 
         const {jg, top, adc, sup, mid} = newFavorites
@@ -144,7 +117,7 @@ export default function ChampionTable({favoriteChampions}) {
             ...flatten(mid, 'Mid Lane'),
             ...flatten(sup, 'Support'),
         ])
-        
+
         store.addNotification({
             title: "Champion Deleted!",
             message: " ",
@@ -157,42 +130,12 @@ export default function ChampionTable({favoriteChampions}) {
                 duration: 5000
             }
         });
-        await delay(500);
-        window.location.reload();
 
     }
 
 
     return (
         <div style={{height: 400, width: 800}}>
-
-            <Autocomplete
-                id="combo-box-demo"
-                options={champions}
-                style={{margin: '10px 0', width: '30%'}}
-                renderInput={(params) => <TextField {...params} label="Champions" variant="outlined"/>}
-                onChange={(event, value) => setSearchChampion(value)}
-            />
-            <Select
-                required={true}
-                value={role}
-                onChange={(event) => setRole(event.target.value)}
-                style={{margin: '10px 0', width: '30%'}}
-                variant="outlined"
-            >
-                {roles.map((value, index) => {
-                    return <MenuItem key={index} value={value}>{value}</MenuItem>;
-                })}
-            </Select>
-
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleNewChampion()}
-            >
-                Add!
-            </Button>
-
 
             <DataGrid
                 rows={data}
