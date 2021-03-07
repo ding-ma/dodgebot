@@ -39,6 +39,8 @@ export default function ChampionTable({favoriteChampions}) {
         return e !== "None"
     })
 
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+
     const flatten = (arr, name) => {
         let tmp = []
         for (let i = 0; i < arr.length; i++) {
@@ -101,6 +103,9 @@ export default function ChampionTable({favoriteChampions}) {
             }
         });
 
+        await delay(500);
+        window.location.reload();
+
     }
 
 
@@ -139,7 +144,7 @@ export default function ChampionTable({favoriteChampions}) {
             ...flatten(mid, 'Mid Lane'),
             ...flatten(sup, 'Support'),
         ])
-
+        
         store.addNotification({
             title: "Champion Deleted!",
             message: " ",
@@ -152,6 +157,8 @@ export default function ChampionTable({favoriteChampions}) {
                 duration: 5000
             }
         });
+        await delay(500);
+        window.location.reload();
 
     }
 
