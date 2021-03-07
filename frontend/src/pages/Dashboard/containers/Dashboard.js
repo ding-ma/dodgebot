@@ -3,11 +3,33 @@ import firebase from "firebase";
 import {AuthContext} from "../../../context/providers/AccountProvider";
 import {store} from 'react-notifications-component';
 import MatchCard from "../components/MatchCard";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import Card from "@material-ui/core/Card";
+import {makeStyles} from "@material-ui/core/styles";
 
+const useStyles = makeStyles({
+    root: {
+        minWidth: 800,
+    },
+    bullet: {
+        display: 'inline-block',
+        margin: '0 2px',
+        transform: 'scale(0.8)',
+    },
+    title: {
+        fontSize: 14,
+    },
+    pos: {
+        marginBottom: 12,
+    },
+});
 
 const Dashboard = () => {
-    const {currentUser} = useContext(AuthContext);
+    const classes = useStyles();
+    const bull = <span className={classes.bullet}>•</span>;
 
+    const {currentUser} = useContext(AuthContext);
     const [leagueAccount, setLeagueAccount] = useState({})
     const [matchHistory, setMatchesHistory] = useState([]);
 
@@ -108,13 +130,23 @@ const Dashboard = () => {
     return (
         <div className="login">
 
-            <h1>Welcome <u>{leagueAccount.summonerName}</u>!</h1>
+            <Card className={classes.root} style={{background: '#a6c0ef'}} variant="outlined">
+                <CardContent>
 
-            <ul>
-                <li>Region: {leagueAccount.region}</li>
-                <li>Elo: {leagueAccount.elo}</li>
-                <li>Tier: {leagueAccount.tier}</li>
-            </ul>
+                    <Typography variant="body1" component="p">
+                        {leagueAccount.region}
+                    </Typography>
+
+                    <Typography variant="h3" component="p">
+                        {leagueAccount.summonerName}
+                    </Typography>
+
+                    <Typography variant="body1" component="p">
+                        {leagueAccount.elo} {bull} <b>{leagueAccount.tier}</b>
+                    </Typography>
+                </CardContent>
+
+            </Card>
 
             <h2>Past Matches</h2>
             {matchHistory.length !== 0  && renderMatches()}

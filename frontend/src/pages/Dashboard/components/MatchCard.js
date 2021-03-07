@@ -4,6 +4,11 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import {KeyToChamp} from "../../../constants/KeyToChampion";
+import bot from "../../../images/roles/bot.png"
+import top from "../../../images/roles/top.png"
+import jungle from "../../../images/roles/jungle.png"
+import mid from "../../../images/roles/mid.png"
+import support from "../../../images/roles/support.png"
 
 
 const useStyles = makeStyles({
@@ -23,9 +28,9 @@ const useStyles = makeStyles({
     },
 });
 
+//pass data via props then render it
 export default function MatchCard() {
     const classes = useStyles();
-    const bull = <span className={classes.bullet}>•</span>;
 
     const getImage = (championID) => {
         const champName = KeyToChamp[championID]
@@ -45,65 +50,51 @@ export default function MatchCard() {
                     <Typography variant="body2" component="p">
                         tmp to show color
                     </Typography>
+
                 </CardContent>
 
             </Card>
             <Card className={classes.root} style={{background: '#f89b9b'}} variant="outlined">
                 <CardContent>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Date of match
+                        {new Date(1615136533*1000).toDateString()}
                     </Typography>
 
-                    <div className="row">
-                        <div className="column">
-                            <Typography variant="h6" component="h6">
-                                Your Team
-                            </Typography>
-
-                            <div className="column">
-                                <Typography variant="subtitle1" component="h6">
-                                    Picks
-                                </Typography>
-
-                            </div>
-                            <div className="column">
-                                <Typography variant="subtitle1" component="h6">
-                                    Bans
-                                </Typography>
-                            </div>
-
+                    <div className="grid-container">
+                        <div><Typography variant="h6" component="h6">
+                            Roles
+                        </Typography>
+                        </div>
+                        <div><Typography variant="h6" component="h6">
+                            Your Team
+                        </Typography>
+                        </div>
+                        <div><Typography variant="h6" component="h6">
+                            Their Team
+                        </Typography>
                         </div>
 
+                        <div><img src={top} alt="toplane"/></div>
+                        <div>{getImage("34")}</div>
+                        <div>{getImage("53")}</div>
 
-                        <div className="column">
-                            <Typography variant="h6" component="h6">
-                                Their Team
-                            </Typography>
+                        <div><img src={jungle} alt="jungle"/></div>
+                        <div>{getImage("64")}</div>
+                        <div>{getImage("51")}</div>
 
-                            <div className="row">
-                                <div className="column">
-                                    <Typography variant="subtitle1" component="h6">
-                                        Picks
-                                    </Typography>
-                                    <ul>
-                                        <li>{getImage("11")}</li>
-                                        <li>22</li>
-                                        <li>22</li>
-                                        <li>22</li>
-                                        <li>22</li>
-                                    </ul>
-                                </div>
+                        <div><img src={mid} alt="midlane"/></div>
+                        <div>{getImage("201")}</div>
+                        <div>{getImage("63")}</div>
 
-                                <div className="column">
-                                    <Typography variant="subtitle1" component="h6">
-                                        Bans
-                                    </Typography>
+                        <div><img src={bot} alt="botlane"/></div>
+                        <div>{getImage("96")}</div>
+                        <div>{getImage("40")}</div>
 
-                                </div>
-                            </div>
-
-                        </div>
+                        <div><img src={support} alt="support"/></div>
+                        <div>{getImage("427")}</div>
+                        <div>{getImage("145")}</div>
                     </div>
+
                 </CardContent>
 
             </Card>
