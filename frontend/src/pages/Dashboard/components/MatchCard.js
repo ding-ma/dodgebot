@@ -50,7 +50,7 @@ export default function MatchCard({color}) {
                         {new Date(1615136533 * 1000).toDateString()}
                     </Typography>
 
-                    <div className="grid-container">
+                    <div className="grid-container-match">
                         <div><Typography variant="h6" component="h6">
                             Roles
                         </Typography>

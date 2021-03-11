@@ -1,5 +1,5 @@
 /* Create three equal columns that floats next to each other */
-.grid-container {
+.grid-container-match {
   display: grid;
   grid-template-columns: 15% auto auto;
   grid-template-rows: 8% auto auto auto auto auto;

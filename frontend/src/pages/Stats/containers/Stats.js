@@ -24,7 +24,7 @@ export default function Stats() {
         return <div>Loading...</div>
     }
 
-    return <div className="login-form">
+    return <div className="dashboard">
         <Select
             required={true}
             value={elo}
@@ -37,10 +37,19 @@ export default function Stats() {
             })}
         </Select>
 
-        <BarGraph data={matchStats.blueBans}/>
+        <BarGraph data={matchStats.mostPopularTop}/>
+        <BarGraph data={matchStats.mostPopularJg}/>
+        <BarGraph data={matchStats.mostPopularMid}/>
         <BarGraph data={matchStats.mostPopularAdc}/>
+        <BarGraph data={matchStats.mostPopularSup}/>
+
+        <BarGraph data={matchStats.redBans}/>
         <PieGraph data={matchStats.redWin}/>
         <PieGraph data={matchStats.redWinBans}/>
+
+        WIP
+        <BarGraph data={matchStats.yasuoGames}/>
+
 
     </div>;
 }
