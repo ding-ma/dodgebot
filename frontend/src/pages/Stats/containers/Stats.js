@@ -38,9 +38,9 @@ export default function Stats() {
         </Select>
 
         <BarGraph data={matchStats.blueBans}/>
-        {/*<BarGraph data={matchStats.mostPopularAdc}/>*/}
+        <BarGraph data={matchStats.mostPopularAdc}/>
         <PieGraph data={matchStats.redWin}/>
-        {/*<PieGraph data={matchStats.redWinBans}/>*/}
+        <PieGraph data={matchStats.redWinBans}/>
 
     </div>;
 }

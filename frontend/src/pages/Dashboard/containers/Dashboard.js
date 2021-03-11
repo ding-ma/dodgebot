@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import firebase from "firebase";
 import {AuthContext} from "../../../context/providers/AccountProvider";
-import {store} from 'react-notifications-component';
 import MatchCard from "../components/MatchCard";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
@@ -30,8 +29,23 @@ const Dashboard = () => {
     const bull = <span className={classes.bullet}>•</span>;
 
     const {currentUser} = useContext(AuthContext);
+    console.log(currentUser)
     const [leagueAccount, setLeagueAccount] = useState({})
     const [matchHistory, setMatchesHistory] = useState([]);
+
+    // eslint-disable-next-line no-unused-vars
+    const eloToColor = {
+        "Unranked": "#f9e8db",
+        "Iron": "#8d8c89",
+        "Bronze": "#af8a6b",
+        "Silver": "#a7bac0",
+        "Gold": "#e2c282",
+        "Platinum": "#a5c7c6",
+        "Diamond": "#a5c7c6",
+        "Master":"#d2a1e3",
+        "GrandMaster":"#fb6665",
+        "Challenger":"#67fafe"
+    }
 
     useEffect(() => {
         const getUserAccount = async () => {
@@ -46,26 +60,6 @@ const Dashboard = () => {
         }
         getUserAccount()
     }, [currentUser])
-
-    if(matchHistory.length ===0 ){
-        const notice = localStorage.getItem("notified")
-        if (notice !== "yes"){
-            store.addNotification({
-                title: "Welcome Summoner!",
-                message: "Select your favorite champions and start making predictions!",
-                type: "success",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 5000
-                }
-            });
-            localStorage.setItem("notified", "yes")
-        }
-
-    }
 
     const renderBans = (bans) => {
         return (
@@ -92,6 +86,7 @@ const Dashboard = () => {
     }
 
 
+    // eslint-disable-next-line no-unused-vars
     const renderMatches = () => {
         return matchHistory.map((match) => {
             return (
@@ -128,9 +123,9 @@ const Dashboard = () => {
 
 
     return (
-        <div className="login">
+        <div className="dashboard">
 
-            <Card className={classes.root} style={{background: '#a6c0ef'}} variant="outlined">
+            <Card className={classes.root} style={{background: "#a5c7c6"}} variant="outlined">
                 <CardContent>
 
                     <Typography variant="body1" component="p">
@@ -149,9 +144,8 @@ const Dashboard = () => {
             </Card>
 
             <h2>Past Matches</h2>
-            {matchHistory.length !== 0  && renderMatches()}
-            {matchHistory.length === 0 && <div>No history!</div>}
-            <MatchCard/>
+            <MatchCard color={'#9fde99'}/>
+            <MatchCard color={'#f89b9b'}/>
 
         </div>
     );

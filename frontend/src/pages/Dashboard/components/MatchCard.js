@@ -29,35 +29,25 @@ const useStyles = makeStyles({
 });
 
 //pass data via props then render it
-export default function MatchCard() {
+export default function MatchCard({color}) {
     const classes = useStyles();
 
     const getImage = (championID) => {
         const champName = KeyToChamp[championID]
-        return <img style={{height: "10vh", width: "10vh"}} key={championID}
-                    src={`../ChampionIcons/` + champName + `Square.png`} alt="info"
-        />
+        return <img width="50" height="50" key={championID} src={`../ChampionIcons/` + champName + `Square.png`}
+                    alt="info"/>
+    }
+
+    const getLane = (lane) => {
+        return <img src={lane.lane} alt={lane} width="50" height="50"/>
     }
 
     return (
-        <div>
-            <Card className={classes.root} style={{background: '#9fde99'}} variant="outlined">
+        <div className="card">
+            <Card className={classes.root} style={{background: color}} variant="outlined">
                 <CardContent>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Date of match
-                    </Typography>
-
-                    <Typography variant="body2" component="p">
-                        tmp to show color
-                    </Typography>
-
-                </CardContent>
-
-            </Card>
-            <Card className={classes.root} style={{background: '#f89b9b'}} variant="outlined">
-                <CardContent>
-                    <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        {new Date(1615136533*1000).toDateString()}
+                        {new Date(1615136533 * 1000).toDateString()}
                     </Typography>
 
                     <div className="grid-container">
@@ -74,31 +64,30 @@ export default function MatchCard() {
                         </Typography>
                         </div>
 
-                        <div><img src={top} alt="toplane"/></div>
+                        <div>{getLane({"lane": top})}</div>
                         <div>{getImage("34")}</div>
                         <div>{getImage("53")}</div>
 
-                        <div><img src={jungle} alt="jungle"/></div>
+                        <div>{getLane({"lane": jungle})}</div>
                         <div>{getImage("64")}</div>
                         <div>{getImage("51")}</div>
 
-                        <div><img src={mid} alt="midlane"/></div>
+                        <div>{getLane({"lane": mid})}</div>
                         <div>{getImage("201")}</div>
                         <div>{getImage("63")}</div>
 
-                        <div><img src={bot} alt="botlane"/></div>
+                        <div>{getLane({"lane": bot})}</div>
                         <div>{getImage("96")}</div>
                         <div>{getImage("40")}</div>
 
-                        <div><img src={support} alt="support"/></div>
+                        <div>{getLane({"lane": support})}</div>
                         <div>{getImage("427")}</div>
                         <div>{getImage("145")}</div>
                     </div>
 
                 </CardContent>
-
             </Card>
-        </div>
 
+        </div>
     );
 }

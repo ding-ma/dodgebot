@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {Button, InputLabel, MenuItem, Select, TextField, Typography} from '@material-ui/core';
 import firebase from "firebase";
+import {store} from 'react-notifications-component';
 
 const NewPlayerForm = () => {
     const history = useHistory();
@@ -47,7 +48,19 @@ const NewPlayerForm = () => {
             })
 
         setSummonerError(false);
-        history.push('/dashboard')
+        store.addNotification({
+            title: "Welcome Summoner!",
+            message: "Please click on link in your email to confirm it",
+            type: "success",
+            insert: "top",
+            container: "top-right",
+            animationIn: ["animate__animated", "animate__fadeIn"],
+            animationOut: ["animate__animated", "animate__fadeOut"],
+            dismiss: {
+                duration: 5000
+            }
+        });
+        history.push('/dashboard');
     }
 
     return (

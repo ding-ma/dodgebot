@@ -25,6 +25,7 @@ const RegisterForm = () => {
         if (emailCheck && passwordCheck && confirmCheck) {
             try {
                 await firebase.auth().createUserWithEmailAndPassword(email, password);
+                await firebase.auth().currentUser?.sendEmailVerification();
                 setEmailError(false);
                 setPasswordError(false);
                 setConfirmError(false);
