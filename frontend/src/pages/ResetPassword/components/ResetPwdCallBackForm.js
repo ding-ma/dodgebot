@@ -52,6 +52,7 @@ const ResetPasswordCallBack = (code) => {
                 {errorMessage}
             </Typography>
             <TextField
+                required
                 label="Password"
                 value={pwd}
                 type="password"
@@ -62,6 +63,7 @@ const ResetPasswordCallBack = (code) => {
                 error={errorMessage.length > 0}
             />
             <TextField
+                required
                 label="Confirm Password"
                 value={confirmPwd}
                 type="password"

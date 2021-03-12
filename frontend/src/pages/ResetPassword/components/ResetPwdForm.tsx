@@ -42,6 +42,7 @@ const ResetPwdForm = () => {
                 {errorMessage}
             </Typography>
             <TextField
+                required
                 label="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.currentTarget.value)}

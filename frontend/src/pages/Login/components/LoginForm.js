@@ -29,7 +29,15 @@ const LoginForm = () => {
             .auth()
             .signInWithPopup(new firebase.auth.GoogleAuthProvider())
             .then(async () => {
-                history.push('/dashboard')
+                const data = await firebase.firestore()
+                    .collection('users')
+                    .doc(firebase.auth().currentUser.uid)
+                    .get()
+                if (data.exists){
+                    history.push('/dashboard')
+                } else {
+                    history.push('/new')
+                }
             })
             .catch((err) => {
                 console.log(err);
@@ -43,6 +51,7 @@ const LoginForm = () => {
                 {errorMessage}
             </Typography>
             <TextField
+                required
                 label="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.currentTarget.value)}
@@ -52,6 +61,7 @@ const LoginForm = () => {
                 error={errorMessage.length > 0}
             />
             <TextField
+                required
                 label="Password"
                 type="password"
                 value={password}

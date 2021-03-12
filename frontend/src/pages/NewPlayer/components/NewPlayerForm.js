@@ -27,6 +27,8 @@ const NewPlayerForm = () => {
             return
         }
         const {currentUser} = firebase.auth();
+        const isPassword = currentUser.providerData[0].providerId === "password"
+
         const profile = {
             'elo': elo,
             'region': region,
@@ -48,18 +50,35 @@ const NewPlayerForm = () => {
             })
 
         setSummonerError(false);
-        store.addNotification({
-            title: "Welcome Summoner!",
-            message: "Please click on link in your email to confirm it",
-            type: "success",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-                duration: 5000
-            }
-        });
+        if(isPassword){
+            await currentUser.sendEmailVerification();
+            store.addNotification({
+                title: "Welcome Summoner!",
+                message: "Please click on link in your email to confirm it",
+                type: "success",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000
+                }
+            });
+        } else {
+            store.addNotification({
+                title: "Welcome Summoner!",
+                message: " ",
+                type: "success",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000
+                }
+            });
+        }
+
         history.push('/dashboard');
     }
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { Typography, Button } from '@material-ui/core';
+import {useHistory} from 'react-router-dom';
+import {Button, Typography} from '@material-ui/core';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 
 const NotFound = () => {
@@ -24,9 +24,10 @@ const NotFound = () => {
             <Button
                 variant="contained"
                 color="primary"
-                onClick={() => history.goBack()}
+                className="login-form__button"
+                onClick={() => history.push("/")}
             >
-                Go back
+                Go to home
             </Button>
         </div>
     );
