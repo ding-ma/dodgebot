@@ -23,6 +23,7 @@ type PredictionsState = {
 }
 
 class Predictions extends React.Component<{}, PredictionsState> {
+    private el: any;
     
     constructor(props: any) {
         super(props)
@@ -37,6 +38,19 @@ class Predictions extends React.Component<{}, PredictionsState> {
         this.selectChamp = this.selectChamp.bind(this)
         this.predict = this.predict.bind(this)
         this.reset = this.reset.bind(this)
+    }
+    
+    componentDidMount() {
+        this.scrollToBottom();
+    }
+    
+    componentDidUpdate() {
+        this.scrollToBottom();
+    }
+    
+    scrollToBottom() {
+        this.el.scrollIntoView({ behavior: 'auto' });
+        document.body.style.overflow = 'hidden';
     }
     
     // When selecting friendly champ
@@ -262,6 +276,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
                                        champions={this.state.enemyTeam}/>
                     </div>
                 </div>
+                <div ref={el => { this.el = el; }} />
             </div>
         );
     };
