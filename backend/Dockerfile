@@ -1,16 +1,15 @@
-FROM python:3.8
-# todo: optimize to python:3.8-alpine, this image is 2.67GB
+FROM python:3.8-slim
 
-WORKDIR /code
+RUN apt-get update -y
+RUN apt-get install -y python-pip python-dev build-essential
 
-ENV FLASK_APP=app.py
-ENV FLASK_RUN_HOST=0.0.0.0
+# Allow statements and log messages to immediately appear in the Knative logs
+ENV PYTHONUNBUFFERED True
 
-# todo: generate requirements.txt from CI pipeline
-COPY requirements.txt requirements.txt
+COPY . /app
+WORKDIR /app
+
 RUN pip install -r requirements.txt
+RUN pip install Flask gunicorn
 
-EXPOSE 5000
-COPY . .
-
-CMD ["flask", "run"]
+CMD exec gunicorn --bind :$PORT --workers 3 --threads 3 --timeout 100 main:app  --access-logfile -

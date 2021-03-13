@@ -1,0 +1,53 @@
+name: Deploy ML Model
+
+on:
+  push:
+    paths:
+      - "backend/**"
+    branches:
+      - master
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  IMAGE: prediction
+  DB_SETTING: TEST
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up GCP CLI
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          service_account_key: ${{ secrets.GCP_FUNCTION_CI }}
+          project_id: ${{ secrets.GCP_PROJECT_ID  }}
+          export_default_credentials: true
+
+      - name: Setup Docker
+        run: |-
+          gcloud --quiet auth configure-docker
+        shell: bash
+        working-directory: ./backend
+
+      - name: Build Docker Image
+        run: |-
+          docker build --file docker/prod/python/Dockerfile \
+            --tag "gcr.io/$PROJECT_ID/$IMAGE" \
+            --build-arg GITHUB_SHA="$GITHUB_SHA" \
+            --build-arg GITHUB_REF="$GITHUB_REF" \
+            .
+        working-directory: ./backend
+
+      - name: Delete old image
+        run: gcloud container images delete gcr.io/$PROJECT_ID/$IMAGE:latest --quiet
+
+      - name: Publish Docker Image
+        run: |-
+          docker push "gcr.io/$PROJECT_ID/$IMAGE:latest"
+
+      - name: Deploy to Cloud Run
+        run: |-
+          gcloud run deploy $IMAGE --image="gcr.io/$PROJECT_ID/$IMAGE:latest" --max-instances=2 --memory=1Gi --allow-unauthenticated --platform=managed --region=us-central1
