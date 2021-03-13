@@ -284,9 +284,6 @@ class Predictions extends React.Component<{}, PredictionsState> {
                   </div>
                 )}
             </div>
-              )
-            }
-
           </div>
 
           {/* Enemy Panel */}
