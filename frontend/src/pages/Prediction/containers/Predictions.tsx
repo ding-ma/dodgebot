@@ -101,7 +101,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
           "Access-Control-Allow-Headers": "*"
         },
         body: JSON.stringify({
-          "redTop":  ChampToKey[this.state.friendlyTeam[0] as keyof typeof ChampToKey],
+          "redTop": ChampToKey[this.state.friendlyTeam[0] as keyof typeof ChampToKey],
           "redJungle": ChampToKey[this.state.friendlyTeam[1] as keyof typeof ChampToKey],
           "redMid": ChampToKey[this.state.friendlyTeam[2] as keyof typeof ChampToKey],
           "redAdc": ChampToKey[this.state.friendlyTeam[3] as keyof typeof ChampToKey],
@@ -118,7 +118,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
         isLoading: true,
         submitted: true
       }, () => {
-        fetch('http://127.0.0.1:8080/predictWinner', requestOptions)
+        fetch('https://prediction-wvdj36m4qa-uc.a.run.app/predictWinner', requestOptions)
           .then(response => response.json())
           .then(async data => {
             console.log(data)
@@ -152,7 +152,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
       <div style={{
         zIndex: 5,
         width: "100%",
-        height: "100%",
+        height: "84vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -164,7 +164,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
       <div style={{
         zIndex: 5,
         width: "100%",
-        height: "100%",
+        height: "84vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -199,10 +199,10 @@ class Predictions extends React.Component<{}, PredictionsState> {
       // Background
       <div className="backgroundImg">
 
-        <div style={{ display: "flex", justifyContent: "center", margin: "6.5vh" }}>
+        <div style={{ display: "flex", justifyContent: "center", height: "100vh", paddingTop: "6.5vh" }}>
 
           {/* Friendly panel */}
-          <div style={{ width: "20%", display: "flex", justifyContent: "center" }}>
+          <div style={{ width: "25%", display: "flex", justifyContent: "center" }}>
             <ChampionPanel isLeftSide={true} selectBox={this.selectingFriendly}
               champions={this.state.friendlyTeam} />
           </div>
@@ -211,80 +211,86 @@ class Predictions extends React.Component<{}, PredictionsState> {
           <div style={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
-            width: "60%",
-            height: "85vh",
-            marginTop: "4vh",
-            position: "relative"
+            justifyContent: "center",
+            width: "50%",
+            height: "93.5vh",
+            position: "relative",
           }}>
 
-            {/* Centre panel background */}
-            <img style={{ zIndex: 4, position: "absolute", width: "90%", height: "100%" }} src={OuterOval}
-              className="centered" alt="" />
-            <img style={{ zIndex: 4, position: "absolute", width: "90%", height: "100%" }} src={InnerOval}
-              className="centered" alt="" />
-            <img style={{ zIndex: 3, position: "absolute", width: "90%", height: "100%" }} src={OvalInside}
-              className="centered" alt="" />
+            <div style={{
+              width: "100%", position: "relative"
+            }}>
 
-            {this.state.submitted ? resultsPage :
-              (
-                <div style={{ zIndex: 100, width: "100%" }}>
+              {/* Centre panel background */}
+              <img style={{ zIndex: 4, position: "absolute", width: "100%", height: "100%" }} src={OuterOval}
+                className="centered" alt="" />
+              <img style={{ zIndex: 4, position: "absolute", width: "100%", height: "100%" }} src={InnerOval}
+                className="centered" alt="" />
+              <img style={{ zIndex: 3, position: "absolute", width: "100%", height: "100%" }} src={OvalInside}
+                className="centered" alt="" />
 
-                  {/* Scrollable list of champions with search bar */}
+              {this.state.submitted ? resultsPage :
+                (
                   <div>
-                    <ChampionScroll selectChamp={this.selectChamp} />
-                  </div>
-                  <div style={{
-                    height: "9vh",
-                    width: "100%",
-                    display: "flex",
-                    position: "relative",
-                    justifyContent: "center",
-                    alignItems: "flex-end"
-                  }}>
+                    {/* Scrollable list of champions with search bar */}
+                    <div style={{ zIndex: 50, position: "relative" }}>
+                      <ChampionScroll selectChamp={this.selectChamp} />
+                    </div>
 
-
-                    {/* Predict Button */}
-                    <img style={{ width: "25%", height: "70%" }} src={PredictBox}
-                      onClick={this.predict} alt="" />
-                    <p onClick={this.predict} style={{
-                      zIndex: 100,
-                      fontWeight: "bold",
-                      textAlign: "center",
-                      position: "absolute",
-                      bottom: -18,
-                      color: "#b8bcbd",
-                      fontFamily: 'Garamond',
-                      fontSize: "22pt"
+                    <div style={{
+                      height: "9vh",
+                      width: "100%",
+                      display: "flex",
+                      position: "relative",
+                      justifyContent: "center",
+                      alignItems: "flex-end"
                     }}>
-                      PREDICT
+
+                      {/* Predict Button */}
+                      <img style={{ width: "25%", height: "70%", zIndex: 50 }} src={PredictBox}
+                        onClick={this.predict} alt="" />
+                      <p onClick={this.predict} style={{
+                        zIndex: 100,
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        position: "absolute",
+                        bottom: -18,
+                        color: "#b8bcbd",
+                        fontFamily: 'Garamond',
+                        fontSize: "22pt"
+                      }}>
+                        PREDICT
                                         </p>
 
-                    <img style={{
-                      position: "absolute",
-                      height: "50%",
-                      width: "4.35%",
-                      bottom: "18%",
-                      left: "35.2%"
-                    }} src={PredictBoxLeft} alt="" />
-                    <img style={{
-                      position: "absolute",
-                      height: "50%",
-                      width: "4.3%",
-                      bottom: "18%",
-                      left: "60.5%",
-                      transform: "scaleX(-1)"
-                    }} src={PredictBoxLeft} alt="" />
+                      <img style={{
+                        zIndex: 50,
+                        position: "absolute",
+                        height: "50%",
+                        width: "4.35%",
+                        bottom: "18%",
+                        left: "35.2%"
+                      }} src={PredictBoxLeft} alt="" />
+                      <img style={{
+                        zIndex: 50,
+                        position: "absolute",
+                        height: "50%",
+                        width: "4.3%",
+                        bottom: "18%",
+                        left: "60.5%",
+                        transform: "scaleX(-1)"
+                      }} src={PredictBoxLeft} alt="" />
+                    </div>
 
                   </div>
-                </div>
+                )}
+            </div>
               )
             }
 
           </div>
 
           {/* Enemy Panel */}
-          <div style={{ width: "20%", display: "flex", justifyContent: "center" }}>
+          <div style={{ width: "25%", display: "flex", justifyContent: "center" }}>
             <ChampionPanel isLeftSide={false} selectBox={this.selectingEnemy}
               champions={this.state.enemyTeam} />
           </div>

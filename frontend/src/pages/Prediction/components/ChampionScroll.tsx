@@ -53,7 +53,6 @@ class ChampionScroll extends React.Component<ChampionScrollProps, ChampionScroll
                         color: "gray",
                         width: "15%",
                         height: "3vh",
-                        marginRight: "4%",
                         textAlign: "center",
                         border: "1px solid #3e7f75",
                         background: "#0a1b23",
@@ -69,7 +68,6 @@ class ChampionScroll extends React.Component<ChampionScrollProps, ChampionScroll
                     flexWrap: "wrap",
                     overflowY: "auto",
                     alignContent: "flex-start",
-                    marginTop: "1vh"
                 }}>
                     {this.state.filteredListOfChamps.map(
                         (champName: string, index: any) =>
