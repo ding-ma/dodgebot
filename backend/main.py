@@ -11,11 +11,6 @@ CORS(app)
 model = tf.keras.models.load_model(os.path.join("models", "model.h5"))
 
 
-@app.route("/")
-def test():
-    return "!!!!!", 200
-
-
 # Predicts winner of match
 @app.route('/predictWinner', methods=["POST"])
 def predict_winner():
