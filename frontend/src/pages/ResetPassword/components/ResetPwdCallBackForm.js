@@ -4,7 +4,7 @@ import {Button, TextField, Typography} from '@material-ui/core';
 import firebase from 'firebase';
 import {store} from 'react-notifications-component';
 
-const ResetPasswordCallBack = (code) => {
+const ResetPasswordCallBack = ({code}) => {
     const history = useHistory();
     
     const [pwd, setPwd] = useState('');
@@ -12,7 +12,6 @@ const ResetPasswordCallBack = (code) => {
     const [errorMessage, setErrorMessage] = useState('');
 
     const handleSubmit = () => {
-
         if (pwd !== confirmPwd || pwd.length < 8) {
             setErrorMessage("Password doesn't match or length is smaller than 8");
             return;
