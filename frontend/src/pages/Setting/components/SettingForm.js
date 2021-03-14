@@ -181,7 +181,7 @@ const SettingForm = () => {
 
                 <div className="login-footer">
                     <Typography color="inherit" className="login-footer__text">
-                        <b>Note:</b> to change a disabled field, please email a moderator!
+                        <b>Note:</b> to change a disabled field, please <a href={"mailto:contact@dodgebot.tech"}>email</a> us!
                     </Typography>
                 </div>
             </form>

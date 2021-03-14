@@ -7,3 +7,4 @@ GCP_KEY.json
 *.csv
 *.zip
 !template.csv
+node_modules/
