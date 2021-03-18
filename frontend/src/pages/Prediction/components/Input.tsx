@@ -147,7 +147,7 @@ type InputProps = {
 
 class Input extends React.Component<InputProps, {}> {
     render() {
-        const imgSrc = this.props.champion === "" ? "../RoleIcons/" + this.props.role + ".png" : `../ChampionIcons/` + this.props.champion + `Square.png`;
+        const imgSrc = this.props.champion === "" ? `../RoleIcons/` + this.props.role + `.png` : `../ChampionIcons/` + this.props.champion + `Square.png`;
         const img = <img alt="" onClick={() => this.props.onClick()} src={imgSrc} style={{
             height: "10vh",
             width: "10vh",
