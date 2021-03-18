@@ -10,6 +10,8 @@ import { ChampToKey } from "../../../constants/ChampToKey"
 
 import '../styles/Predictions.css'
 import ChampionScroll from "../components/ChampionScroll";
+import {store} from 'react-notifications-component';
+
 
 var selectingTeam: string | null = null
 var selectingRole: number | null = null
@@ -86,6 +88,20 @@ class Predictions extends React.Component<{}, PredictionsState> {
         }
       }
     }
+    else {
+      store.addNotification({
+        title: "Champ already in use",
+        message: '  ',
+        type: "danger",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+            duration: 3000
+        }
+    });
+    }
   }
 
   // Predict Winner
@@ -126,6 +142,20 @@ class Predictions extends React.Component<{}, PredictionsState> {
             })
           });
       })
+    }
+    else {
+      store.addNotification({
+        title: "Please select all 10 champions",
+        message: '  ',
+        type: "danger",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+            duration: 3000
+        }
+    });
     }
   }
 
