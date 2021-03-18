@@ -1,6 +1,11 @@
 import React from "react";
 // import styled from "styled-components";
 import QuestionMark from '../../../images/QuestionMark.jpg'
+import ADC from "../../../images/roles/bot.png"
+import Top from "../../../images/roles/top.png"
+import Jungle from "../../../images/roles/jungle.png"
+import Mid from "../../../images/roles/mid.png"
+import Support from "../../../images/roles/support.png"
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const items = [
@@ -147,9 +152,8 @@ type InputProps = {
 }
 
 class Input extends React.Component<InputProps, {}> {
-    
     render() {
-        const imgSrc = this.props.champion === "" ? QuestionMark : `../ChampionIcons/` + this.props.champion + `Square.png`;
+        const imgSrc = this.props.champion === "" ? "../RoleIcons/" + this.props.role + ".png" : `../ChampionIcons/` + this.props.champion + `Square.png`;
         const img = <img alt="" onClick={() => this.props.onClick()} src={imgSrc} style={{
             height: "10vh",
             width: "10vh",
