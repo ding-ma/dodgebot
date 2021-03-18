@@ -68,24 +68,22 @@ class Predictions extends React.Component<{}, PredictionsState> {
   // Chooses champ
   selectChamp(champ: string) {
 
-    let temp;
-    if (ChampToKey[champ as keyof typeof ChampToKey] === undefined) {
-      console.log(champ)
-    }
-
-    if (selectingTeam != null && selectingRole != null) {
-      if (selectingTeam === "friendly") {
-        temp = this.state.friendlyTeam;
-        temp[selectingRole] = champ
-        this.setState({
-          friendlyTeam: temp
-        })
-      } else {
-        temp = this.state.enemyTeam;
-        temp[selectingRole] = champ
-        this.setState({
-          enemyTeam: temp
-        })
+    if (!this.state.friendlyTeam.concat(this.state.enemyTeam).includes(champ)) {
+      let temp;
+      if (selectingTeam != null && selectingRole != null) {
+        if (selectingTeam === "friendly") {
+          temp = this.state.friendlyTeam;
+          temp[selectingRole] = champ
+          this.setState({
+            friendlyTeam: temp
+          })
+        } else {
+          temp = this.state.enemyTeam;
+          temp[selectingRole] = champ
+          this.setState({
+            enemyTeam: temp
+          })
+        }
       }
     }
   }
@@ -234,7 +232,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
                   <div>
                     {/* Scrollable list of champions with search bar */}
                     <div style={{ zIndex: 50, position: "relative" }}>
-                      <ChampionScroll selectChamp={this.selectChamp} />
+                      <ChampionScroll selectChamp={this.selectChamp} unavailableChamps={this.state.friendlyTeam.concat(this.state.enemyTeam)} />
                     </div>
 
                     <div style={{
