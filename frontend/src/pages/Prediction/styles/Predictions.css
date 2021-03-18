@@ -24,7 +24,8 @@
     border-radius: 10px;
     font-size: 20pt;
     font-family: 'Courier New';
-    border: #4b4e2e
+    border: #4b4e2e;
+    z-index: 100;
 }
 
 
