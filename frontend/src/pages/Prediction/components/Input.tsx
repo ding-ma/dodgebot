@@ -142,7 +142,8 @@ const items = [
 type InputProps = {
     champion: string,
     onClick: Function,
-    isLeftSide: Boolean
+    isFriendlyTeam: Boolean,
+    role: String
 }
 
 class Input extends React.Component<InputProps, {}> {
@@ -158,7 +159,7 @@ class Input extends React.Component<InputProps, {}> {
         return (
             <div style={{display: "flex", justifyContent: "center", alignItems: "center", margin: "2%"}}>
                 {/* Display img on left of select button if right panel */}
-                {this.props.isLeftSide ? img : null}
+                {this.props.isFriendlyTeam ? img : null}
                 
                 {/* Select button */}
                 <div style={{
@@ -173,12 +174,12 @@ class Input extends React.Component<InputProps, {}> {
                 }} onClick={() => this.props.onClick()}>
                     {/* Champ name */}
                     <p style={{color: "#87742a"}}>
-                        {this.props.champion === "" ? "Click to Select" : this.props.champion}
+                        {this.props.champion === "" ? (this.props.isFriendlyTeam ? "Friendly " : "Enemy ") + this.props.role : this.props.champion}
                     </p>
                 </div>
                 
                 {/* Display img on right of select button if left panel */}
-                {!this.props.isLeftSide ? img : null}
+                {!this.props.isFriendlyTeam ? img : null}
             
             </div>
         );

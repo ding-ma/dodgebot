@@ -201,7 +201,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
           {/* Friendly panel */}
           <div style={{ width: "25%", display: "flex", justifyContent: "center" }}>
-            <ChampionPanel isLeftSide={true} selectBox={this.selectingFriendly}
+            <ChampionPanel isFriendlyTeam={true} selectBox={this.selectingFriendly}
               champions={this.state.friendlyTeam} />
           </div>
 
@@ -286,7 +286,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
           {/* Enemy Panel */}
           <div style={{ width: "25%", display: "flex", justifyContent: "center" }}>
-            <ChampionPanel isLeftSide={false} selectBox={this.selectingEnemy}
+            <ChampionPanel isFriendlyTeam={false} selectBox={this.selectingEnemy}
               champions={this.state.enemyTeam} />
           </div>
         </div>
