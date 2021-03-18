@@ -29,11 +29,9 @@ const Dashboard = () => {
     const bull = <span className={classes.bullet}>•</span>;
 
     const {currentUser} = useContext(AuthContext);
-    console.log(currentUser)
     const [leagueAccount, setLeagueAccount] = useState({})
     const [matchHistory, setMatchesHistory] = useState([]);
 
-    // eslint-disable-next-line no-unused-vars
     const eloToColor = {
         "Unranked": "#f9e8db",
         "Iron": "#8d8c89",
@@ -42,9 +40,9 @@ const Dashboard = () => {
         "Gold": "#e2c282",
         "Platinum": "#a5c7c6",
         "Diamond": "#a5c7c6",
-        "Master":"#d2a1e3",
-        "GrandMaster":"#fb6665",
-        "Challenger":"#67fafe"
+        "Master": "#d2a1e3",
+        "GrandMaster": "#fb6665",
+        "Challenger": "#67fafe"
     }
 
     useEffect(() => {
@@ -120,12 +118,9 @@ const Dashboard = () => {
     }
 
 
-
-
     return (
         <div className="dashboard">
-
-            <Card className={classes.root} style={{background: "#a5c7c6"}} variant="outlined">
+            <Card className={classes.root} style={{background: eloToColor[leagueAccount.elo]}} variant="outlined">
                 <CardContent>
 
                     <Typography variant="body1" component="p">
@@ -140,7 +135,6 @@ const Dashboard = () => {
                         {leagueAccount.elo} {bull} <b>{leagueAccount.tier}</b>
                     </Typography>
                 </CardContent>
-
             </Card>
 
             <h2>Past Matches</h2>
