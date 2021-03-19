@@ -157,7 +157,7 @@ class Input extends React.Component<InputProps, {}> {
             border: "1px solid #5a4820",
             borderRadius: "2px",
             cursor: "pointer",
-            backgroundColor: "rgba(0, 0, 0, 0.3)"
+            backgroundColor: "rgba(0, 0, 0, 0.2)"
         }} />;
         return (
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", margin: "2%" }}>
