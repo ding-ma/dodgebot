@@ -12,16 +12,14 @@ import '../styles/Predictions.css'
 import ChampionScroll from "../components/ChampionScroll";
 import { store } from 'react-notifications-component';
 
-
-var selectingTeam: string | null = null
-var selectingRole: number | null = null
-
 type PredictionsState = {
   friendlyTeam: string[]
   enemyTeam: string[]
   submitted: Boolean
   isLoading: Boolean
   winPercentage: number | null
+  selectingTeam: string | null
+  selectingRole: number | null
 }
 
 class Predictions extends React.Component<{}, PredictionsState> {
@@ -34,7 +32,9 @@ class Predictions extends React.Component<{}, PredictionsState> {
       enemyTeam: ["", "", "", "", ""],
       submitted: false,
       isLoading: false,
-      winPercentage: null
+      winPercentage: null,
+      selectingTeam: null,
+      selectingRole: null
     }
 
     this.selectChamp = this.selectChamp.bind(this)
@@ -42,7 +42,8 @@ class Predictions extends React.Component<{}, PredictionsState> {
     this.dodge = this.dodge.bind(this)
     this.win = this.win.bind(this)
     this.loss = this.loss.bind(this)
-
+    this.selectingFriendly = this.selectingFriendly.bind(this)
+    this.selectingEnemy = this.selectingEnemy.bind(this)
   }
 
   componentDidMount() {
@@ -60,14 +61,19 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
   // When selecting friendly champ
   selectingFriendly(number: number) {
-    selectingTeam = "friendly"
-    selectingRole = number
+    this.setState({
+      selectingTeam: "friendly",
+      selectingRole: number
+    })
+
   }
 
   // When selecting enemy champ
   selectingEnemy(number: number) {
-    selectingTeam = "enemy"
-    selectingRole = number
+    this.setState({
+      selectingTeam: "enemy",
+      selectingRole: number
+    })
   }
 
   // Chooses champ
@@ -75,16 +81,16 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
     if (!this.state.friendlyTeam.concat(this.state.enemyTeam).includes(champ)) {
       let temp;
-      if (selectingTeam != null && selectingRole != null) {
-        if (selectingTeam === "friendly") {
+      if (this.state.selectingTeam != null && this.state.selectingRole != null) {
+        if (this.state.selectingTeam === "friendly") {
           temp = this.state.friendlyTeam;
-          temp[selectingRole] = champ
+          temp[this.state.selectingRole] = champ
           this.setState({
             friendlyTeam: temp
           })
         } else {
           temp = this.state.enemyTeam;
-          temp[selectingRole] = champ
+          temp[this.state.selectingRole] = champ
           this.setState({
             enemyTeam: temp
           })
@@ -133,7 +139,9 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
       this.setState({
         isLoading: true,
-        submitted: true
+        submitted: true,
+        selectingTeam: null,
+        selectingRole: null
       }, () => {
         fetch('https://prediction-wvdj36m4qa-uc.a.run.app/predictWinner', requestOptions)
           .then(response => response.json())
@@ -272,7 +280,8 @@ class Predictions extends React.Component<{}, PredictionsState> {
           {/* Friendly panel */}
           <div style={{ width: "25%", display: "flex", justifyContent: "center" }}>
             <ChampionPanel isFriendlyTeam={true} selectBox={this.selectingFriendly}
-              champions={this.state.friendlyTeam} />
+              champions={this.state.friendlyTeam}
+              selectedBox={this.state.selectingTeam == "friendly" ? this.state.selectingRole : null} />
           </div>
 
           {/* Centre panel */}
@@ -358,7 +367,8 @@ class Predictions extends React.Component<{}, PredictionsState> {
           {/* Enemy Panel */}
           <div style={{ width: "25%", display: "flex", justifyContent: "center" }}>
             <ChampionPanel isFriendlyTeam={false} selectBox={this.selectingEnemy}
-              champions={this.state.enemyTeam} />
+              champions={this.state.enemyTeam}
+              selectedBox={this.state.selectingTeam == "enemy" ? this.state.selectingRole : null}  />
           </div>
         </div>
         <div ref={el => { this.el = el; }} />

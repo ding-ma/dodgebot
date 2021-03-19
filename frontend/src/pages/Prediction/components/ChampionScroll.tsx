@@ -84,7 +84,7 @@ class ChampionScroll extends React.Component<ChampionScrollProps, ChampionScroll
                                 marginTop: "1vh",
                                 marginBottom: "1vh"
                             }}>
-                                <img style={{ height: "10vh", width: "10vh", filter: imgFilter, cursor: "pointer" }} key={index}
+                                <img style={{ height: "10vh", width: "10vh", filter: imgFilter, cursor: "pointer", background: "rgba(0,0,0,0.3)" }} key={index}
                                     src={`../ChampionIcons/` + champName + `Square.png`} alt="info"
                                     onClick={() => this.props.selectChamp(champName)} />
                                 <p style={{ margin: 0, color: "gray", marginTop: "0.6vh" }}>{champName}</p>
