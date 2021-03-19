@@ -130,6 +130,7 @@ const SettingForm = () => {
                     className="login-form__input"
                     variant="outlined"
                     color="primary"
+                    helperText="New password must be at least 8 characters long"
                 />
                 }
 
