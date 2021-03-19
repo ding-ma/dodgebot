@@ -11,7 +11,11 @@ html * {
 }
 
 body {
+  background-image: linear-gradient(to top, #020b0f, #07141a, #0a1b23, #09222d, #082938);
+  height: 100%;
   margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 ::-webkit-scrollbar {

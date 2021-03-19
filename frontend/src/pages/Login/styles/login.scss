@@ -1,7 +1,6 @@
 @import "../../../global/styles/layout";
 
 
-
 .login-form {
   display: flex;
   flex-direction: column;
@@ -21,8 +20,8 @@
     height: 3em;
     padding: 18.5px 14px;
     background-color: $leag-color;
-    &:hover{
-      background-color: black;
+    &:hover {
+      background-color: red;
     }
   }
 }
