@@ -17,15 +17,15 @@
 }
 
 .resetBtn {
-    width: 40%;
-    height: 10%;
-    margin-top: 10vh;
+    width: 20%;
+    height: 70%;
     background-color: #7b775b;
     border-radius: 10px;
     font-size: 20pt;
     font-family: 'Courier New';
     border: #4b4e2e;
     z-index: 100;
+    margin-top: 1%;
 }
 
 
@@ -33,6 +33,37 @@
     background: #4b4e2e;
 }
 
+.winBtn {
+  width: 20%;
+  height: 70%;
+  background-color: #1D5107;
+  border-radius: 10px;
+  font-size: 20pt;
+  font-family: 'Courier New';
+  border: #4b4e2e;
+  z-index: 100;
+  margin-right: 2%;
+}
+
+.winBtn:hover{
+  background: #143705;
+}
+
+.lossBtn {
+  width: 20%;
+  height: 70%;
+  background-color: #751D0B;
+  border-radius: 10px;
+  font-size: 20pt;
+  font-family: 'Courier New';
+  border: #4b4e2e;
+  z-index: 100;
+  margin-left: 2%;
+}
+
+.lossBtn:hover{
+  background: #591608;
+}
 
 .loader {
   border: 16px solid #272825;

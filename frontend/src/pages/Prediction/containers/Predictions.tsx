@@ -10,7 +10,7 @@ import { ChampToKey } from "../../../constants/ChampToKey"
 
 import '../styles/Predictions.css'
 import ChampionScroll from "../components/ChampionScroll";
-import {store} from 'react-notifications-component';
+import { store } from 'react-notifications-component';
 
 
 var selectingTeam: string | null = null
@@ -39,7 +39,10 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
     this.selectChamp = this.selectChamp.bind(this)
     this.predict = this.predict.bind(this)
-    this.reset = this.reset.bind(this)
+    this.dodge = this.dodge.bind(this)
+    this.win = this.win.bind(this)
+    this.loss = this.loss.bind(this)
+
   }
 
   componentDidMount() {
@@ -98,9 +101,9 @@ class Predictions extends React.Component<{}, PredictionsState> {
         animationIn: ["animate__animated", "animate__fadeIn"],
         animationOut: ["animate__animated", "animate__fadeOut"],
         dismiss: {
-            duration: 3000
+          duration: 3000
         }
-    });
+      });
     }
   }
 
@@ -153,13 +156,31 @@ class Predictions extends React.Component<{}, PredictionsState> {
         animationIn: ["animate__animated", "animate__fadeIn"],
         animationOut: ["animate__animated", "animate__fadeOut"],
         dismiss: {
-            duration: 3000
+          duration: 3000
         }
-    });
+      });
     }
   }
 
-  reset() {
+  dodge() {
+    this.setState({
+      submitted: false,
+      isLoading: false,
+      winPercentage: null
+    })
+  }
+
+  win() {
+    console.log("win")
+    this.setState({
+      submitted: false,
+      isLoading: false,
+      winPercentage: null
+    })
+  }
+
+  loss() {
+    console.log("loss")
     this.setState({
       submitted: false,
       isLoading: false,
@@ -203,7 +224,8 @@ class Predictions extends React.Component<{}, PredictionsState> {
           textAlign: "center",
           fontSize: "30pt",
           fontFamily: "Courier New",
-          margin: 0
+          margin: 0,
+          marginTop: "12%"
         }}>You have a</p>
         <p style={{
           color: winColor,
@@ -219,8 +241,26 @@ class Predictions extends React.Component<{}, PredictionsState> {
           fontFamily: "Courier New",
           margin: 0
         }}>chance of winning</p>
+        
+        <p style={{
+          color: "#7b775b",
+          textAlign: "center",
+          fontSize: "20pt",
+          fontFamily: "Courier New",
+          marginTop: "8vh"
+        }}>Actual Result:</p>
 
-        <button className="resetBtn" onClick={this.reset}>Reset</button>
+        <div style={{ display: "flex", justifyContent: "center", height: "10%", width: "100%" }}>
+          <button className="winBtn" onClick={this.win}>Win</button>
+          <button className="lossBtn" onClick={this.loss}>Loss</button>
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "center", height: "10%", width: "100%" }}>
+        <button className="resetBtn" onClick={this.dodge}>Dodge</button>
+
+        </div>
+
+
       </div>
 
     return (
