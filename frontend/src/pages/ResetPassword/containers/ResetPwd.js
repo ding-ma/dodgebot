@@ -1,7 +1,8 @@
 import React from 'react';
-import {Box, Link, Typography} from '@material-ui/core';
+import {Box, Typography} from '@material-ui/core';
 import ResetPwdForm from '../components/ResetPwdForm';
 import "../../Login/styles/login.scss"
+import Link from "../../MaterialUIOverwrite/Link"
 
 const ResetPwd = () => (
     <Box className="login">

@@ -9,7 +9,7 @@ export default function PieGraph({data}) {
 
             <PieChart width={730} height={300}>
                 <Pie data={flattenRedTeam(data)}
-                     color="#c79b3b" dataKey="value"
+                     dataKey="value"
                      nameKey="name"
                      cx="50%"
                      cy="50%"

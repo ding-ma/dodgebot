@@ -6,6 +6,7 @@ import {Button} from "@material-ui/core";
 import firebase from "firebase";
 import {AuthContext} from "../../../context/providers/AccountProvider";
 import {store} from 'react-notifications-component';
+import "../styles/table.scss"
 
 const columns = [
     {field: 'champion', headerName: 'Champion Name', width: 200},
@@ -27,8 +28,8 @@ const displayRoleToDb = {
 let counter = 1;
 
 export default function ChampionTable({favoriteChampions}) {
-    const {currentUser} = useContext(AuthContext);
 
+    const {currentUser} = useContext(AuthContext);
     const [selectedItems, setSelectedItems] = useState([])
     const [data, setData] = useState([])
     const flatten = (arr, name) => {
@@ -137,17 +138,19 @@ export default function ChampionTable({favoriteChampions}) {
     return (
         <div style={{height: 400, width: 800}}>
 
-            <DataGrid
-                rows={data}
-                columns={columns}
-                pageSize={5}
-                checkboxSelection={true}
-                onSelectionModelChange={e => selectItems(e.selectionModel)}
-            />
+                <DataGrid
+                    rows={data}
+                    columns={columns}
+                    pageSize={5}
+                    checkboxSelection={true}
+                    onSelectionModelChange={e => selectItems(e.selectionModel)}
+                />
+
 
             <Button
                 variant="contained"
                 color="primary"
+                className="login-form__smallButton"
                 onClick={() => handleDelete()}
             >
                 Delete Selected

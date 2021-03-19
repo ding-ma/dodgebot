@@ -7,11 +7,6 @@ const styles = theme => ({
         display: 'flex',
         flexWrap: 'wrap',
     },
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 200,
-    },
 
     label: {
         color : '#c79b3b',
@@ -20,6 +15,9 @@ const styles = theme => ({
         },
         "&$erroredLabel": {
             color: "red"
+        },
+        "&.Mui-focused": {
+            color: "#c79b3b"
         }
     },
 

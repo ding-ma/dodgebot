@@ -3,11 +3,41 @@ import {AuthContext} from "../../../context/providers/AccountProvider";
 import firebase from "firebase";
 import ChampionTable from "../components/ChampionTable";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import {Button, MenuItem, Select, TextField} from "@material-ui/core";
+import {Button, MenuItem} from "@material-ui/core";
 import {KeyToChamp} from "../../../constants/KeyToChampion";
 import {ChampToKey} from "../../../constants/ChampToKey";
 import {store} from "react-notifications-component";
+import TextField from "../../MaterialUIOverwrite/TextField"
+import {makeStyles} from '@material-ui/core/styles';
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        "& .MuiInputLabel-outlined:not(.MuiInputLabel-shrink)": {
+            transform: "translate(34px, 20px) scale(1);"
+        },
+        "& .MuiFormLabel-root":{
+            color: 'white !important'
+        },
+        "& .MuiSvgIcon-root":{
+            color: 'white !important'
+        },
+    },
+    inputRoot: {
+        color: "white",
+        '&[class*="MuiOutlinedInput-root"] .MuiAutocomplete-input:first-child': {
+            paddingLeft: 26
+        },
+        "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#c79b3b"
+        },
+        "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#c79b3b"
+        },
+        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#c79b3b"
+        }
+    }
+}));
 
 const displayRoleToDb = {
     "Top Lane": "top",
@@ -19,6 +49,9 @@ const displayRoleToDb = {
 
 
 const Favorites = () => {
+    const classes = useStyles();
+
+
     const {currentUser} = useContext(AuthContext);
     const roles = ['Top Lane', 'Jungle', 'Mid Lane', 'Bot Lane', 'Support'];
     const [role, setRole] = useState('Top Lane')
@@ -74,28 +107,34 @@ const Favorites = () => {
                 id="combo-box-demo"
                 options={champions}
                 style={{margin: '10px 0', width: '30%'}}
-                renderInput={(params) => <TextField {...params} label="Champions" variant="outlined"/>}
+                renderInput={
+                    (params) => <TextField {...params} label="Champions" variant="outlined"/>
+                }
                 onChange={(event, value) => setSearchChampion(value)}
+                classes={classes}
             />
-            <Select
+            <TextField
                 required={true}
                 value={role}
                 onChange={(event) => setRole(event.target.value)}
                 style={{margin: '10px 0', width: '30%'}}
                 variant="outlined"
+                select
             >
                 {roles.map((value, index) => {
                     return <MenuItem key={index} value={value}>{value}</MenuItem>;
                 })}
-            </Select>
+            </TextField>
 
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleNewChampion()}
-            >
-                Add!
-            </Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    className="login-form__smallButton"
+                    onClick={() => handleNewChampion()}
+                >
+                    Add!
+                </Button>
+
             <ChampionTable favoriteChampions={favChampions}/>
         </div>
     )
