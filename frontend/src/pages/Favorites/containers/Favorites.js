@@ -3,10 +3,11 @@ import {AuthContext} from "../../../context/providers/AccountProvider";
 import firebase from "firebase";
 import ChampionTable from "../components/ChampionTable";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import {Button, MenuItem, Select, TextField} from "@material-ui/core";
+import {Button, MenuItem} from "@material-ui/core";
 import {KeyToChamp} from "../../../constants/KeyToChampion";
 import {ChampToKey} from "../../../constants/ChampToKey";
 import {store} from "react-notifications-component";
+import TextField from "../../MaterialUIOverwrite/TextField"
 
 
 const displayRoleToDb = {
@@ -77,17 +78,18 @@ const Favorites = () => {
                 renderInput={(params) => <TextField {...params} label="Champions" variant="outlined"/>}
                 onChange={(event, value) => setSearchChampion(value)}
             />
-            <Select
+            <TextField
                 required={true}
                 value={role}
                 onChange={(event) => setRole(event.target.value)}
                 style={{margin: '10px 0', width: '30%'}}
                 variant="outlined"
+                select
             >
                 {roles.map((value, index) => {
                     return <MenuItem key={index} value={value}>{value}</MenuItem>;
                 })}
-            </Select>
+            </TextField>
 
             <Button
                 variant="contained"

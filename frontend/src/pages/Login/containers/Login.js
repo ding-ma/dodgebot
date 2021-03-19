@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react';
-import {Box, Link, Typography} from '@material-ui/core';
+import {Box, Typography} from '@material-ui/core';
 import LoginForm from '../components/LoginForm';
 import firebase from "firebase";
 import {useHistory} from "react-router-dom";
+import Link from "../../MaterialUIOverwrite/Link"
 
 const Login = () => {
     const history = useHistory();
@@ -26,7 +27,7 @@ const Login = () => {
             <div className="login-footer">
                 <Typography color="inherit" className="login-footer__text">
                     No account?{' '}
-                    <Link color="primary" href="/register">
+                    <Link href="/register">
                         Sign up
                     </Link>
                 </Typography>
@@ -34,7 +35,7 @@ const Login = () => {
             <div className="login-footer">
                 <Typography color="inherit" className="login-footer__text">
                     Forgot Password?{' '}
-                    <Link color="primary" href="/reset">
+                    <Link href="/reset">
                         Reset
                     </Link>
                 </Typography>

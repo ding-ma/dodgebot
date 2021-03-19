@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {Button, InputLabel, MenuItem, Select, Typography} from '@material-ui/core';
+import {Button, InputLabel, MenuItem, Typography} from '@material-ui/core';
 import firebase from "firebase";
 import {store} from 'react-notifications-component';
 import TextField from "../../MaterialUIOverwrite/TextField"
@@ -91,46 +91,49 @@ const NewPlayerForm = () => {
                 </Typography>
             )}
 
-            <InputLabel htmlFor="">Region</InputLabel>
-            <Select
+            <InputLabel className="label-color">Region</InputLabel>
+            <TextField
                 required={true}
                 value={region}
                 onChange={(event) => setRegion(event.target.value)}
                 style={{ margin: '10px 0', width: '70%' }}
                 variant="outlined"
+                select
             >
                 {regions.map((value, index) => {
                     return <MenuItem key={index} value={value}>{value}</MenuItem>;
                 })}
-            </Select>
+            </TextField>
 
-            <InputLabel htmlFor="">Elo</InputLabel>
-            <Select
+            <InputLabel className="label-color">Elo</InputLabel>
+            <TextField
                 required={true}
                 value={elo}
                 onChange={(event) => setElo(event.target.value)}
                 style={{ margin: '10px 0', width: '70%' }}
                 variant="outlined"
+                select
             >
                 {elos.map((value, index) => {
                     return <MenuItem key={index} value={value}>{value}</MenuItem>;
                 })}
-            </Select>
+            </TextField>
 
-            <InputLabel htmlFor="">Tier</InputLabel>
-            <Select
+            <InputLabel className="label-color">Tier</InputLabel>
+            <TextField
                 required={true}
                 value={tier}
                 onChange={(event) => setTier(event.target.value)}
                 style={{ margin: '10px 0', width: '70%' }}
                 variant="outlined"
+                select
             >
                 {tiers.map((value, index) => {
                     return <MenuItem key={index} value={value}>{value}</MenuItem>;
                 })}
-            </Select>
+            </TextField>
 
-            <InputLabel htmlFor="">Summoner Name</InputLabel>
+            <InputLabel className="label-color">Summoner Name</InputLabel>
             <TextField
                 required={true}
                 value={summonerName}
@@ -141,7 +144,6 @@ const NewPlayerForm = () => {
                 error={summonerError}
             />
 
-            <InputLabel htmlFor=""/>
             <Button
                 variant="contained"
                 color="primary"
