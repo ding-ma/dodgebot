@@ -40,6 +40,9 @@ const styles = theme => ({
     disabledInput: {
         color: '#c4bb97',
     },
+    helper: {
+        color: 'white'
+    }
 });
 
 const TextField = withStyles(styles)(function TextField({classes, ...props}) {
@@ -59,6 +62,7 @@ const TextField = withStyles(styles)(function TextField({classes, ...props}) {
                     disabled: classes.disabledInput
                 },
             }}
+            FormHelperTextProps={{ classes: { root: classes.helper } }}
             {...props}
         />
     );
