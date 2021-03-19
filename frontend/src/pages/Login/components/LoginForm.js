@@ -3,68 +3,7 @@ import firebase from 'firebase';
 import {useHistory} from 'react-router-dom';
 import {Button, Typography} from '@material-ui/core';
 import "../styles/login.scss"
-import {withStyles} from "@material-ui/core/styles";
-import TextFieldMui from "@material-ui/core/TextField";
-
-const styles = theme => ({
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 200,
-    },
-
-    label: {
-        color : '#c79b3b',
-        "&$focusedLabel": {
-            color: "#c79b3b"
-        },
-        "&$erroredLabel": {
-            color: "red"
-        }
-    },
-
-    cssOutlinedInput: {
-        color: "white",
-        '&$cssFocused $notchedOutline': {
-            borderColor: '#c79b3b !important',
-        }
-    },
-
-    cssFocused: {
-        borderWidth: '1px',
-        borderColor: '#c79b3b !important'
-    },
-
-    notchedOutline: {
-        borderWidth: '1px',
-        borderColor: '#c79b3b !important'
-    },
-});
-
-const TextField = withStyles(styles)(function TextField({classes, ...props}) {
-    return (
-        <TextFieldMui
-            InputLabelProps={{
-                classes: {
-                    root: classes.label,
-                    focused: classes.cssFocused,
-                },
-            }}
-            InputProps={{
-                classes: {
-                    root: classes.cssOutlinedInput,
-                    focused: classes.cssFocused,
-                    notchedOutline: classes.notchedOutline,
-                },
-            }}
-            {...props}
-        />
-    );
-});
+import TextField from "../../MaterialUIOverwrite/TextField"
 
 const LoginForm = () => {
 
@@ -155,4 +94,4 @@ const LoginForm = () => {
     );
 };
 
-export default withStyles(styles)(LoginForm);
+export default LoginForm;

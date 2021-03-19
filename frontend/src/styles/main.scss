@@ -26,3 +26,11 @@ body {
 *:focus {
   outline: none;
 }
+
+a:link {
+  color: $leag-color;
+}
+
+a:visited {
+  color: #483a13;
+}

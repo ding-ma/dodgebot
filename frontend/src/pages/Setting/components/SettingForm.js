@@ -1,9 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
 import firebase from 'firebase';
-import {Button, InputLabel, MenuItem, Select, TextField, Typography} from '@material-ui/core';
+import {Button, InputLabel, MenuItem, Select, Typography} from '@material-ui/core';
 import {AuthContext} from "../../../context/providers/AccountProvider";
 import {useHistory} from "react-router-dom";
 import {store} from 'react-notifications-component';
+import TextField from "../../MaterialUIOverwrite/TextField"
 
 const SettingForm = () => {
         const history = useHistory()
@@ -84,7 +85,7 @@ const SettingForm = () => {
                     {errorMessage}
                 </Typography>
 
-                <InputLabel htmlFor="">Email</InputLabel>
+                <InputLabel className="label-color">Email</InputLabel>
                 <TextField
                     disabled
                     required={true}
@@ -94,7 +95,7 @@ const SettingForm = () => {
                     color="primary"
                 />
 
-                <InputLabel htmlFor="">Summoner Name</InputLabel>
+                <InputLabel className="label-color">Summoner Name</InputLabel>
                 <TextField
                     disabled
                     required={true}
@@ -104,7 +105,7 @@ const SettingForm = () => {
                     color="primary"
                 />
 
-                <InputLabel htmlFor="">Change Password</InputLabel>
+                <InputLabel className="label-color">Change Password</InputLabel>
                 {isPassword &&
                 <TextField
                     required={true}
@@ -128,7 +129,7 @@ const SettingForm = () => {
                 }
 
 
-                <InputLabel htmlFor="">Region</InputLabel>
+                <InputLabel className="label-color">Region</InputLabel>
                 <Select
                     disabled
                     required={true}
@@ -142,7 +143,7 @@ const SettingForm = () => {
                     })}
                 </Select>
 
-                <InputLabel htmlFor="">Elo</InputLabel>
+                <InputLabel className="label-color">Elo</InputLabel>
                 <Select
                     required={true}
                     value={elo}
@@ -155,7 +156,7 @@ const SettingForm = () => {
                     })}
                 </Select>
 
-                <InputLabel htmlFor="">Tier</InputLabel>
+                <InputLabel className="label-color">Tier</InputLabel>
                 <Select
                     required={true}
                     value={tier}
@@ -169,7 +170,7 @@ const SettingForm = () => {
                 </Select>
 
 
-                <InputLabel htmlFor=""/>
+                <InputLabel className="label-color"/>
                 <Button
                     variant="contained"
                     color="primary"
@@ -181,7 +182,8 @@ const SettingForm = () => {
 
                 <div className="login-footer">
                     <Typography color="inherit" className="login-footer__text">
-                        <b>Note:</b> to change a disabled field, please <a href={"mailto:contact@dodgebot.tech"}>email</a> us!
+                        <b>Note:</b> to change a disabled field, please <a
+                        href={"mailto:contact@dodgebot.tech"}>email</a> us!
                     </Typography>
                 </div>
             </form>

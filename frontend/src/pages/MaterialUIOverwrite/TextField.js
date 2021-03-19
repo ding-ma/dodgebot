@@ -27,7 +27,7 @@ const styles = theme => ({
         color: "white",
         '&$cssFocused $notchedOutline': {
             borderColor: '#c79b3b !important',
-        }
+        },
     },
 
     cssFocused: {
@@ -38,6 +38,9 @@ const styles = theme => ({
     notchedOutline: {
         borderWidth: '1px',
         borderColor: '#c79b3b !important'
+    },
+    disabledInput: {
+        color: '#c4bb97',
     },
 });
 
@@ -55,6 +58,7 @@ const TextField = withStyles(styles)(function TextField({classes, ...props}) {
                     root: classes.cssOutlinedInput,
                     focused: classes.cssFocused,
                     notchedOutline: classes.notchedOutline,
+                    disabled: classes.disabledInput
                 },
             }}
             {...props}
@@ -62,4 +66,4 @@ const TextField = withStyles(styles)(function TextField({classes, ...props}) {
     );
 });
 
-export default TextField;
+export default withStyles(styles)(TextField);
