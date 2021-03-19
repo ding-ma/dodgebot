@@ -8,7 +8,41 @@ import {KeyToChamp} from "../../../constants/KeyToChampion";
 import {ChampToKey} from "../../../constants/ChampToKey";
 import {store} from "react-notifications-component";
 import TextField from "../../MaterialUIOverwrite/TextField"
+import {makeStyles} from '@material-ui/core/styles';
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        "& .MuiInputLabel-outlined:not(.MuiInputLabel-shrink)": {
+            // Default transform is "translate(14px, 20px) scale(1)""
+            // This lines up the label with the initial cursor position in the input
+            // after changing its padding-left.
+            transform: "translate(34px, 20px) scale(1);"
+        },
+        "& .MuiFormLabel-root":{
+            color: 'white !important'
+        },
+        "& .MuiSvgIcon-root":{
+            color: 'white !important'
+        },
+    },
+    inputRoot: {
+        color: "white",
+        // This matches the specificity of the default styles at https://github.com/mui-org/material-ui/blob/v4.11.3/packages/material-ui-lab/src/Autocomplete/Autocomplete.js#L90
+        '&[class*="MuiOutlinedInput-root"] .MuiAutocomplete-input:first-child': {
+            // Default left padding is 6px
+            paddingLeft: 26
+        },
+        "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#c79b3b"
+        },
+        "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#c79b3b"
+        },
+        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#c79b3b"
+        }
+    }
+}));
 
 const displayRoleToDb = {
     "Top Lane": "top",
@@ -20,6 +54,9 @@ const displayRoleToDb = {
 
 
 const Favorites = () => {
+    const classes = useStyles();
+
+
     const {currentUser} = useContext(AuthContext);
     const roles = ['Top Lane', 'Jungle', 'Mid Lane', 'Bot Lane', 'Support'];
     const [role, setRole] = useState('Top Lane')
@@ -75,8 +112,11 @@ const Favorites = () => {
                 id="combo-box-demo"
                 options={champions}
                 style={{margin: '10px 0', width: '30%'}}
-                renderInput={(params) => <TextField {...params} label="Champions" variant="outlined"/>}
+                renderInput={
+                    (params) => <TextField {...params} label="Champions" variant="outlined"/>
+                }
                 onChange={(event, value) => setSearchChampion(value)}
+                classes={classes}
             />
             <TextField
                 required={true}

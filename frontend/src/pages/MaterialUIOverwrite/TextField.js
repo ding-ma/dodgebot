@@ -15,7 +15,7 @@ const styles = theme => ({
         },
         "&$erroredLabel": {
             color: "red"
-        }
+        },
     },
 
     cssOutlinedInput: {
