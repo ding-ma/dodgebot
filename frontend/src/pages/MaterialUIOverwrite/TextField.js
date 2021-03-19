@@ -16,6 +16,9 @@ const styles = theme => ({
         "&$erroredLabel": {
             color: "red"
         },
+        "&.Mui-focused": {
+            color: "#c79b3b"
+        }
     },
 
     cssOutlinedInput: {
