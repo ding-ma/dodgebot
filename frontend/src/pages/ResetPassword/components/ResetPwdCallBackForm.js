@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {Button, TextField, Typography} from '@material-ui/core';
+import {Button, Typography} from '@material-ui/core';
 import firebase from 'firebase';
 import {store} from 'react-notifications-component';
+import TextField from "../../MaterialUIOverwrite/TextField"
+
 
 const ResetPasswordCallBack = ({code}) => {
     const history = useHistory();

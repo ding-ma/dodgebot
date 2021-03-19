@@ -8,11 +8,11 @@ const Login = () => {
     const history = useHistory();
     
     useEffect(() => {
-        (async function() {
-                const isUserLogged = await firebase.auth().currentUser;
-                if (isUserLogged){
-                    history.push("/dashboard")
-                }
+        (async function () {
+            const isUserLogged = await firebase.auth().currentUser;
+            if (isUserLogged) {
+                history.push("/dashboard")
+            }
         })();
     }, [history]);
     

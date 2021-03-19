@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {Button, InputLabel, MenuItem, Select, TextField, Typography} from '@material-ui/core';
+import {Button, InputLabel, MenuItem, Select, Typography} from '@material-ui/core';
 import firebase from "firebase";
 import {store} from 'react-notifications-component';
+import TextField from "../../MaterialUIOverwrite/TextField"
 
 const NewPlayerForm = () => {
     const history = useHistory();

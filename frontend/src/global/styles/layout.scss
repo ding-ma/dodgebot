@@ -5,6 +5,9 @@ $leag-color: #c79b3b;
   justify-content: center;
   align-items: center;
   padding-top: 5%;
-  //padding-bottom: 20px;
-  width: 100vw;
+  width: 100%;
+}
+
+body, h1, h2, h3 {
+  color: white;
 }

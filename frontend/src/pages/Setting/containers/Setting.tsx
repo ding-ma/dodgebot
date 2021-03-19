@@ -9,9 +9,9 @@ const Setting = () => {
             <Typography variant="h3" className="login__header">
                 Change your settings
             </Typography>
-            
+    
             <SettingForm/>
-        
+            
         </Box>
     )
 }
