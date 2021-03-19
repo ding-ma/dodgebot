@@ -152,7 +152,8 @@ class Input extends React.Component<InputProps, {}> {
             height: "10vh",
             width: "10vh",
             border: "1px solid #5a4820",
-            borderRadius: "2px"
+            borderRadius: "2px",
+            cursor: "pointer"
         }}/>;
         return (
             <div style={{display: "flex", justifyContent: "center", alignItems: "center", margin: "2%"}}>
@@ -168,7 +169,8 @@ class Input extends React.Component<InputProps, {}> {
                     justifyContent: "center",
                     border: "1px solid #5a4820",
                     margin: "4%",
-                    borderRadius: "2px"
+                    borderRadius: "2px",
+                    cursor: "pointer"
                 }} onClick={() => this.props.onClick()}>
                     {/* Champ name */}
                     <p style={{color: "#87742a"}}>

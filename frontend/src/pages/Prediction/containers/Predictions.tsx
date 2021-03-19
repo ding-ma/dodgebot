@@ -275,7 +275,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
                     }}>
 
                       {/* Predict Button */}
-                      <img style={{ width: "25%", height: "70%", zIndex: 50 }} src={PredictBox}
+                      <img style={{ width: "25%", height: "70%", zIndex: 50, cursor: "pointer" }} src={PredictBox}
                         onClick={this.predict} alt="" />
                       <p onClick={this.predict} style={{
                         zIndex: 100,
@@ -285,7 +285,8 @@ class Predictions extends React.Component<{}, PredictionsState> {
                         bottom: -18,
                         color: "#b8bcbd",
                         fontFamily: 'Garamond',
-                        fontSize: "22pt"
+                        fontSize: "22pt",
+                        cursor: "pointer"
                       }}>
                         PREDICT
                                         </p>
