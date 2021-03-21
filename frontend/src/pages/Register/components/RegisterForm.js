@@ -4,8 +4,6 @@ import {useHistory} from 'react-router-dom';
 import {Button, Typography,} from '@material-ui/core';
 import TextField from "../../MaterialUIOverwrite/TextField"
 
-//TODO: capture elo, rank and all that stuff
-
 const RegisterForm = () => {
     const history = useHistory();
     

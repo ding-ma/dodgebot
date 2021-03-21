@@ -42,6 +42,9 @@ const styles = theme => ({
     },
     helper: {
         color: 'white'
+    },
+    icon: {
+        color: '#c79b3b',
     }
 });
 
@@ -61,6 +64,11 @@ const TextField = withStyles(styles)(function TextField({classes, ...props}) {
                     notchedOutline: classes.notchedOutline,
                     disabled: classes.disabledInput
                 },
+            }}
+            SelectProps={{
+                classes: {
+                    icon: classes.icon
+                }
             }}
             FormHelperTextProps={{ classes: { root: classes.helper } }}
             {...props}
