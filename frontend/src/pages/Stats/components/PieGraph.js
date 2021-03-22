@@ -1,5 +1,5 @@
 import React from "react";
-import {Pie, PieChart, Tooltip} from 'recharts';
+import { Pie, PieChart, Tooltip} from 'recharts';
 import flattenRedTeam from "./FlattenRedTeam";
 
 export default function PieGraph({data}) {
@@ -14,8 +14,10 @@ export default function PieGraph({data}) {
                      cx="50%"
                      cy="50%"
                      outerRadius={120}
-                     fill="#c79b3b"/>
-                <Tooltip/>
+                     fill="#c79b3b"
+                     name={data.tooltip}
+                />
+                <Tooltip color="black"/>
             </PieChart>
         </div>
     );
