@@ -31,7 +31,7 @@ const CustomTooltip = props => {
         }
     ];
 
-    return <DefaultTooltipContent {...props} payload={newPayload}/>;
+    return <DefaultTooltipContent payload={newPayload}/>;
 };
 
 export default function BarGraph({data}) {

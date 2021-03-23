@@ -19,7 +19,7 @@ const CustomTooltip = props => {
             'value': bans
         }
     ];
-    return <DefaultTooltipContent {...props} payload={newPayload}/>;
+    return <DefaultTooltipContent payload={newPayload}/>;
 };
 
 const flatten = (json) =>{
