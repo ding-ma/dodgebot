@@ -78,7 +78,7 @@ const Header = () => {
             <Toolbar>
                 <Container maxWidth="md" className={classes.navbarDisplayFlex}>
                     <IconButton edge="start" color="inherit" aria-label="home">
-                        {userLogin && <a href='/dashboard'>
+                        {userLogin && <a href='/predict'>
                             <Home fontSize="large" className={classes.home}/>
                         </a>}
                     </IconButton>
@@ -94,9 +94,9 @@ const Header = () => {
                         </a>
                         
                         {userLogin &&
-                        <a href='/predict' key='predict' className={classes.linkText}>
+                        <a href='/history' key='hisotry' className={classes.linkText}>
                             <ListItem button>
-                                <ListItemText style={{ color: '#FFFFFF' }} primary='Predict'/>
+                                <ListItemText style={{ color: '#FFFFFF' }} primary='History'/>
                             </ListItem>
                         </a>
                         }

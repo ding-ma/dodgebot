@@ -12,7 +12,7 @@ const Login = () => {
         (async function () {
             const isUserLogged = await firebase.auth().currentUser;
             if (isUserLogged) {
-                history.push("/dashboard")
+                history.push("/predict")
             }
         })();
     }, [history]);

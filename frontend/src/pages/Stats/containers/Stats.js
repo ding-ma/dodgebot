@@ -40,17 +40,17 @@ export default function Stats() {
         </TextField>
 
         <BarGraph data={matchStats.mostPopularTop}/>
-        <BarGraph data={matchStats.mostPopularJg}/>
-        <BarGraph data={matchStats.mostPopularMid}/>
-        <BarGraph data={matchStats.mostPopularAdc}/>
-        <BarGraph data={matchStats.mostPopularSup}/>
+        {/*<BarGraph data={matchStats.mostPopularJg}/>*/}
+        {/*<BarGraph data={matchStats.mostPopularMid}/>*/}
+        {/*<BarGraph data={matchStats.mostPopularAdc}/>*/}
+        {/*<BarGraph data={matchStats.mostPopularSup}/>*/}
 
-        <BarGraph data={matchStats.redBans}/>
-        <PieGraph data={matchStats.redWin}/>
-        <PieGraph data={matchStats.redWinBans}/>
+        {/*<BarGraph data={matchStats.redBans}/>*/}
+        {/*<PieGraph data={matchStats.redWin}/>*/}
+        {/*<PieGraph data={matchStats.redWinBans}/>*/}
 
-        WIP
-        <BarGraph data={matchStats.yasuoGames}/>
+        {/*WIP*/}
+        {/*<BarGraph data={matchStats.yasuoGames}/>*/}
 
 
     </div>;
