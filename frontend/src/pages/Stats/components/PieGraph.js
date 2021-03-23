@@ -1,6 +1,36 @@
 import React from "react";
-import { Pie, PieChart, Tooltip} from 'recharts';
+import {Pie, PieChart, Tooltip} from 'recharts';
 import flattenRedTeam from "./FlattenRedTeam";
+import {DefaultTooltipContent} from 'recharts/lib/component/DefaultTooltipContent';
+
+
+const convertNumbToText = (n)=>{
+    return n === 0? 'Lose': 'Win'
+}
+
+const CustomTooltip = props => {
+    if (!props.active) {
+        return null
+    }
+
+    if (props.payload === undefined){
+        return null
+    }
+
+    const {index, value} = props.payload[0].payload.payload
+
+    const newPayload = [
+        {
+            'name': 'Outcome',
+            'value': convertNumbToText(index)
+        },
+        {
+            'name': 'Matches',
+            'value': value
+        }
+    ];
+    return <DefaultTooltipContent {...props} payload={newPayload}/>;
+};
 
 export default function PieGraph({data}) {
     return (
@@ -17,7 +47,7 @@ export default function PieGraph({data}) {
                      fill="#c79b3b"
                      name={data.tooltip}
                 />
-                <Tooltip color="black"/>
+                <Tooltip content={<CustomTooltip/>}/>
             </PieChart>
         </div>
     );

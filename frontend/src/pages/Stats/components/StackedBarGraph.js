@@ -1,11 +1,6 @@
 import React from 'react';
 import {Bar, BarChart, Tooltip, XAxis, YAxis} from "recharts";
-import flatten from "./Flatten";
 import {DefaultTooltipContent} from 'recharts/lib/component/DefaultTooltipContent';
-
-const convertPickBan = (name)=>{
-    return name.includes('bans')? 'Bans' : 'Picks'
-}
 
 const CustomTooltip = props => {
     if (!props.active) {
@@ -16,25 +11,28 @@ const CustomTooltip = props => {
         return null
     }
 
-    const champ  = props.label
     const bans = props.payload[0].value
     const banOrPick = props.payload[0].name
-
     const newPayload = [
         {
-            'name': 'Champion',
-            'value': champ,
-        },
-        {
-            'name': convertPickBan(banOrPick),
+            'name': banOrPick,
             'value': bans
         }
     ];
-
     return <DefaultTooltipContent {...props} payload={newPayload}/>;
 };
 
-export default function BarGraph({data}) {
+const flatten = (json) =>{
+    const tmp = []
+    json.data.forEach((e) => {
+        let {index, values} = e
+        tmp.push({"index": index.replace(/\b\w/g, l => l.toUpperCase()), "value": values})
+    })
+    console.log(tmp)
+    return tmp
+}
+
+export default function YasBarGraph({data}) {
     return <div>
         <h2>{data.title}</h2>
 
@@ -48,7 +46,6 @@ export default function BarGraph({data}) {
             <XAxis
                 dataKey="index"
                 stroke="white"
-                tick={false}
             />
 
             <YAxis stroke="white"/>

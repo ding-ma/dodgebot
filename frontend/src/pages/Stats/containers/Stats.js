@@ -4,6 +4,7 @@ import firebase from "firebase";
 import BarGraph from "../components/BarGraphs";
 import PieGraph from "../components/PieGraph";
 import TextField from "../../MaterialUIOverwrite/TextField"
+import YasBarGraph from "../components/StackedBarGraph"
 
 export default function Stats() {
     const elos = ['Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond']
@@ -40,18 +41,16 @@ export default function Stats() {
         </TextField>
 
         <BarGraph data={matchStats.mostPopularTop}/>
-        {/*<BarGraph data={matchStats.mostPopularJg}/>*/}
-        {/*<BarGraph data={matchStats.mostPopularMid}/>*/}
-        {/*<BarGraph data={matchStats.mostPopularAdc}/>*/}
-        {/*<BarGraph data={matchStats.mostPopularSup}/>*/}
+        <BarGraph data={matchStats.mostPopularJg}/>
+        <BarGraph data={matchStats.mostPopularMid}/>
+        <BarGraph data={matchStats.mostPopularAdc}/>
+        <BarGraph data={matchStats.mostPopularSup}/>
 
-        {/*<BarGraph data={matchStats.redBans}/>*/}
-        {/*<PieGraph data={matchStats.redWin}/>*/}
-        {/*<PieGraph data={matchStats.redWinBans}/>*/}
+        <BarGraph data={matchStats.redBans}/>
+        <PieGraph data={matchStats.redWin}/>
+        <PieGraph data={matchStats.redWinBans}/>
 
-        {/*WIP*/}
-        {/*<BarGraph data={matchStats.yasuoGames}/>*/}
-
+        <YasBarGraph data={matchStats.yasuoGames}/>
 
     </div>;
 }
