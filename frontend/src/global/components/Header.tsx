@@ -55,7 +55,7 @@ const Header = () => {
                 <div className={classes.linkText} onClick={() => firebase.auth().signOut()}>
                     <a href="/" key='Logout' className={classes.linkText}>
                         <ListItem button>
-                            <ListItemText primary='Logout'/>
+                            <ListItemText style={{ color: '#FFFFFF' }} primary='Logout'/>
                         </ListItem>
                     </a>
                 </div>
@@ -64,7 +64,7 @@ const Header = () => {
             // No user is signed in.
             return <a href='/' key='Login' className={classes.linkText}>
                 <ListItem button>
-                    <ListItemText primary='Login'/>
+                    <ListItemText style={{ color: '#FFFFFF' }} primary='Login'/>
                 </ListItem>
             </a>
         }
@@ -78,7 +78,7 @@ const Header = () => {
             <Toolbar>
                 <Container maxWidth="md" className={classes.navbarDisplayFlex}>
                     <IconButton edge="start" color="inherit" aria-label="home">
-                        {userLogin && <a href='/dashboard'>
+                        {userLogin && <a href='/predict'>
                             <Home fontSize="large" className={classes.home}/>
                         </a>}
                     </IconButton>
@@ -89,14 +89,14 @@ const Header = () => {
                     >
                         <a href='/stats' key='Stats' className={classes.linkText}>
                             <ListItem button>
-                                <ListItemText primary='How it works'/>
+                                <ListItemText style={{ color: '#FFFFFF' }} primary='How it works'/>
                             </ListItem>
                         </a>
                         
                         {userLogin &&
-                        <a href='/predict' key='predict' className={classes.linkText}>
+                        <a href='/history' key='hisotry' className={classes.linkText}>
                             <ListItem button>
-                                <ListItemText primary='Predict'/>
+                                <ListItemText style={{ color: '#FFFFFF' }} primary='History'/>
                             </ListItem>
                         </a>
                         }
@@ -104,7 +104,7 @@ const Header = () => {
                         {userLogin &&
                         <a href='/favorites' key='favorites' className={classes.linkText}>
                             <ListItem button>
-                                <ListItemText primary='Favorites'/>
+                                <ListItemText style={{ color: '#FFFFFF' }} primary='Favorites'/>
                             </ListItem>
                         </a>
                         }
@@ -112,7 +112,7 @@ const Header = () => {
                         {userLogin &&
                         <a href='/settings' key='settings' className={classes.linkText}>
                             <ListItem button>
-                                <ListItemText primary='Account'/>
+                                <ListItemText style={{ color: '#FFFFFF' }} primary='Account'/>
                             </ListItem>
                         </a>
                         }

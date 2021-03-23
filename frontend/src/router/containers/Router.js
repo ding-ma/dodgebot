@@ -7,7 +7,7 @@ import Register from "../../pages/Register/containers/Register"
 import ResetPwd from "../../pages/ResetPassword";
 import NotFound from '../../pages/NotFound';
 import NewPlayer from "../../pages/NewPlayer";
-import Dashboard from "../../pages/Dashboard";
+import Dashboard from "../../pages/History";
 import PrivateRoute from "../components/PrivateRoute";
 import ResetPasswordCallBack from '../../pages/ResetPassword/containers/ResetPwdCallBack';
 import firebase from "firebase";
@@ -45,12 +45,11 @@ const Router = () => {
                         <Route exact path="/reset" component={ResetPwd}/>
                         <Route exact path="/confirm" component={ResetPasswordCallBack}/>
                         <PrivateRoute exact path="/new" component={NewPlayer}/>
-                        <PrivateRoute exact path="/dashboard" component={Dashboard}/>
+                        <PrivateRoute exact path="/history" component={Dashboard}/>
                         <PrivateRoute exact path="/settings" component={Setting}/>
                         <PrivateRoute exact path="/predict" component={Predictions}/>
                         <PrivateRoute exact path="/favorites" component={Favorites}/>
                         <Route component={NotFound}/>
-
                     </Switch>
                 </Layout>
             </BrowserRouter>

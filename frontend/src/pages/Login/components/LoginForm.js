@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import firebase from 'firebase';
 import {useHistory} from 'react-router-dom';
-import {Button, TextField, Typography} from '@material-ui/core';
+import {Button, Typography} from '@material-ui/core';
 import "../styles/login.scss"
+import TextField from "../../MaterialUIOverwrite/TextField"
 
 const LoginForm = () => {
+
     const history = useHistory();
 
     const [email, setEmail] = useState('');
@@ -33,7 +35,7 @@ const LoginForm = () => {
                     .collection('users')
                     .doc(firebase.auth().currentUser.uid)
                     .get()
-                if (data.exists){
+                if (data.exists) {
                     history.push('/dashboard')
                 } else {
                     history.push('/new')

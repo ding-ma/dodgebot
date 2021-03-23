@@ -1,6 +1,7 @@
 import React from 'react';
-import {Box, Link, Typography} from '@material-ui/core';
+import {Box, Typography} from '@material-ui/core';
 import RegisterForm from '../components/RegisterForm';
+import Link from "../../MaterialUIOverwrite/Link"
 
 const Register = () => (
     <Box className="login">

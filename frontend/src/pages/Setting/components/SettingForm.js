@@ -1,11 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
 import firebase from 'firebase';
-import {Button, InputLabel, MenuItem, Select, TextField, Typography} from '@material-ui/core';
+import {Button, InputLabel, MenuItem, Typography} from '@material-ui/core';
 import {AuthContext} from "../../../context/providers/AccountProvider";
 import {useHistory} from "react-router-dom";
 import {store} from 'react-notifications-component';
+import TextField from "../../MaterialUIOverwrite/TextField"
 
 const SettingForm = () => {
+
         const history = useHistory()
         const {currentUser} = useContext(AuthContext);
 
@@ -84,7 +86,7 @@ const SettingForm = () => {
                     {errorMessage}
                 </Typography>
 
-                <InputLabel htmlFor="">Email</InputLabel>
+                <InputLabel className="label-color">Email</InputLabel>
                 <TextField
                     disabled
                     required={true}
@@ -94,7 +96,7 @@ const SettingForm = () => {
                     color="primary"
                 />
 
-                <InputLabel htmlFor="">Summoner Name</InputLabel>
+                <InputLabel className="label-color">Summoner Name</InputLabel>
                 <TextField
                     disabled
                     required={true}
@@ -104,7 +106,22 @@ const SettingForm = () => {
                     color="primary"
                 />
 
-                <InputLabel htmlFor="">Change Password</InputLabel>
+                <InputLabel className="label-color">Region</InputLabel>
+                <TextField
+                    disabled
+                    required={true}
+                    value={region}
+                    onChange={(event) => setRegion(event.target.value)}
+                    style={{margin: '10px 0', width: '70%'}}
+                    variant="outlined"
+                    select
+                >
+                    {regions.map((value, index) => {
+                        return <MenuItem key={index} value={value}>{value}</MenuItem>;
+                    })}
+                </TextField>
+
+                <InputLabel className="label-color">Change Password</InputLabel>
                 {isPassword &&
                 <TextField
                     required={true}
@@ -113,6 +130,7 @@ const SettingForm = () => {
                     className="login-form__input"
                     variant="outlined"
                     color="primary"
+                    helperText="New password must be at least 8 characters long"
                 />
                 }
 
@@ -127,49 +145,36 @@ const SettingForm = () => {
                 />
                 }
 
-
-                <InputLabel htmlFor="">Region</InputLabel>
-                <Select
-                    disabled
-                    required={true}
-                    value={region}
-                    onChange={(event) => setRegion(event.target.value)}
-                    style={{margin: '10px 0', width: '70%'}}
-                    variant="outlined"
-                >
-                    {regions.map((value, index) => {
-                        return <MenuItem key={index} value={value}>{value}</MenuItem>;
-                    })}
-                </Select>
-
-                <InputLabel htmlFor="">Elo</InputLabel>
-                <Select
+                <InputLabel className="label-color">Elo</InputLabel>
+                <TextField
                     required={true}
                     value={elo}
                     onChange={(event) => setElo(event.target.value)}
                     style={{margin: '10px 0', width: '70%'}}
                     variant="outlined"
+                    select
                 >
                     {elos.map((value, index) => {
                         return <MenuItem key={index} value={value}>{value}</MenuItem>;
                     })}
-                </Select>
+                </TextField>
 
-                <InputLabel htmlFor="">Tier</InputLabel>
-                <Select
+                <InputLabel className="label-color">Tier</InputLabel>
+                <TextField
                     required={true}
                     value={tier}
                     onChange={(event) => setTier(event.target.value)}
                     style={{margin: '10px 0', width: '70%'}}
                     variant="outlined"
+                    select
                 >
                     {tiers.map((value, index) => {
                         return <MenuItem key={index} value={value}>{value}</MenuItem>;
                     })}
-                </Select>
+                </TextField>
 
 
-                <InputLabel htmlFor=""/>
+                <InputLabel className="label-color"/>
                 <Button
                     variant="contained"
                     color="primary"
@@ -181,7 +186,8 @@ const SettingForm = () => {
 
                 <div className="login-footer">
                     <Typography color="inherit" className="login-footer__text">
-                        <b>Note:</b> to change a disabled field, please <a href={"mailto:contact@dodgebot.tech"}>email</a> us!
+                        <b>Note:</b> to change a disabled field, please <a
+                        href={"mailto:contact@dodgebot.tech"}>email</a> us!
                     </Typography>
                 </div>
             </form>

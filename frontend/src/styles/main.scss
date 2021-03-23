@@ -2,7 +2,7 @@
 
 
 @import "../pages/Login/styles/login";
-@import "../pages/Dashboard/styles/dashboard";
+@import "src/pages/History/styles/dashboard";
 
 
 html * {
@@ -11,7 +11,11 @@ html * {
 }
 
 body {
+  background-image: linear-gradient(to top, #020b0f, #07141a, #0a1b23, #09222d, #082938);
+  height: 100%;
   margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 ::-webkit-scrollbar {
@@ -21,4 +25,22 @@ body {
 
 *:focus {
   outline: none;
+}
+
+a:link {
+  color: $leag-color;
+}
+
+a:visited {
+  color: #483a13;
+}
+
+.MuiOutlinedInput-notchedOutline {
+  border-color: #fff;//for border color
+}
+.MuiSelect-icon {
+  color: #fff;// for icon drop down icon color
+}
+.MuiInputLabel-root {
+  color: #fff;// for lable color
 }
