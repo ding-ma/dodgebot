@@ -12,7 +12,6 @@ import '../styles/Predictions.css'
 import ChampionScroll from "../components/ChampionScroll";
 import { store } from 'react-notifications-component';
 import firebase from "firebase";
-import { string } from "prop-types";
 
 type PredictionsState = {
   friendlyTeam: string[]
