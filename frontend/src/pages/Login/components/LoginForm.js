@@ -36,7 +36,7 @@ const LoginForm = () => {
                     .doc(firebase.auth().currentUser.uid)
                     .get()
                 if (data.exists) {
-                    history.push('/dashboard')
+                    history.push('/predict')
                 } else {
                     history.push('/new')
                 }

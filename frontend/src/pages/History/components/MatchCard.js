@@ -28,8 +28,16 @@ const useStyles = makeStyles({
     },
 });
 
-//pass data via props then render it
-export default function MatchCard({color}) {
+const outComeToColor = {
+    "win": '#9fde99',
+    "loss": '#f89b9b',
+    "dodge": '#dbdbdb'
+}
+
+export default function MatchCard({data}) {
+    const {friendlyTeam, enemyTeam, date, outcome} = data
+
+    console.log(friendlyTeam, enemyTeam, date, outcome, outComeToColor[outcome])
     const classes = useStyles();
 
     const getImage = (championID) => {
@@ -44,10 +52,10 @@ export default function MatchCard({color}) {
 
     return (
         <div className="card">
-            <Card className={classes.root} style={{background: color}} variant="outlined">
+            <Card className={classes.root} style={{background: outComeToColor[outcome]}} variant="outlined">
                 <CardContent>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        {new Date(1615136533 * 1000).toDateString()}
+                        {date}
                     </Typography>
 
                     <div className="grid-container-match">
@@ -65,24 +73,24 @@ export default function MatchCard({color}) {
                         </div>
 
                         <div>{getLane({"lane": top})}</div>
-                        <div>{getImage("34")}</div>
-                        <div>{getImage("53")}</div>
+                        <div>{getImage(friendlyTeam.top)}</div>
+                        <div>{getImage(enemyTeam.top)}</div>
 
                         <div>{getLane({"lane": jungle})}</div>
-                        <div>{getImage("64")}</div>
-                        <div>{getImage("51")}</div>
+                        <div>{getImage(friendlyTeam.jungle)}</div>
+                        <div>{getImage(enemyTeam.jungle)}</div>
 
                         <div>{getLane({"lane": mid})}</div>
-                        <div>{getImage("201")}</div>
-                        <div>{getImage("63")}</div>
+                        <div>{getImage(friendlyTeam.mid)}</div>
+                        <div>{getImage(enemyTeam.mid)}</div>
 
                         <div>{getLane({"lane": bot})}</div>
-                        <div>{getImage("96")}</div>
-                        <div>{getImage("40")}</div>
+                        <div>{getImage(friendlyTeam.bot)}</div>
+                        <div>{getImage(enemyTeam.bot)}</div>
 
                         <div>{getLane({"lane": support})}</div>
-                        <div>{getImage("427")}</div>
-                        <div>{getImage("145")}</div>
+                        <div>{getImage(friendlyTeam.support)}</div>
+                        <div>{getImage(enemyTeam.support)}</div>
                     </div>
 
                 </CardContent>
