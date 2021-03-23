@@ -11,6 +11,8 @@ import { ChampToKey } from "../../../constants/ChampToKey"
 import '../styles/Predictions.css'
 import ChampionScroll from "../components/ChampionScroll";
 import { store } from 'react-notifications-component';
+import firebase from "firebase";
+import { string } from "prop-types";
 
 type PredictionsState = {
   friendlyTeam: string[]
@@ -24,9 +26,14 @@ type PredictionsState = {
 
 class Predictions extends React.Component<{}, PredictionsState> {
   private el: any;
+  private db: any;
+  private uid: any;
+  private userRef: any;
+  private userElo: any;
 
   constructor(props: any) {
     super(props)
+    this.db = firebase.firestore();
     this.state = {
       friendlyTeam: ["", "", "", "", ""],
       enemyTeam: ["", "", "", "", ""],
@@ -36,6 +43,14 @@ class Predictions extends React.Component<{}, PredictionsState> {
       selectingTeam: null,
       selectingRole: null
     }
+
+    
+    this.uid = firebase.auth().currentUser?.uid;
+    this.userRef = this.db.collection('users').doc(this.uid);
+
+    this.userRef.get().then((doc: any) => {
+      this.userElo = doc.data()["profile"]["elo"]
+    });
 
     this.selectChamp = this.selectChamp.bind(this)
     this.predict = this.predict.bind(this)
@@ -48,6 +63,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
   componentDidMount() {
     this.scrollToBottom();
+
   }
 
   componentDidUpdate() {
@@ -170,7 +186,30 @@ class Predictions extends React.Component<{}, PredictionsState> {
     }
   }
 
-  dodge() {
+  async dodge() {
+    await this.userRef.update({
+      predictions: firebase.firestore.FieldValue.arrayUnion({
+        "friendlyTeam": {
+          "top": ChampToKey[this.state.friendlyTeam[0] as keyof typeof ChampToKey],
+          "jungle": ChampToKey[this.state.friendlyTeam[1] as keyof typeof ChampToKey],
+          "mid": ChampToKey[this.state.friendlyTeam[2] as keyof typeof ChampToKey],
+          "bot": ChampToKey[this.state.friendlyTeam[3] as keyof typeof ChampToKey],
+          "support": ChampToKey[this.state.friendlyTeam[4] as keyof typeof ChampToKey],
+        },
+        "enemyTeam": {
+          "top": ChampToKey[this.state.enemyTeam[0] as keyof typeof ChampToKey],
+          "jungle": ChampToKey[this.state.enemyTeam[1] as keyof typeof ChampToKey],
+          "mid": ChampToKey[this.state.enemyTeam[2] as keyof typeof ChampToKey],
+          "bot": ChampToKey[this.state.enemyTeam[3] as keyof typeof ChampToKey],
+          "support": ChampToKey[this.state.enemyTeam[4] as keyof typeof ChampToKey],
+        },
+        "date": Date(),
+        "outcome": "dodge",
+        "elo": this.userElo,
+        "predictedPercentage": this.state.winPercentage
+      })
+    })
+
     this.setState({
       submitted: false,
       isLoading: false,
@@ -178,8 +217,30 @@ class Predictions extends React.Component<{}, PredictionsState> {
     })
   }
 
-  win() {
-    console.log("win")
+  async win() {
+    await this.userRef.update({
+      predictions: firebase.firestore.FieldValue.arrayUnion({
+        "friendlyTeam": {
+          "top": ChampToKey[this.state.friendlyTeam[0] as keyof typeof ChampToKey],
+          "jungle": ChampToKey[this.state.friendlyTeam[1] as keyof typeof ChampToKey],
+          "mid": ChampToKey[this.state.friendlyTeam[2] as keyof typeof ChampToKey],
+          "bot": ChampToKey[this.state.friendlyTeam[3] as keyof typeof ChampToKey],
+          "support": ChampToKey[this.state.friendlyTeam[4] as keyof typeof ChampToKey],
+        },
+        "enemyTeam": {
+          "top": ChampToKey[this.state.enemyTeam[0] as keyof typeof ChampToKey],
+          "jungle": ChampToKey[this.state.enemyTeam[1] as keyof typeof ChampToKey],
+          "mid": ChampToKey[this.state.enemyTeam[2] as keyof typeof ChampToKey],
+          "bot": ChampToKey[this.state.enemyTeam[3] as keyof typeof ChampToKey],
+          "support": ChampToKey[this.state.enemyTeam[4] as keyof typeof ChampToKey],
+        },
+        "date": Date(),
+        "outcome": "win",
+        "elo": this.userElo,
+        "predictedPercentage": this.state.winPercentage
+      })
+    })
+
     this.setState({
       submitted: false,
       isLoading: false,
@@ -187,8 +248,30 @@ class Predictions extends React.Component<{}, PredictionsState> {
     })
   }
 
-  loss() {
-    console.log("loss")
+  async loss() {
+    await this.userRef.update({
+      predictions: firebase.firestore.FieldValue.arrayUnion({
+        "friendlyTeam": {
+          "top": ChampToKey[this.state.friendlyTeam[0] as keyof typeof ChampToKey],
+          "jungle": ChampToKey[this.state.friendlyTeam[1] as keyof typeof ChampToKey],
+          "mid": ChampToKey[this.state.friendlyTeam[2] as keyof typeof ChampToKey],
+          "bot": ChampToKey[this.state.friendlyTeam[3] as keyof typeof ChampToKey],
+          "support": ChampToKey[this.state.friendlyTeam[4] as keyof typeof ChampToKey],
+        },
+        "enemyTeam": {
+          "top": ChampToKey[this.state.enemyTeam[0] as keyof typeof ChampToKey],
+          "jungle": ChampToKey[this.state.enemyTeam[1] as keyof typeof ChampToKey],
+          "mid": ChampToKey[this.state.enemyTeam[2] as keyof typeof ChampToKey],
+          "bot": ChampToKey[this.state.enemyTeam[3] as keyof typeof ChampToKey],
+          "support": ChampToKey[this.state.enemyTeam[4] as keyof typeof ChampToKey],
+        },
+        "date": Date(),
+        "outcome": "loss",
+        "elo": this.userElo,
+        "predictedPercentage": this.state.winPercentage
+      })
+    })
+
     this.setState({
       submitted: false,
       isLoading: false,
@@ -249,7 +332,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
           fontFamily: "Courier New",
           margin: 0
         }}>chance of winning</p>
-        
+
         <p style={{
           color: "#7b775b",
           textAlign: "center",
@@ -264,7 +347,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
         </div>
 
         <div style={{ display: "flex", justifyContent: "center", height: "10%", width: "100%" }}>
-        <button className="resetBtn" onClick={this.dodge}>Dodge</button>
+          <button className="resetBtn" onClick={this.dodge}>Dodge</button>
 
         </div>
 
@@ -368,7 +451,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
           <div style={{ width: "25%", display: "flex", justifyContent: "center" }}>
             <ChampionPanel isFriendlyTeam={false} selectBox={this.selectingEnemy}
               champions={this.state.enemyTeam}
-              selectedBox={this.state.selectingTeam === "enemy" ? this.state.selectingRole : null}  />
+              selectedBox={this.state.selectingTeam === "enemy" ? this.state.selectingRole : null} />
           </div>
         </div>
         <div ref={el => { this.el = el; }} />
