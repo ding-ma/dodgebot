@@ -4,10 +4,11 @@ import LoginForm from '../components/LoginForm';
 import firebase from "firebase";
 import {useHistory} from "react-router-dom";
 import Link from "../../MaterialUIOverwrite/Link"
+import {isMobile} from 'react-device-detect';
 
 const Login = () => {
     const history = useHistory();
-    
+
     useEffect(() => {
         (async function () {
             const isUserLogged = await firebase.auth().currentUser;
@@ -16,8 +17,11 @@ const Login = () => {
             }
         })();
     }, [history]);
-    
-    
+
+    if (isMobile) {
+        return <div>DodgeBot is not available on mobile yet. Please access it on your computer</div>
+    }
+
     return (
         <Box className="login">
             <Typography variant="h3" className="login__header">
