@@ -17,6 +17,7 @@ import Setting from "../../pages/Setting/containers/Setting";
 import Predictions from "../../pages/Prediction/containers/Predictions";
 import Favorites from "../../pages/Favorites/containers/Favorites";
 import ReactNotification from 'react-notifications-component'
+import {isMobile} from 'react-device-detect';
 
 
 const Router = () => {
@@ -32,9 +33,13 @@ const Router = () => {
         });
     }
 
+    if (isMobile) {
+        return <div>DodgeBot is not available on mobile yet. Please access it on your computer</div>
+    }
+
     return (
         <AuthProvider>
-            <ReactNotification />
+            <ReactNotification/>
             <Header/>
             <BrowserRouter>
                 <Layout>
