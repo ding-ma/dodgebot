@@ -18,7 +18,7 @@ const LoginForm = () => {
             .auth()
             .signInWithEmailAndPassword(email, password)
             .then(async () => {
-                history.push('/dashboard')
+                history.push('/predict')
             })
             .catch((err) => {
                 console.log(err);
