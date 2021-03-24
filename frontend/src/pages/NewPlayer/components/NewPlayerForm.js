@@ -80,7 +80,7 @@ const NewPlayerForm = () => {
             });
         }
 
-        history.push('/dashboard');
+        history.push('/predict');
     }
 
     return (
