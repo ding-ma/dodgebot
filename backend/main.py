@@ -8,9 +8,6 @@ import numpy as np
 app = Flask(__name__)
 CORS(app)
 
-# Load model from file
-model = tf.keras.models.load_model(os.path.join("models", "Bronze.h5"))
-
 
 # Predicts winner of match
 @app.route('/predictWinner', methods=['POST'])
@@ -19,21 +16,26 @@ def predict_winner():
     data = request.get_json()
     
     # Create array of champions from request data
-    championArray = create_champion_array(data)
+    champion_array = create_champion_array(data)
+    
+    elo = data.get("elo", "Gold")
 
-    predictData = []
-    predictData.append(championArray)
-    predictData = np.array(predictData)
-    predictData = predictData.astype('int32')
-    predictData = [predictData[:, i] for i in range(predictData.shape[1])]
+    # Load model from file
+    model = tf.keras.models.load_model(os.path.join("models", f"2021-02-22-{elo}.h5"))
+
+    predict_data = []
+    predict_data.append(champion_array)
+    predict_data = np.array(predict_data)
+    predict_data = predict_data.astype('int32')
+    predict_data = [predict_data[:, i] for i in range(predict_data.shape[1])]
 
     # Make prediction
-    prediction = model.predict(predictData)
+    prediction = model.predict(predict_data)
     return str(prediction[0][0])
+
 
 # Creates champion array from json data
 def create_champion_array(data):
-    print(data)
     return [float(data["redTop"]), float(data["redJungle"]), float(data["redMid"]), float(data["redAdc"]), float(data["redSupport"]), float(data["blueTop"]),
             float(data["blueJungle"]), float(data["blueMid"]), float(data["blueAdc"]), float(data["blueSupport"])]
 

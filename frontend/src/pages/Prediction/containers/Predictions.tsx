@@ -6,11 +6,11 @@ import OuterOval from "../../../images/Outer Oval.png"
 import OvalInside from "../../../images/Oval Inside.png"
 import PredictBox from "../../../images/Predict Box.png"
 import PredictBoxLeft from "../../../images/Predict Box Side.png"
-import { ChampToKey } from "../../../constants/ChampToKey"
+import {ChampToKey} from "../../../constants/ChampToKey"
 
 import '../styles/Predictions.css'
 import ChampionScroll from "../components/ChampionScroll";
-import { store } from 'react-notifications-component';
+import {store} from 'react-notifications-component';
 import firebase from "firebase";
 
 type PredictionsState = {
@@ -62,7 +62,6 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
   componentDidMount() {
     this.scrollToBottom();
-
   }
 
   componentDidUpdate() {
@@ -202,7 +201,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
           "bot": ChampToKey[this.state.enemyTeam[3] as keyof typeof ChampToKey],
           "support": ChampToKey[this.state.enemyTeam[4] as keyof typeof ChampToKey],
         },
-        "date": Date(),
+        "date": Date.now(),
         "outcome": "dodge",
         "elo": this.userElo,
         "predictedPercentage": this.state.winPercentage
@@ -233,7 +232,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
           "bot": ChampToKey[this.state.enemyTeam[3] as keyof typeof ChampToKey],
           "support": ChampToKey[this.state.enemyTeam[4] as keyof typeof ChampToKey],
         },
-        "date": Date(),
+        "date": Date.now(),
         "outcome": "win",
         "elo": this.userElo,
         "predictedPercentage": this.state.winPercentage
@@ -264,7 +263,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
           "bot": ChampToKey[this.state.enemyTeam[3] as keyof typeof ChampToKey],
           "support": ChampToKey[this.state.enemyTeam[4] as keyof typeof ChampToKey],
         },
-        "date": Date(),
+        "date": Date.now(),
         "outcome": "loss",
         "elo": this.userElo,
         "predictedPercentage": this.state.winPercentage
