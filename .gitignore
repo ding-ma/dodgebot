@@ -8,3 +8,5 @@ GCP_KEY.json
 *.zip
 !template.csv
 node_modules/
+.vscode
+venv/
