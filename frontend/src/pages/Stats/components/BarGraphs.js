@@ -35,9 +35,8 @@ const CustomTooltip = props => {
 };
 
 export default function BarGraph({data}) {
-    return <div>
+    return <div style={{display:"flex", flexDirection: "column", alignItems: "center"}}>
         <h2>{data.title}</h2>
-
         <BarChart
             width={600}
             height={300}

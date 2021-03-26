@@ -16,7 +16,7 @@
     background-image: linear-gradient(to top, #020b0f, #07141a, #0a1b23, #09222d, #082938);
 }
 
-.resetBtn {
+.dodgeBtn {
     width: 20%;
     height: 70%;
     background-color: #7b775b;
@@ -29,7 +29,7 @@
 }
 
 
-.resetBtn:hover{
+.dodgeBtn:hover{
     background: #4b4e2e;
 }
 

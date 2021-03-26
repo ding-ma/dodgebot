@@ -26,12 +26,12 @@ export default function Stats() {
         return <div>Loading...</div>
     }
 
-    return <div className="dashboard">
+    return <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
         <TextField
             required={true}
             value={elo}
             onChange={(event) => setElo(event.target.value)}
-            style={{ margin: '10px 0', width: '70%' }}
+            style={{ margin: '10px 0', width: '30%' }}
             variant="outlined"
             select
         >
@@ -39,6 +39,8 @@ export default function Stats() {
                 return <MenuItem key={index} value={value}>{value}</MenuItem>;
             })}
         </TextField>
+
+<div style={{display: "flex", flexWrap: "wrap", justifyContent: "center"}}>
 
         <BarGraph data={matchStats.mostPopularTop}/>
         <BarGraph data={matchStats.mostPopularJg}/>
@@ -51,6 +53,6 @@ export default function Stats() {
         <PieGraph data={matchStats.redWinBans}/>
 
         <YasBarGraph data={matchStats.yasuoGames}/>
-
+</div>
     </div>;
 }

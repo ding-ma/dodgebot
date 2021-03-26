@@ -6,11 +6,11 @@ import OuterOval from "../../../images/Outer Oval.png"
 import OvalInside from "../../../images/Oval Inside.png"
 import PredictBox from "../../../images/Predict Box.png"
 import PredictBoxLeft from "../../../images/Predict Box Side.png"
-import {ChampToKey} from "../../../constants/ChampToKey"
+import { ChampToKey } from "../../../constants/ChampToKey"
 
 import '../styles/Predictions.css'
 import ChampionScroll from "../components/ChampionScroll";
-import {store} from 'react-notifications-component';
+import { store } from 'react-notifications-component';
 import firebase from "firebase";
 
 type PredictionsState = {
@@ -43,7 +43,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
       selectingRole: null
     }
 
-    
+
     this.uid = firebase.auth().currentUser?.uid;
     this.userRef = this.db.collection('users').doc(this.uid);
 
@@ -127,7 +127,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
   // Predict Winner
   predict() {
-    if (!this.state.friendlyTeam.includes("") && !this.state.enemyTeam.includes("")) {
+    if (!this.state.friendlyTeam.includes("") && !this.state.enemyTeam.includes("") && !this.state.submitted) {
       const requestOptions = {
         method: 'POST',
         headers: {
@@ -180,43 +180,47 @@ class Predictions extends React.Component<{}, PredictionsState> {
       });
     }
   }
-  
+
   async sendResults(outcome: string) {
-    const results = {
-      "friendlyTeam": {
-        "top": ChampToKey[this.state.friendlyTeam[0] as keyof typeof ChampToKey],
-        "jungle": ChampToKey[this.state.friendlyTeam[1] as keyof typeof ChampToKey],
-        "mid": ChampToKey[this.state.friendlyTeam[2] as keyof typeof ChampToKey],
-        "bot": ChampToKey[this.state.friendlyTeam[3] as keyof typeof ChampToKey],
-        "support": ChampToKey[this.state.friendlyTeam[4] as keyof typeof ChampToKey],
-      },
-      "enemyTeam": {
-        "top": ChampToKey[this.state.enemyTeam[0] as keyof typeof ChampToKey],
-        "jungle": ChampToKey[this.state.enemyTeam[1] as keyof typeof ChampToKey],
-        "mid": ChampToKey[this.state.enemyTeam[2] as keyof typeof ChampToKey],
-        "bot": ChampToKey[this.state.enemyTeam[3] as keyof typeof ChampToKey],
-        "support": ChampToKey[this.state.enemyTeam[4] as keyof typeof ChampToKey],
-      },
-      "date": Date.now(),
-      "outcome": outcome,
-      "elo": this.userElo,
-      "predictedPercentage": this.state.winPercentage
+    if (this.state.submitted) {
+      const winPercentage = this.state.winPercentage
+
+      this.setState({
+        submitted: false,
+        isLoading: false,
+        winPercentage: null
+      }, async () => {
+
+        const results = {
+          "friendlyTeam": {
+            "top": ChampToKey[this.state.friendlyTeam[0] as keyof typeof ChampToKey],
+            "jungle": ChampToKey[this.state.friendlyTeam[1] as keyof typeof ChampToKey],
+            "mid": ChampToKey[this.state.friendlyTeam[2] as keyof typeof ChampToKey],
+            "bot": ChampToKey[this.state.friendlyTeam[3] as keyof typeof ChampToKey],
+            "support": ChampToKey[this.state.friendlyTeam[4] as keyof typeof ChampToKey],
+          },
+          "enemyTeam": {
+            "top": ChampToKey[this.state.enemyTeam[0] as keyof typeof ChampToKey],
+            "jungle": ChampToKey[this.state.enemyTeam[1] as keyof typeof ChampToKey],
+            "mid": ChampToKey[this.state.enemyTeam[2] as keyof typeof ChampToKey],
+            "bot": ChampToKey[this.state.enemyTeam[3] as keyof typeof ChampToKey],
+            "support": ChampToKey[this.state.enemyTeam[4] as keyof typeof ChampToKey],
+          },
+          "date": Date.now(),
+          "outcome": outcome,
+          "elo": this.userElo,
+          "predictedPercentage": winPercentage
+        }
+        await this.userRef.update({
+          predictions: firebase.firestore.FieldValue.arrayUnion(results)
+        })
+
+        await fetch('https://us-central1-ordinal-cacao-291815.cloudfunctions.net/collect-data', {
+          method: 'POST',
+          body: JSON.stringify(results)
+        }).then((res) => res.json());
+      })
     }
-    await this.userRef.update({
-      predictions: firebase.firestore.FieldValue.arrayUnion(results)
-    })
-  
-    await fetch('https://us-central1-ordinal-cacao-291815.cloudfunctions.net/collect-data', {
-      method: 'POST',
-      body: JSON.stringify(results)
-    }).then((res) => res.json());
-  
-  
-    this.setState({
-      submitted: false,
-      isLoading: false,
-      winPercentage: null
-    })
   }
 
   render() {
@@ -280,14 +284,14 @@ class Predictions extends React.Component<{}, PredictionsState> {
           fontFamily: "Courier New",
           marginTop: "8vh"
         }}>Actual Result:</p>
-  
-        <div style={{display: "flex", justifyContent: "center", height: "10%", width: "100%"}}>
+
+        <div style={{ display: "flex", justifyContent: "center", height: "10%", width: "100%" }}>
           <button className="winBtn" onClick={() => this.sendResults("win")}>Win</button>
           <button className="lossBtn" onClick={() => this.sendResults("loss")}>Loss</button>
         </div>
 
         <div style={{ display: "flex", justifyContent: "center", height: "10%", width: "100%" }}>
-          <button className="resetBtn" onClick={() => this.sendResults("dodge")}>Dodge</button>
+          <button className="dodgeBtn" onClick={() => this.sendResults("dodge")}>Dodge</button>
 
         </div>
 

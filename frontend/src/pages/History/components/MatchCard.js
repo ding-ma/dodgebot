@@ -29,9 +29,9 @@ const useStyles = makeStyles({
 });
 
 const outComeToColor = {
-    "win": '#9fde99',
-    "loss": '#f89b9b',
-    "dodge": '#dbdbdb'
+    "win": '#ACEE8F',
+    "loss": '#F75959',
+    "dodge": '#E5C784'
 }
 
 export default function MatchCard({data}) {
