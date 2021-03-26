@@ -158,7 +158,6 @@ class Predictions extends React.Component<{}, PredictionsState> {
         fetch('https://prediction-wvdj36m4qa-uc.a.run.app/predictWinner', requestOptions)
           .then(response => response.json())
           .then(async data => {
-            console.log(data)
             this.setState({
               isLoading: false,
               winPercentage: data
@@ -183,7 +182,6 @@ class Predictions extends React.Component<{}, PredictionsState> {
   }
   
   async sendResults(outcome: string) {
-    console.log(outcome)
     const results = {
       "friendlyTeam": {
         "top": ChampToKey[this.state.friendlyTeam[0] as keyof typeof ChampToKey],
@@ -207,22 +205,18 @@ class Predictions extends React.Component<{}, PredictionsState> {
     await this.userRef.update({
       predictions: firebase.firestore.FieldValue.arrayUnion(results)
     })
-    
-    const requestOptions = {
+  
+    await fetch('https://us-central1-ordinal-cacao-291815.cloudfunctions.net/collect-data', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        "Access-Control-Allow-Headers": "*"
-      },
       body: JSON.stringify(results)
-    }
-    
+    }).then((res) => res.json());
+  
+  
     this.setState({
       submitted: false,
       isLoading: false,
       winPercentage: null
-    }, () => fetch('https://us-central1-ordinal-cacao-291815.cloudfunctions.net/continous-collection', requestOptions))
+    })
   }
 
   render() {

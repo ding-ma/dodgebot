@@ -45,7 +45,6 @@ class ChampionScroll extends React.Component<ChampionScrollProps, ChampionScroll
     }
 
     render() {
-        console.log(this.props.unavailableChamps)
         return (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
 
