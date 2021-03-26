@@ -1,4 +1,5 @@
 from google.cloud import storage
+from flask import json
 
 
 key_to_champ = {
@@ -199,16 +200,30 @@ def create_csv_row(js):
 
 
 def append_to_collection(request):
+    
+    if request.method == 'OPTIONS':
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Max-Age': '3600',
+        }
+        return ('', 204, headers)
+
+    headers = {
+        'Access-Control-Allow-Origin': '*'
+    }
+    
     if request.method != 'POST':
-        return 'Only Post allowed!', 405
+        return json.dumps({'status': 'Only Post allowed!'}), 403, headers, 405, headers
     
     request_json = request.get_json()
 
     if not request_json:
-        return 'Missing JSON request body', 403
+        return json.dumps({'status': 'Missing JSON request body'}), 403, headers, 403, headers
     
     if not validate_json(request_json):
-        return 'Error in Json format', 403
+        return json.dumps({'status': 'Error in Json format'}), 403, headers
     
     
     client = storage.Client()
@@ -223,5 +238,4 @@ def append_to_collection(request):
     
     blob = continuous_bucket.blob(f.name)
     blob.upload_from_filename(base_path + f.name)
-    return '', 200
-
+    return json.dumps({'status': 'sucess'}), 200, headers
