@@ -1,97 +1,230 @@
 from google.cloud import storage
+from flask import json
 
-base_types = {
-    "roles": {
-        "top": int,
-        "jg": int,
-        "mid": int,
-        "adc": int,
-        "sup": int
-    },
-    "bans": {
-        "ban1": int,
-        "ban2": int,
-        "ban3": int,
-        "ban4": int,
-        "ban5": int
-    },
-    "dodged": [-1, 0, 1],
-    "redTeamWin": [-1, 0, 1],
-    "elo": ["IRON", "BRONZE", "SILVER", "GOLD", "PLATINUM", "DIAMOND", "MASTER", "GRAND-MASTER", "CHALLENGER"],
-    "region": ["BR1", "EUN1", "EUW1", "JP1", "KR", "LA1", "LA2", "NA1", "OC1", "TR1", "RU"]
+
+key_to_champ = {
+    "0": "None",
+    "266": "Aatrox",
+    "103": "Ahri",
+    "84": "Akali",
+    "12": "Alistar",
+    "32": "Amumu",
+    "34": "Anivia",
+    "1": "Annie",
+    "523": "Aphelios",
+    "22": "Ashe",
+    "136": "Aurelion Sol",
+    "268": "Azir",
+    "432": "Bard",
+    "53": "Blitzcrank",
+    "63": "Brand",
+    "201": "Braum",
+    "51": "Caitlyn",
+    "164": "Camille",
+    "69": "Cassiopeia",
+    "31": "Cho'Gath",
+    "42": "Corki",
+    "122": "Darius",
+    "131": "Diana",
+    "119": "Draven",
+    "36": "Dr. Mundo",
+    "245": "Ekko",
+    "60": "Elise",
+    "28": "Evelynn",
+    "81": "Ezreal",
+    "9": "Fiddlesticks",
+    "114": "Fiora",
+    "105": "Fizz",
+    "3": "Galio",
+    "41": "Gangplank",
+    "86": "Garen",
+    "150": "Gnar",
+    "79": "Gragas",
+    "104": "Graves",
+    "120": "Hecarim",
+    "74": "Heimerdinger",
+    "420": "Illaoi",
+    "39": "Irelia",
+    "427": "Ivern",
+    "40": "Janna",
+    "59": "Jarvan IV",
+    "24": "Jax",
+    "126": "Jayce",
+    "202": "Jhin",
+    "222": "Jinx",
+    "145": "Kai'Sa",
+    "429": "Kalista",
+    "43": "Karma",
+    "30": "Karthus",
+    "38": "Kassadin",
+    "55": "Katarina",
+    "10": "Kayle",
+    "141": "Kayn",
+    "85": "Kennen",
+    "121": "Kha'Zix",
+    "203": "Kindred",
+    "240": "Kled",
+    "96": "Kog'Maw",
+    "7": "LeBlanc",
+    "64": "Lee Sin",
+    "89": "Leona",
+    "876": "Lillia",
+    "127": "Lissandra",
+    "236": "Lucian",
+    "117": "Lulu",
+    "99": "Lux",
+    "54": "Malphite",
+    "90": "Malzahar",
+    "57": "Maokai",
+    "11": "Master Yi",
+    "21": "Miss Fortune",
+    "62": "Wukong",
+    "82": "Mordekaiser",
+    "25": "Morgana",
+    "267": "Nami",
+    "75": "Nasus",
+    "111": "Nautilus",
+    "518": "Neeko",
+    "76": "Nidalee",
+    "56": "Nocturne",
+    "20": "Nunu",
+    "2": "Olaf",
+    "61": "Orianna",
+    "516": "Ornn",
+    "80": "Pantheon",
+    "78": "Poppy",
+    "555": "Pyke",
+    "246": "Qiyana",
+    "133": "Quinn",
+    "497": "Rakan",
+    "33": "Rammus",
+    "421": "Rek'Sai",
+    "526": "Rell",
+    "58": "Renekton",
+    "107": "Rengar",
+    "92": "Riven",
+    "68": "Rumble",
+    "13": "Ryze",
+    "360": "Samira",
+    "113": "Sejuani",
+    "235": "Senna",
+    "147": "Seraphine",
+    "875": "Sett",
+    "35": "Shaco",
+    "98": "Shen",
+    "102": "Shyvana",
+    "27": "Singed",
+    "14": "Sion",
+    "15": "Sivir",
+    "72": "Skarner",
+    "37": "Sona",
+    "16": "Soraka",
+    "50": "Swain",
+    "517": "Sylas",
+    "134": "Syndra",
+    "223": "Tahm Kench",
+    "163": "Taliyah",
+    "91": "Talon",
+    "44": "Taric",
+    "17": "Teemo",
+    "412": "Thresh",
+    "18": "Tristana",
+    "48": "Trundle",
+    "23": "Tryndamere",
+    "4": "Twisted Fate",
+    "29": "Twitch",
+    "77": "Udyr",
+    "6": "Urgot",
+    "110": "Varus",
+    "67": "Vayne",
+    "45": "Veigar",
+    "161": "Vel'Koz",
+    "254": "Vi",
+    "112": "Viktor",
+    "8": "Vladimir",
+    "106": "Volibear",
+    "19": "Warwick",
+    "498": "Xayah",
+    "101": "Xerath",
+    "5": "Xin Zhao",
+    "157": "Yasuo",
+    "777": "Yone",
+    "83": "Yorick",
+    "350": "Yuumi",
+    "154": "Zac",
+    "238": "Zed",
+    "115": "Ziggs",
+    "26": "Zilean",
+    "142": "Zoe",
+    "143": "Zyra"
 }
 
 
-def validate_bans(ban: dict):
-    if set(ban) != set(base_types['bans']):
-        return False
-    
-    for k, v in ban.items():
-        if k not in base_types['bans'] or type(v) is not base_types['bans'][k]:
-            return False
-    return True
-
 
 def validate_team(team: dict):
-    if set(team) != set(base_types['roles']):
+    roles = {
+        "top",
+        "jungle",
+        "mid",
+        "bot",
+        "support"
+    }
+    if set(team.keys()) != roles:
         return False
     
     for k, v in team.items():
-        if k not in base_types['roles'] or type(v) is not base_types['roles'][k]:
+        if k not in roles or v not in key_to_champ:
             return False
     return True
 
 
 def validate_json(request_input):
     try:
-        dodge = request_input['dodged'] in base_types['dodged']
-        red_won = request_input['redTeamWin'] in base_types['redTeamWin']
-        elo = request_input['elo'] in base_types['elo']
-        region = request_input['region'] in base_types['region']
+        outcome = 'outcome' in request_input
+        elo = 'elo' in request_input
+        date = 'date' in  request_input
+        predicted = 'predictedPercentage' in request_input
+
+        red_team = validate_team(request_input['enemyTeam'])
+        blue_team = validate_team(request_input['friendlyTeam'])
         
-        red_bans = validate_bans(request_input['redTeam']['bans'])
-        blue_bans = validate_bans(request_input['blueTeam']['bans'])
-        
-        red_team = validate_team(request_input['redTeam']['roles'])
-        blue_team = validate_team(request_input['blueTeam']['roles'])
-        return all([dodge, red_won, elo, region, red_bans, blue_bans, red_team, blue_team])
+        return all([outcome, elo, red_team, blue_team, date, predicted])
     except KeyError:
         return False
 
 
 def create_csv_row(js):
-    return '{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} \n'.format(
-        js['region'], js['elo'], js['dodged'],
-        
-        js['redTeam']['bans']['ban1'], js['redTeam']['bans']['ban2'],
-        js['redTeam']['bans']['ban3'], js['redTeam']['bans']['ban4'], js['redTeam']['bans']['ban5'],
-        
-        js['redTeam']['roles']['top'], js['redTeam']['roles']['jg'],
-        js['redTeam']['roles']['mid'], js['redTeam']['roles']['adc'], js['redTeam']['roles']['sup'],
-        
-        js['blueTeam']['bans']['ban1'], js['blueTeam']['bans']['ban2'],
-        js['blueTeam']['bans']['ban3'], js['blueTeam']['bans']['ban4'], js['blueTeam']['bans']['ban5'],
-       
-        js['blueTeam']['roles']['top'], js['blueTeam']['roles']['jg'],
-        js['blueTeam']['roles']['mid'], js['blueTeam']['roles']['adc'], js['blueTeam']['roles']['sup'],
-        js['redTeamWin']
-    )
+    f = js['friendlyTeam']
+    e = js['enemyTeam']
+    return f"{js['date']}, {js['elo']}, {js['outcome']}, {js['predictedPercentage'][0]}, {f['top']}, {f['jungle']}, {f['mid']}, {f['bot']}, {f['support']}, {e['top']}, {e['jungle']}, {e['mid']}, {e['bot']}, {e['support']} \n"
 
 
 def append_to_collection(request):
+    
+    if request.method == 'OPTIONS':
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Max-Age': '3600',
+        }
+        return ('', 204, headers)
+
+    headers = {
+        'Access-Control-Allow-Origin': '*'
+    }
+    
     if request.method != 'POST':
-        return 'Only Post allowed!', 405
+        return json.dumps({'status': 'Only Post allowed!'}), 403, headers, 405, headers
     
     request_json = request.get_json()
 
     if not request_json:
-        return 'Missing JSON request body', 403
+        return json.dumps({'status': 'Missing JSON request body'}), 403, headers, 403, headers
     
     if not validate_json(request_json):
-        return 'Error in Json format', 403
+        return json.dumps({'status': 'Error in Json format'}), 403, headers
     
-    if request_json['dodged'] == -1 and request_json['redTeamWin'] == -1:
-        return 'Cannot have a dodged game and a played game', 403
     
     client = storage.Client()
     base_path = "/tmp/"
@@ -105,4 +238,4 @@ def append_to_collection(request):
     
     blob = continuous_bucket.blob(f.name)
     blob.upload_from_filename(base_path + f.name)
-    return '', 200
+    return json.dumps({'status': 'sucess'}), 200, headers

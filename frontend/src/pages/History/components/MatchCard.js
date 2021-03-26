@@ -37,7 +37,6 @@ const outComeToColor = {
 export default function MatchCard({data}) {
     const {friendlyTeam, enemyTeam, date, outcome} = data
 
-    console.log(friendlyTeam, enemyTeam, date, outcome, outComeToColor[outcome])
     const classes = useStyles();
 
     const getImage = (championID) => {
@@ -55,7 +54,7 @@ export default function MatchCard({data}) {
             <Card className={classes.root} style={{background: outComeToColor[outcome]}} variant="outlined">
                 <CardContent>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        {date}
+                        {new Date(date).toLocaleString()}
                     </Typography>
 
                     <div className="grid-container-match">

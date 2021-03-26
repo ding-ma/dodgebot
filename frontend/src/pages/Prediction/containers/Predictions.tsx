@@ -6,11 +6,11 @@ import OuterOval from "../../../images/Outer Oval.png"
 import OvalInside from "../../../images/Oval Inside.png"
 import PredictBox from "../../../images/Predict Box.png"
 import PredictBoxLeft from "../../../images/Predict Box Side.png"
-import { ChampToKey } from "../../../constants/ChampToKey"
+import {ChampToKey} from "../../../constants/ChampToKey"
 
 import '../styles/Predictions.css'
 import ChampionScroll from "../components/ChampionScroll";
-import { store } from 'react-notifications-component';
+import {store} from 'react-notifications-component';
 import firebase from "firebase";
 
 type PredictionsState = {
@@ -53,16 +53,13 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
     this.selectChamp = this.selectChamp.bind(this)
     this.predict = this.predict.bind(this)
-    this.dodge = this.dodge.bind(this)
-    this.win = this.win.bind(this)
-    this.loss = this.loss.bind(this)
     this.selectingFriendly = this.selectingFriendly.bind(this)
     this.selectingEnemy = this.selectingEnemy.bind(this)
+    this.sendResults = this.sendResults.bind(this)
   }
 
   componentDidMount() {
     this.scrollToBottom();
-
   }
 
   componentDidUpdate() {
@@ -161,7 +158,6 @@ class Predictions extends React.Component<{}, PredictionsState> {
         fetch('https://prediction-wvdj36m4qa-uc.a.run.app/predictWinner', requestOptions)
           .then(response => response.json())
           .then(async data => {
-            console.log(data)
             this.setState({
               isLoading: false,
               winPercentage: data
@@ -184,93 +180,38 @@ class Predictions extends React.Component<{}, PredictionsState> {
       });
     }
   }
-
-  async dodge() {
+  
+  async sendResults(outcome: string) {
+    const results = {
+      "friendlyTeam": {
+        "top": ChampToKey[this.state.friendlyTeam[0] as keyof typeof ChampToKey],
+        "jungle": ChampToKey[this.state.friendlyTeam[1] as keyof typeof ChampToKey],
+        "mid": ChampToKey[this.state.friendlyTeam[2] as keyof typeof ChampToKey],
+        "bot": ChampToKey[this.state.friendlyTeam[3] as keyof typeof ChampToKey],
+        "support": ChampToKey[this.state.friendlyTeam[4] as keyof typeof ChampToKey],
+      },
+      "enemyTeam": {
+        "top": ChampToKey[this.state.enemyTeam[0] as keyof typeof ChampToKey],
+        "jungle": ChampToKey[this.state.enemyTeam[1] as keyof typeof ChampToKey],
+        "mid": ChampToKey[this.state.enemyTeam[2] as keyof typeof ChampToKey],
+        "bot": ChampToKey[this.state.enemyTeam[3] as keyof typeof ChampToKey],
+        "support": ChampToKey[this.state.enemyTeam[4] as keyof typeof ChampToKey],
+      },
+      "date": Date.now(),
+      "outcome": outcome,
+      "elo": this.userElo,
+      "predictedPercentage": this.state.winPercentage
+    }
     await this.userRef.update({
-      predictions: firebase.firestore.FieldValue.arrayUnion({
-        "friendlyTeam": {
-          "top": ChampToKey[this.state.friendlyTeam[0] as keyof typeof ChampToKey],
-          "jungle": ChampToKey[this.state.friendlyTeam[1] as keyof typeof ChampToKey],
-          "mid": ChampToKey[this.state.friendlyTeam[2] as keyof typeof ChampToKey],
-          "bot": ChampToKey[this.state.friendlyTeam[3] as keyof typeof ChampToKey],
-          "support": ChampToKey[this.state.friendlyTeam[4] as keyof typeof ChampToKey],
-        },
-        "enemyTeam": {
-          "top": ChampToKey[this.state.enemyTeam[0] as keyof typeof ChampToKey],
-          "jungle": ChampToKey[this.state.enemyTeam[1] as keyof typeof ChampToKey],
-          "mid": ChampToKey[this.state.enemyTeam[2] as keyof typeof ChampToKey],
-          "bot": ChampToKey[this.state.enemyTeam[3] as keyof typeof ChampToKey],
-          "support": ChampToKey[this.state.enemyTeam[4] as keyof typeof ChampToKey],
-        },
-        "date": Date(),
-        "outcome": "dodge",
-        "elo": this.userElo,
-        "predictedPercentage": this.state.winPercentage
-      })
+      predictions: firebase.firestore.FieldValue.arrayUnion(results)
     })
-
-    this.setState({
-      submitted: false,
-      isLoading: false,
-      winPercentage: null
-    })
-  }
-
-  async win() {
-    await this.userRef.update({
-      predictions: firebase.firestore.FieldValue.arrayUnion({
-        "friendlyTeam": {
-          "top": ChampToKey[this.state.friendlyTeam[0] as keyof typeof ChampToKey],
-          "jungle": ChampToKey[this.state.friendlyTeam[1] as keyof typeof ChampToKey],
-          "mid": ChampToKey[this.state.friendlyTeam[2] as keyof typeof ChampToKey],
-          "bot": ChampToKey[this.state.friendlyTeam[3] as keyof typeof ChampToKey],
-          "support": ChampToKey[this.state.friendlyTeam[4] as keyof typeof ChampToKey],
-        },
-        "enemyTeam": {
-          "top": ChampToKey[this.state.enemyTeam[0] as keyof typeof ChampToKey],
-          "jungle": ChampToKey[this.state.enemyTeam[1] as keyof typeof ChampToKey],
-          "mid": ChampToKey[this.state.enemyTeam[2] as keyof typeof ChampToKey],
-          "bot": ChampToKey[this.state.enemyTeam[3] as keyof typeof ChampToKey],
-          "support": ChampToKey[this.state.enemyTeam[4] as keyof typeof ChampToKey],
-        },
-        "date": Date(),
-        "outcome": "win",
-        "elo": this.userElo,
-        "predictedPercentage": this.state.winPercentage
-      })
-    })
-
-    this.setState({
-      submitted: false,
-      isLoading: false,
-      winPercentage: null
-    })
-  }
-
-  async loss() {
-    await this.userRef.update({
-      predictions: firebase.firestore.FieldValue.arrayUnion({
-        "friendlyTeam": {
-          "top": ChampToKey[this.state.friendlyTeam[0] as keyof typeof ChampToKey],
-          "jungle": ChampToKey[this.state.friendlyTeam[1] as keyof typeof ChampToKey],
-          "mid": ChampToKey[this.state.friendlyTeam[2] as keyof typeof ChampToKey],
-          "bot": ChampToKey[this.state.friendlyTeam[3] as keyof typeof ChampToKey],
-          "support": ChampToKey[this.state.friendlyTeam[4] as keyof typeof ChampToKey],
-        },
-        "enemyTeam": {
-          "top": ChampToKey[this.state.enemyTeam[0] as keyof typeof ChampToKey],
-          "jungle": ChampToKey[this.state.enemyTeam[1] as keyof typeof ChampToKey],
-          "mid": ChampToKey[this.state.enemyTeam[2] as keyof typeof ChampToKey],
-          "bot": ChampToKey[this.state.enemyTeam[3] as keyof typeof ChampToKey],
-          "support": ChampToKey[this.state.enemyTeam[4] as keyof typeof ChampToKey],
-        },
-        "date": Date(),
-        "outcome": "loss",
-        "elo": this.userElo,
-        "predictedPercentage": this.state.winPercentage
-      })
-    })
-
+  
+    await fetch('https://us-central1-ordinal-cacao-291815.cloudfunctions.net/collect-data', {
+      method: 'POST',
+      body: JSON.stringify(results)
+    }).then((res) => res.json());
+  
+  
     this.setState({
       submitted: false,
       isLoading: false,
@@ -339,14 +280,14 @@ class Predictions extends React.Component<{}, PredictionsState> {
           fontFamily: "Courier New",
           marginTop: "8vh"
         }}>Actual Result:</p>
-
-        <div style={{ display: "flex", justifyContent: "center", height: "10%", width: "100%" }}>
-          <button className="winBtn" onClick={this.win}>Win</button>
-          <button className="lossBtn" onClick={this.loss}>Loss</button>
+  
+        <div style={{display: "flex", justifyContent: "center", height: "10%", width: "100%"}}>
+          <button className="winBtn" onClick={() => this.sendResults("win")}>Win</button>
+          <button className="lossBtn" onClick={() => this.sendResults("loss")}>Loss</button>
         </div>
 
         <div style={{ display: "flex", justifyContent: "center", height: "10%", width: "100%" }}>
-          <button className="resetBtn" onClick={this.dodge}>Dodge</button>
+          <button className="resetBtn" onClick={() => this.sendResults("dodge")}>Dodge</button>
 
         </div>
 

@@ -55,7 +55,14 @@ const Dashboard = () => {
             const {profile} = data.data() || {}
             const {predictions} = data.data() || []
             setLeagueAccount(profile)
-            setMatchesHistory(predictions)
+
+            const sortedPredictions = predictions.sort(function (a, b) {
+                // Turn your strings into dates, and then subtract them
+                // to get a value that is either negative, positive, or zero.
+                return new Date(b.date) - new Date(a.date);
+            });
+
+            setMatchesHistory(sortedPredictions)
         }
         getUserAccount()
     }, [currentUser])
@@ -67,7 +74,7 @@ const Dashboard = () => {
                 <div>
                     <h2>Past Matches</h2>
                     {matchHistory.map(e => {
-                        return (<MatchCard data={e}/>)
+                        return (<MatchCard data={e} key={e.date}/>)
                     })}
                 </div>
             )
