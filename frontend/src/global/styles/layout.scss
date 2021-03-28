@@ -8,6 +8,17 @@ $leag-color: #c79b3b;
   width: 100%;
 }
 
-body, h1, h2, h3 {
+body,
+h1,
+h2,
+h3 {
   color: white;
+}
+
+.MuiListItem-gutters {
+  padding-top: 13px !important;
+}
+
+.MuiIconButton-label {
+  padding-top: 8px !important;
 }
