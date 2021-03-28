@@ -4,6 +4,7 @@ import {AppBar, Container, IconButton, List, ListItem, ListItemText, Toolbar} fr
 import {Home} from "@material-ui/icons";
 import {makeStyles} from "@material-ui/core/styles";
 import firebase from "firebase";
+import "../styles/layout.scss"
 
 const useStyles = makeStyles({
     navbarDisplayFlex: {
@@ -63,7 +64,7 @@ const Header = () => {
         } else {
             // No user is signed in.
             return <a href='/' key='Login' className={classes.linkText}>
-                <ListItem button>
+                <ListItem>
                     <ListItemText style={{ color: '#FFFFFF' }} primary='Login'/>
                 </ListItem>
             </a>
@@ -75,7 +76,7 @@ const Header = () => {
     
     return (
         <AppBar position="fixed" style={{height: "55px"}} className={classes.navBar}>
-            <Toolbar>
+            <Toolbar variant="dense">
                 <Container maxWidth="md" className={classes.navbarDisplayFlex}>
                     <IconButton edge="start" color="inherit" aria-label="home">
                         {userLogin && <a href='/predict'>
@@ -89,7 +90,7 @@ const Header = () => {
                     >
                         <a href='/stats' key='Stats' className={classes.linkText}>
                             <ListItem button>
-                                <ListItemText style={{ color: '#FFFFFF' }} primary='How it works'/>
+                                <ListItemText style={{ color: '#FFFFFF' }} primary='Stats'/>
                             </ListItem>
                         </a>
                         
