@@ -113,27 +113,33 @@ const Favorites = () => {
                 onChange={(event, value) => setSearchChampion(value)}
                 classes={classes}
             />
-            <TextField
-                required={true}
-                value={role}
-                onChange={(event) => setRole(event.target.value)}
-                style={{margin: '10px 0', width: '30%'}}
-                variant="outlined"
-                select
-            >
-                {roles.map((value, index) => {
-                    return <MenuItem key={index} value={value}>{value}</MenuItem>;
-                })}
-            </TextField>
+            <div className="row">
 
-                <Button
-                    variant="contained"
-                    color="primary"
-                    className="login-form__smallButton"
-                    onClick={() => handleNewChampion()}
+                <TextField
+                    required={true}
+                    value={role}
+                    onChange={(event) => setRole(event.target.value)}
+                    style={{margin: '10px 0', width: '30%'}}
+                    variant="outlined"
+                    select
                 >
-                    Add!
-                </Button>
+                    {roles.map((value, index) => {
+                        return <MenuItem key={index} value={value}>{value}</MenuItem>;
+                    })}
+                </TextField>
+
+                <div className="column">
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        className="login-form__smallButton"
+                        onClick={() => handleNewChampion()}
+                    >
+                        Add!
+                    </Button>
+                </div>
+            </div>
+
 
             <ChampionTable favoriteChampions={favChampions}/>
         </div>

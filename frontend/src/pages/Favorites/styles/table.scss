@@ -1,7 +1,15 @@
 @import "../../../global/styles/layout";
 
-.MuiDataGrid-row, .MuiDataGrid-colCellTitle, .MuiIconButton-label,.MuiDataGrid-root {
-  color: $leag-color;
-  border-color: $leag-color;
+.MuiDataGrid-row, .MuiDataGrid-colCellTitle, .MuiIconButton-label, .MuiDataGrid-root, .MuiTypography-colorInherit {
+  color: $leag-color !important;
+  border-color: $leag-color !important;
 }
 
+.row {
+  display: flex;
+}
+
+.column {
+  padding-top: 7px;
+  padding-left: 15px;
+}
