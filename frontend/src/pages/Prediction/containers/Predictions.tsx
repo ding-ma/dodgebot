@@ -4,7 +4,7 @@ import ChampionPanel from "../components/ChampionPanel";
 import InnerOval from "../../../images/Inner Oval.png"
 import OuterOval from "../../../images/Outer Oval.png"
 import OvalInside from "../../../images/Oval Inside.png"
-import PredictBox from "../../../images/Predict Box.png"
+import PredictBox from "../../../images/Predict Box Text.png"
 import PredictBoxLeft from "../../../images/Predict Box Side.png"
 import { ChampToKey } from "../../../constants/ChampToKey"
 
@@ -353,20 +353,6 @@ class Predictions extends React.Component<{}, PredictionsState> {
                       {/* Predict Button */}
                       <img style={{ width: "25%", height: "70%", zIndex: 50, cursor: "pointer" }} src={PredictBox}
                         onClick={this.predict} alt="" />
-                      <p onClick={this.predict} style={{
-                        zIndex: 100,
-                        fontWeight: "bold",
-                        textAlign: "center",
-                        position: "absolute",
-                        bottom: -18,
-                        color: "#b8bcbd",
-                        fontFamily: 'Garamond',
-                        fontSize: "22pt",
-                        cursor: "pointer"
-                      }}>
-                        PREDICT
-                                        </p>
-
                       <img style={{
                         zIndex: 50,
                         position: "absolute",
