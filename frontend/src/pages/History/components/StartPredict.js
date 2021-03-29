@@ -37,7 +37,7 @@ export default function StartPredict() {
                         className="login-form__button"
                         onClick={() => history.push("/")}
                     >
-                        Click here to start predict your WINS!
+                        Click here to start predicting your WINS!
                     </Button>
 
         </div>
