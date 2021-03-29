@@ -336,11 +336,8 @@ class Predictions extends React.Component<{}, PredictionsState> {
                 (
                   <div>
                     {/* Scrollable list of champions with search bar */}
-                    <div style={{ zIndex: 50, position: "relative", width: "100%", display: "flex", justifyContent: "center" }}>
-                      <div style={{ width: "80%" }}>
-
+                    <div style={{ zIndex: 50, position: "relative", width: "100%",  display: "flex", justifyContent: "center" }}>
                         <ChampionScroll selectChamp={this.selectChamp} unavailableChamps={this.state.friendlyTeam.concat(this.state.enemyTeam)} />
-                      </div>
                     </div>
 
                     <div style={{

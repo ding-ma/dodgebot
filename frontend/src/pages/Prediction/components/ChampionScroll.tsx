@@ -46,7 +46,7 @@ class ChampionScroll extends React.Component<ChampionScrollProps, ChampionScroll
 
     render() {
         return (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
 
                 {/* Search bar */}
                 <div style={{ display: "flex", justifyContent: "flex-end", width: "100%", height: "5vh" }}>
@@ -64,7 +64,7 @@ class ChampionScroll extends React.Component<ChampionScrollProps, ChampionScroll
                 {/* Scrollable champ select */}
                 <div style={{
                     height: "70vh",
-                    width: "100%",
+                    width: "80%",
                     display: "flex",
                     flexWrap: "wrap",
                     overflowY: "auto",
