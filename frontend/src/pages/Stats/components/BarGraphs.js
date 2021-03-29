@@ -44,13 +44,13 @@ export default function BarGraph({ data }) {
         width={600}
         height={300}
         data={flatten(data)}
-        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        margin={{ top: 5, right: 30, left: 20, bottom: 50 }}
         title={data.title}
       >
         <XAxis
           dataKey="index"
           stroke="white"
-          angle={-45}
+          angle={-40}
           textAnchor="end"
           interval={0}
         />
