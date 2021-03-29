@@ -1,6 +1,10 @@
 @import "../../../global/styles/layout";
 
-.MuiDataGrid-row, .MuiDataGrid-colCellTitle, .MuiIconButton-label, .MuiDataGrid-root, .MuiTypography-colorInherit {
+.MuiDataGrid-row,
+.MuiDataGrid-colCellTitle,
+.MuiIconButton-label,
+.MuiDataGrid-root,
+.MuiTypography-colorInherit {
   color: $leag-color !important;
   border-color: $leag-color !important;
 }
@@ -12,4 +16,13 @@
 .column {
   padding-top: 7px;
   padding-left: 15px;
+}
+
+.MuiDataGrid-viewport {
+  background-color: #07141a !important;
+}
+
+.MuiDataGrid-colCellTitle {
+  font-weight: bold !important;
+  padding-top: 5px !important;
 }
