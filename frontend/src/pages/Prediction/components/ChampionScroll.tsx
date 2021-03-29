@@ -64,30 +64,37 @@ class ChampionScroll extends React.Component<ChampionScrollProps, ChampionScroll
                 {/* Scrollable champ select */}
                 <div style={{
                     height: "70vh",
-                    width: "84vh",
+                    width: "100%",
                     display: "flex",
                     flexWrap: "wrap",
                     overflowY: "auto",
                     alignContent: "flex-start",
+                    position: "relative"
                 }}>
                     {this.state.filteredListOfChamps.map(
                         (champName: string, index: any) => {
                             const imgFilter = this.props.unavailableChamps.includes(champName) ? "grayscale(100%)" : "none"
-                            return (<div style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                height: "12vh",
-                                marginRight: "2vh",
-                                marginLeft: "2vh",
-                                marginTop: "1vh",
-                                marginBottom: "1vh"
-                            }}>
-                                <img style={{ height: "10vh", width: "10vh", filter: imgFilter, cursor: "pointer", background: "rgba(0,0,0,0.3)" }} key={index}
-                                    src={`../ChampionIcons/` + champName + `Square.png`} alt="info"
-                                    onClick={() => this.props.selectChamp(champName)} />
-                                <p style={{ margin: 0, color: "gray", marginTop: "0.6vh" }}>{champName}</p>
-                            </div>
+                            return (
+                                <div style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    width: "12%",
+                                    marginRight: "2.33%",
+                                    marginLeft: "2.33%",
+                                    marginTop: "0.85%",
+                                    marginBottom: "0.85%",
+                                }}>
+                                    <div style={{
+                                        width: "100%",
+                                    }}>
+                                        <img style={{ height: "100%", width: "100%", filter: imgFilter, cursor: "pointer", background: "rgba(0,0,0,0.3)" }} key={index}
+                                            src={`../ChampionIcons/` + champName + `Square.png`} alt="info"
+                                            onClick={() => this.props.selectChamp(champName)} />
+                                    </div>
+                                    <p style={{ margin: 0, color: "gray", marginTop: "0.6vh", whiteSpace: "nowrap", overflow: "hidden" }}>{champName}</p>
+
+                                </div>
                             )
                         })
                     }

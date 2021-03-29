@@ -318,7 +318,6 @@ class Predictions extends React.Component<{}, PredictionsState> {
             justifyContent: "center",
             width: "50%",
             height: "93.5vh",
-            position: "relative",
           }}>
 
             <div style={{
@@ -337,8 +336,11 @@ class Predictions extends React.Component<{}, PredictionsState> {
                 (
                   <div>
                     {/* Scrollable list of champions with search bar */}
-                    <div style={{ zIndex: 50, position: "relative" }}>
-                      <ChampionScroll selectChamp={this.selectChamp} unavailableChamps={this.state.friendlyTeam.concat(this.state.enemyTeam)} />
+                    <div style={{ zIndex: 50, position: "relative", width: "100%", display: "flex", justifyContent: "center" }}>
+                      <div style={{ width: "80%" }}>
+
+                        <ChampionScroll selectChamp={this.selectChamp} unavailableChamps={this.state.friendlyTeam.concat(this.state.enemyTeam)} />
+                      </div>
                     </div>
 
                     <div style={{
