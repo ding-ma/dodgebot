@@ -29,10 +29,9 @@ export default function StartPredict() {
     const history = useHistory();
 
     return (
-        <div className="card">
-            <Card className={classes.root} style={{background: '#dbdbdb'}} variant="outlined">
-                <CardContent>
-                    <Button
+        <div>
+                    <Button 
+                    style={{width:"100%"}}
                         variant="contained"
                         color="primary"
                         className="login-form__button"
@@ -40,8 +39,6 @@ export default function StartPredict() {
                     >
                         Click here to start predict your WINS!
                     </Button>
-                </CardContent>
-            </Card>
 
         </div>
     );
