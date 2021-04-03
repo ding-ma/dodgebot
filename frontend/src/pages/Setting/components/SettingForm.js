@@ -149,6 +149,7 @@ const SettingForm = () => {
         <TextField
           required={true}
           value={password}
+          type="password"
           onChange={(event) => setPassword(event.target.value)}
           className="login-form__input"
           variant="outlined"
