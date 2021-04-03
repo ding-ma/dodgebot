@@ -384,7 +384,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
             display: "flex",
             justifyContent: "center",
             height: "100vh",
-            paddingTop: "6.5vh",
+            paddingTop: "65px",
           }}
         >
           {/* Friendly panel */}
