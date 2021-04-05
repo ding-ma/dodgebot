@@ -224,9 +224,13 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
       this.setState(
         {
+          friendlyTeam: ["", "", "", "", ""],
+          enemyTeam: ["", "", "", "", ""],
           submitted: false,
           isLoading: false,
           winPercentage: null,
+          selectingTeam: null,
+          selectingRole: null,
         },
         async () => {
           const results = {
@@ -298,9 +302,13 @@ class Predictions extends React.Component<{}, PredictionsState> {
               className="dodgeBtn"
               onClick={() => {
                 this.setState({
+                  friendlyTeam: ["", "", "", "", ""],
+                  enemyTeam: ["", "", "", "", ""],
                   submitted: false,
                   isLoading: false,
                   winPercentage: null,
+                  selectingTeam: null,
+                  selectingRole: null,
                 });
               }}
             >
