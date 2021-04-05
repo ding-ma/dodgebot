@@ -11,7 +11,7 @@ const SettingForm = () => {
   const history = useHistory();
   const { currentUser } = useContext(AuthContext);
 
-  const isPassword = currentUser.providerData[0].providerId === "password";
+  const isPassword = currentUser.providerData[0]?.providerId === "password";
   const [summonerName, setSummonerName] = useState("");
   const [password, setPassword] = useState("");
 

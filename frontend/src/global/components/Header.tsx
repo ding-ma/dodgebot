@@ -40,6 +40,7 @@ const useStyles = makeStyles({
 
 const Header = () => {
   const [userLogin, setUserlogin] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const history = useHistory();
   const classes = useStyles();
 
@@ -50,6 +51,11 @@ const Header = () => {
         setUserlogin(true);
       } else {
         setUserlogin(false);
+      }
+      if (firebase.auth().currentUser?.isAnonymous) {
+        setIsAnonymous(true);
+      } else {
+        setIsAnonymous(false);
       }
     }
 
@@ -118,7 +124,7 @@ const Header = () => {
               </ListItem>
             </div>
 
-            {userLogin && (
+            {userLogin && !isAnonymous && (
               <a href={endpoints.uri.history}>
                 <div className={classes.linkText}>
                   <ListItem button>
@@ -131,7 +137,7 @@ const Header = () => {
               </a>
             )}
 
-            {userLogin && (
+            {userLogin && !isAnonymous && (
               <div className={classes.linkText}>
                 <ListItem
                   button
@@ -145,7 +151,7 @@ const Header = () => {
               </div>
             )}
 
-            {userLogin && (
+            {userLogin && !isAnonymous && (
               <div className={classes.linkText}>
                 <ListItem
                   button

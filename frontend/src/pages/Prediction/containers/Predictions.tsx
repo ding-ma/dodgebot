@@ -48,7 +48,11 @@ class Predictions extends React.Component<{}, PredictionsState> {
     this.userRef = this.db.collection("users").doc(this.uid);
 
     this.userRef.get().then((doc: any) => {
-      this.userElo = doc.data()["profile"]["elo"];
+      try {
+        this.userElo = doc.data()["profile"]["elo"];
+      } catch {
+        this.userElo = "Silver";
+      }
     });
 
     this.selectChamp = this.selectChamp.bind(this);
@@ -56,10 +60,25 @@ class Predictions extends React.Component<{}, PredictionsState> {
     this.selectingFriendly = this.selectingFriendly.bind(this);
     this.selectingEnemy = this.selectingEnemy.bind(this);
     this.sendResults = this.sendResults.bind(this);
+    this.renderSendResultsButton = this.renderSendResultsButton.bind(this);
   }
 
   componentDidMount() {
     this.scrollToBottom();
+    if (firebase.auth().currentUser?.isAnonymous) {
+      store.addNotification({
+        title: "Please consider registering to get the best results",
+        message: " ",
+        type: "warning",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 5000,
+        },
+      });
+    }
   }
 
   componentDidUpdate() {
@@ -261,6 +280,83 @@ class Predictions extends React.Component<{}, PredictionsState> {
     }
   }
 
+  renderSendResultsButton() {
+    if (firebase.auth().currentUser?.isAnonymous) {
+      return (
+        <>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              height: "20%",
+              width: "100%",
+            }}
+          >
+            <button
+              className="dodgeBtn"
+              onClick={() => {
+                this.setState({
+                  submitted: false,
+                  isLoading: false,
+                  winPercentage: null,
+                });
+              }}
+            >
+              Predict again!
+            </button>
+          </div>
+        </>
+      );
+    }
+    return (
+      <>
+        <p
+          style={{
+            color: "#7b775b",
+            textAlign: "center",
+            fontSize: "20pt",
+            fontFamily: "Courier New",
+            marginTop: "8vh",
+          }}
+        >
+          Actual Result:
+        </p>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            height: "10%",
+            width: "100%",
+          }}
+        >
+          <button className="winBtn" onClick={() => this.sendResults("win")}>
+            Win
+          </button>
+          <button className="lossBtn" onClick={() => this.sendResults("loss")}>
+            Loss
+          </button>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            height: "10%",
+            width: "100%",
+          }}
+        >
+          <button
+            className="dodgeBtn"
+            onClick={() => this.sendResults("dodge")}
+          >
+            Dodge
+          </button>
+        </div>
+      </>
+    );
+  }
+
   render() {
     var winColor = "white";
     var winPercentageFormatted = 0;
@@ -330,49 +426,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
           chance of winning
         </p>
 
-        <p
-          style={{
-            color: "#7b775b",
-            textAlign: "center",
-            fontSize: "20pt",
-            fontFamily: "Courier New",
-            marginTop: "8vh",
-          }}
-        >
-          Actual Result:
-        </p>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            height: "10%",
-            width: "100%",
-          }}
-        >
-          <button className="winBtn" onClick={() => this.sendResults("win")}>
-            Win
-          </button>
-          <button className="lossBtn" onClick={() => this.sendResults("loss")}>
-            Loss
-          </button>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            height: "10%",
-            width: "100%",
-          }}
-        >
-          <button
-            className="dodgeBtn"
-            onClick={() => this.sendResults("dodge")}
-          >
-            Dodge
-          </button>
-        </div>
+        {this.renderSendResultsButton()}
       </div>
     );
 
