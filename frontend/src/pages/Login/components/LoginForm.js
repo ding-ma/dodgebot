@@ -5,6 +5,8 @@ import { Button, Typography } from "@material-ui/core";
 import "../styles/login.scss";
 import TextField from "../../MaterialUIOverwrite/TextField";
 import endpoints from "../../../api/endpoints";
+import GoogleLogo from "../../../images/Google Logo.svg";
+
 
 const LoginForm = () => {
   const history = useHistory();
@@ -82,23 +84,21 @@ const LoginForm = () => {
         color="primary"
         error={errorMessage.length > 0}
       />
-      <Button
-        variant="contained"
-        color="primary"
-        className="login-form__button"
-        onClick={() => handleSubmitEmailPwd()}
-      >
-        Sign in
-      </Button>
 
-      <Button
-        variant="contained"
-        color="primary"
-        className="login-form__button"
-        onClick={() => handleSubmitGoogleAuth()}
-      >
-        Sign in with Google
-      </Button>
+      <div style={{ display: "flex", width : "60%" }}>
+        <Button
+          variant="contained"
+          color="primary"
+          className="login-form__button"
+          style ={{width: "91%"}}
+          onClick={() => handleSubmitEmailPwd()}
+        >
+          Sign in
+        </Button>
+
+        <img src={GoogleLogo} alt="Sign in with Google" style={{ width: "7%", marginLeft: "2%", marginRight: "1%" }} onClick={() => handleSubmitGoogleAuth()}></img>
+      </div>
+
 
       <Button
         variant="contained"
@@ -106,7 +106,7 @@ const LoginForm = () => {
         className="login-form__button"
         onClick={() => handleSubmitAnonymousUser()}
       >
-        Try the application
+        Guest user
       </Button>
     </form>
   );
