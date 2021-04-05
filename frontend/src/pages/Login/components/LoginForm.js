@@ -48,6 +48,14 @@ const LoginForm = () => {
       });
   };
 
+  const handleSubmitAnonymousUser = async () => {
+    await firebase
+      .auth()
+      .setPersistence(firebase.auth.Auth.Persistence.SESSION);
+    await firebase.auth().signInAnonymously();
+    history.push(endpoints.uri.predict);
+  };
+
   return (
     <form className="login-form">
       <Typography className="login-form__error" color="error">
@@ -90,6 +98,15 @@ const LoginForm = () => {
         onClick={() => handleSubmitGoogleAuth()}
       >
         Sign in with Google
+      </Button>
+
+      <Button
+        variant="contained"
+        color="primary"
+        className="login-form__button"
+        onClick={() => handleSubmitAnonymousUser()}
+      >
+        Try the application
       </Button>
     </form>
   );
