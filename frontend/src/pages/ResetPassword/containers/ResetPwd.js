@@ -10,8 +10,8 @@ const ResetPwd = () => {
   const history = useHistory();
 
   return (
-    <Box className="login">
-      <Typography variant="h3" className="reset__header">
+    <Box style={{ display: "flex", flexDirection: "column", width: "35%", height: "86vh", alignItems: "center" }}>
+      <Typography variant="h4" className="reset__header">
         Reset Password
       </Typography>
       <ResetPwdForm />

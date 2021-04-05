@@ -21,7 +21,7 @@
     padding: 18.5px 14px;
     background-color: $leag-color;
     &:hover {
-      background-color: red;
+      background-color: #896B2B;
     }
   }
 
@@ -32,13 +32,12 @@
     height: 3em;
     background-color: $leag-color;
     &:hover {
-      background-color: red;
+      background-color: #896B2B;
     }
   }
 }
 
 .login {
-  width: 100%;
   display: flex;
   height: auto;
   align-items: center;
