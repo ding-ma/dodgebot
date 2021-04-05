@@ -65,9 +65,12 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
   componentDidMount() {
     this.scrollToBottom();
-    if (firebase.auth().currentUser?.isAnonymous) {
+    const notified = sessionStorage.getItem("notified");
+    console.log(notified);
+
+    if (firebase.auth().currentUser?.isAnonymous && notified === null) {
       store.addNotification({
-        title: "Please consider registering to get the best results",
+        title: "Consider registering to get the best results",
         message: " ",
         type: "warning",
         insert: "top",
@@ -78,6 +81,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
           duration: 5000,
         },
       });
+      sessionStorage.setItem("notified", "yes");
     }
   }
 

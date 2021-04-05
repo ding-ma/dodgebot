@@ -1,6 +1,5 @@
 @import "../../../global/styles/layout";
 
-
 .login-form {
   display: flex;
   flex-direction: column;
@@ -21,7 +20,7 @@
     padding: 18.5px 14px;
     background-color: $leag-color;
     &:hover {
-      background-color: #896B2B;
+      background-color: #896b2b;
     }
   }
 
@@ -32,7 +31,7 @@
     height: 3em;
     background-color: $leag-color;
     &:hover {
-      background-color: #896B2B;
+      background-color: #896b2b;
     }
   }
 }
@@ -56,6 +55,19 @@
   }
 }
 
-.label-color{
+.label-color {
   color: white !important;
+}
+
+.wrapper {
+  display: flex;
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+.col {
+  width: 50%;
 }

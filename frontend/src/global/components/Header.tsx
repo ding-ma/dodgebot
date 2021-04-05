@@ -15,6 +15,7 @@ import firebase from "firebase";
 import "../styles/layout.scss";
 import endpoints from "../../api/endpoints";
 import { useHistory } from "react-router-dom";
+import { store } from "react-notifications-component";
 
 const useStyles = makeStyles({
   navbarDisplayFlex: {
@@ -44,7 +45,6 @@ const Header = () => {
   const history = useHistory();
   const classes = useStyles();
 
-  //quick hack to render!
   useEffect(() => {
     function getAlerts() {
       if (firebase.auth().currentUser) {
@@ -94,6 +94,72 @@ const Header = () => {
     }
   };
 
+  const sendRegisterNotification = () => {
+    store.addNotification({
+      title: "Register to access that feature",
+      message: " ",
+      type: "warning",
+      insert: "top",
+      container: "top-right",
+      animationIn: ["animate__animated", "animate__fadeIn"],
+      animationOut: ["animate__animated", "animate__fadeOut"],
+      dismiss: {
+        duration: 5000,
+      },
+    });
+  };
+  const renderLoggedInButtons = () => {
+    if (userLogin && !isAnonymous) {
+      return (
+        <>
+          <a href={endpoints.uri.history}>
+            <div className={classes.linkText}>
+              <ListItem button>
+                <ListItemText style={{ color: "#FFFFFF" }} primary="History" />
+              </ListItem>
+            </div>
+          </a>
+          <div className={classes.linkText}>
+            <ListItem
+              button
+              onClick={() => history.push(endpoints.uri.favorites)}
+            >
+              <ListItemText style={{ color: "#FFFFFF" }} primary="Favorites" />
+            </ListItem>
+          </div>
+          <div className={classes.linkText}>
+            <ListItem
+              button
+              onClick={() => history.push(endpoints.uri.settings)}
+            >
+              <ListItemText style={{ color: "#FFFFFF" }} primary="Account" />
+            </ListItem>
+          </div>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <div className={classes.linkText}>
+            <ListItem button onClick={() => sendRegisterNotification()}>
+              <ListItemText style={{ color: "black" }} primary="History" />
+            </ListItem>
+          </div>
+          <div className={classes.linkText}>
+            <ListItem button onClick={() => sendRegisterNotification()}>
+              <ListItemText style={{ color: "black" }} primary="Favorites" />
+            </ListItem>
+          </div>
+          <div className={classes.linkText}>
+            <ListItem button onClick={() => sendRegisterNotification()}>
+              <ListItemText style={{ color: "black" }} primary="Account" />
+            </ListItem>
+          </div>
+        </>
+      );
+    }
+  };
+
   return (
     <AppBar
       position="sticky"
@@ -123,48 +189,7 @@ const Header = () => {
                 <ListItemText style={{ color: "#FFFFFF" }} primary="Stats" />
               </ListItem>
             </div>
-
-            {userLogin && !isAnonymous && (
-              <a href={endpoints.uri.history}>
-                <div className={classes.linkText}>
-                  <ListItem button>
-                    <ListItemText
-                      style={{ color: "#FFFFFF" }}
-                      primary="History"
-                    />
-                  </ListItem>
-                </div>
-              </a>
-            )}
-
-            {userLogin && !isAnonymous && (
-              <div className={classes.linkText}>
-                <ListItem
-                  button
-                  onClick={() => history.push(endpoints.uri.favorites)}
-                >
-                  <ListItemText
-                    style={{ color: "#FFFFFF" }}
-                    primary="Favorites"
-                  />
-                </ListItem>
-              </div>
-            )}
-
-            {userLogin && !isAnonymous && (
-              <div className={classes.linkText}>
-                <ListItem
-                  button
-                  onClick={() => history.push(endpoints.uri.settings)}
-                >
-                  <ListItemText
-                    style={{ color: "#FFFFFF" }}
-                    primary="Account"
-                  />
-                </ListItem>
-              </div>
-            )}
-
+            {renderLoggedInButtons()}
             {renderLoginLogout()}
           </List>
         </Container>

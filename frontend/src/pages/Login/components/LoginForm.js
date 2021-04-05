@@ -7,7 +7,6 @@ import TextField from "../../MaterialUIOverwrite/TextField";
 import endpoints from "../../../api/endpoints";
 import GoogleLogo from "../../../images/Google Logo.svg";
 
-
 const LoginForm = () => {
   const history = useHistory();
 
@@ -85,21 +84,35 @@ const LoginForm = () => {
         error={errorMessage.length > 0}
       />
 
-      <div style={{ display: "flex", width : "60%" }}>
-        <Button
-          variant="contained"
-          color="primary"
-          className="login-form__button"
-          style ={{width: "91%"}}
-          onClick={() => handleSubmitEmailPwd()}
-        >
-          Sign in
-        </Button>
-
-        <img src={GoogleLogo} alt="Sign in with Google" style={{ width: "7%", marginLeft: "2%", marginRight: "1%" }} onClick={() => handleSubmitGoogleAuth()}></img>
+      <div className="wrapper">
+        <div className="col">
+          <Button
+            variant="contained"
+            color="primary"
+            className="login-form__button"
+            style={{ width: "15%" }}
+            onClick={() => handleSubmitEmailPwd()}
+          >
+            Sign in
+          </Button>
+        </div>
+        <div className="col">
+          <Button
+            variant="contained"
+            color="primary"
+            className="login-form__button"
+            style={{ width: "15%" }}
+            onClick={() => handleSubmitGoogleAuth()}
+          >
+            Sign in with
+            <img
+              src={GoogleLogo}
+              alt="Sign in with Google"
+              style={{ width: "13%", marginLeft: "5%" }}
+            />
+          </Button>
+        </div>
       </div>
-
-
       <Button
         variant="contained"
         color="primary"
