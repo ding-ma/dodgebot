@@ -137,7 +137,8 @@ const Header = () => {
           </div>
         </>
       );
-    } else {
+    }
+    if (userLogin) {
       return (
         <>
           <div className={classes.linkText}>
