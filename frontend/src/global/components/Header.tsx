@@ -64,25 +64,23 @@ const Header = () => {
     if (userLogin) {
       // User is signed in.
       return (
-        <div
-          className={classes.linkText}
-          onClick={() => firebase.auth().signOut()}
-        >
-          <div
-            onClick={() => history.push(endpoints.uri.home)}
-            className={classes.linkText}
+        <div className={classes.linkText}>
+          <ListItem
+            button
+            onClick={() => {
+              firebase.auth().signOut();
+              history.push(endpoints.uri.home);
+            }}
           >
-            <ListItem button>
-              <ListItemText style={{ color: "#FFFFFF" }} primary="Logout" />
-            </ListItem>
-          </div>
+            <ListItemText style={{ color: "#FFFFFF" }} primary="Logout" />
+          </ListItem>
         </div>
       );
     } else {
       // No user is signed in.
       return (
         <div className={classes.linkText}>
-          <ListItem onClick={() => history.push(endpoints.uri.home)}>
+          <ListItem button onClick={() => history.push(endpoints.uri.home)}>
             <ListItemText style={{ color: "#FFFFFF" }} primary="Login" />
           </ListItem>
         </div>
@@ -121,17 +119,16 @@ const Header = () => {
             </div>
 
             {userLogin && (
-              <div className={classes.linkText}>
-                <ListItem
-                  button
-                  onClick={() => history.push(endpoints.uri.history)}
-                >
-                  <ListItemText
-                    style={{ color: "#FFFFFF" }}
-                    primary="History"
-                  />
-                </ListItem>
-              </div>
+              <a href={endpoints.uri.history}>
+                <div className={classes.linkText}>
+                  <ListItem button>
+                    <ListItemText
+                      style={{ color: "#FFFFFF" }}
+                      primary="History"
+                    />
+                  </ListItem>
+                </div>
+              </a>
             )}
 
             {userLogin && (
