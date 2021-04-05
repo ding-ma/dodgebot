@@ -17,11 +17,17 @@ const SettingForm = () => {
 
   const [region, setRegion] = useState("North America");
   const regions = [
-    "North America",
-    "Korea",
-    "Europe West",
-    "Europe East",
-    "Brazil",
+    "Brazil (BR1)",
+    "Europe Nordic (EUN1)",
+    "Europe West (EUW1)",
+    "Latin America North (LA1)",
+    "Latin America South (LA2)",
+    "North America (NA1)",
+    "Oceania (OCE)",
+    "Russia (RU1)",
+    "Turkey (TR1)",
+    "Japan (JP1)",
+    "Korea (KR)",
   ];
 
   const elos = [
@@ -65,7 +71,18 @@ const SettingForm = () => {
         .auth()
         .currentUser.updatePassword(password)
         .then(() => {
-          console.log("success");
+          store.addNotification({
+            title: "Successfully updated your password!",
+            message: "  ",
+            type: "success",
+            insert: "top",
+            container: "top-right",
+            animationIn: ["animate__animated", "animate__fadeIn"],
+            animationOut: ["animate__animated", "animate__fadeOut"],
+            dismiss: {
+              duration: 5000,
+            },
+          });
         })
         .catch((err) => {
           setErrorMessage(err);
