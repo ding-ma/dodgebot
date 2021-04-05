@@ -15,7 +15,7 @@ const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmitEmailPwd = async () => {
-    firebase
+    await firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(async () => {
@@ -28,15 +28,16 @@ const LoginForm = () => {
   };
 
   const handleSubmitGoogleAuth = async () => {
-    firebase
+    await firebase
       .auth()
-      .signInWithRedirect(new firebase.auth.GoogleAuthProvider())
+      .signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .then(async () => {
         const data = await firebase
           .firestore()
           .collection("users")
           .doc(firebase.auth().currentUser.uid)
           .get();
+        console.log(data);
         if (data.exists) {
           history.push(endpoints.uri.predict);
         } else {

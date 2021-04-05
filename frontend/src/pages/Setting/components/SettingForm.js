@@ -15,7 +15,7 @@ const SettingForm = () => {
   const [summonerName, setSummonerName] = useState("");
   const [password, setPassword] = useState("");
 
-  const [region, setRegion] = useState("North America");
+  const [region, setRegion] = useState("North America (NA1)");
   const regions = [
     "Brazil (BR1)",
     "Europe Nordic (EUN1)",

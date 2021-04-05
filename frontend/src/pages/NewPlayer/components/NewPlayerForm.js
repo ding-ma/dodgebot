@@ -51,9 +51,7 @@ const NewPlayerForm = () => {
       return;
     }
     const { currentUser } = firebase.auth();
-    console.log(currentUser);
     const isPassword = currentUser.providerData[0]?.providerId === "password";
-    console.log(isPassword);
     const profile = {
       elo: elo,
       region: region,

@@ -66,8 +66,6 @@ class Predictions extends React.Component<{}, PredictionsState> {
   componentDidMount() {
     this.scrollToBottom();
     const notified = sessionStorage.getItem("notified");
-    console.log(notified);
-
     if (firebase.auth().currentUser?.isAnonymous && notified === null) {
       store.addNotification({
         title: "Consider registering to get the best results",
