@@ -84,41 +84,37 @@ const LoginForm = () => {
         color="primary"
         error={errorMessage.length > 0}
       />
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <Button
+          style={{ width: "15%", marginRight: "2.5%", marginLeft: "2.5%" }}
 
-      <div style={{display: "flex", justifyContent: "center"}}>
-        {/* <div className="col"> */}
-          <Button
-            style={{width: "15%", marginRight: "2.5%", marginLeft: "2.5%"}}
-
-            variant="contained"
-            color="primary"
-            className="login-form__button"
-            onClick={() => handleSubmitEmailPwd()}
-          >
-            Sign in
+          variant="contained"
+          color="primary"
+          className="login-form__button"
+          onClick={() => handleSubmitEmailPwd()}
+        >
+          Sign in
           </Button>
-        {/* </div> */}
-        {/* <div className="col"> */}
-          <Button
-            style={{width: "15%", marginRight: "2.5%", marginLeft: "2.5%"}}
-            variant="contained"
-            color="primary"
-            className="login-form__button"
-            onClick={() => handleSubmitGoogleAuth()}
-          >
-            Sign in with
+        <Button
+          style={{ width: "15%", marginRight: "2.5%", marginLeft: "2.5%" }}
+          variant="contained"
+          color="primary"
+          className="login-form__button"
+          onClick={() => handleSubmitGoogleAuth()}
+        >
+          Sign in with
             <img
-              src={GoogleLogo}
-              alt="Sign in with Google"
-              style={{ width: "13%", marginLeft: "5%" }}
-            />
-          </Button>
-        {/* </div> */}
+            src={GoogleLogo}
+            alt="Sign in with Google"
+            style={{ width: "13%", marginLeft: "5%" }}
+          />
+        </Button>
       </div>
       <Button
         variant="contained"
         color="primary"
         className="login-form__button"
+        style={{ width: "50%"}}
         onClick={() => handleSubmitAnonymousUser()}
       >
         Guest user
