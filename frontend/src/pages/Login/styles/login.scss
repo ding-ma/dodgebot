@@ -58,16 +58,3 @@
 .label-color {
   color: white !important;
 }
-
-.wrapper {
-  display: flex;
-  &:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-}
-
-.col {
-  width: 50%;
-}

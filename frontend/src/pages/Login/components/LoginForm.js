@@ -85,24 +85,25 @@ const LoginForm = () => {
         error={errorMessage.length > 0}
       />
 
-      <div className="wrapper">
-        <div className="col">
+      <div style={{display: "flex", justifyContent: "center"}}>
+        {/* <div className="col"> */}
           <Button
+            style={{width: "15%", marginRight: "2.5%", marginLeft: "2.5%"}}
+
             variant="contained"
             color="primary"
             className="login-form__button"
-            style={{ width: "15%" }}
             onClick={() => handleSubmitEmailPwd()}
           >
             Sign in
           </Button>
-        </div>
-        <div className="col">
+        {/* </div> */}
+        {/* <div className="col"> */}
           <Button
+            style={{width: "15%", marginRight: "2.5%", marginLeft: "2.5%"}}
             variant="contained"
             color="primary"
             className="login-form__button"
-            style={{ width: "15%" }}
             onClick={() => handleSubmitGoogleAuth()}
           >
             Sign in with
@@ -112,7 +113,7 @@ const LoginForm = () => {
               style={{ width: "13%", marginLeft: "5%" }}
             />
           </Button>
-        </div>
+        {/* </div> */}
       </div>
       <Button
         variant="contained"
