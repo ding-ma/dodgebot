@@ -224,13 +224,9 @@ class Predictions extends React.Component<{}, PredictionsState> {
 
       this.setState(
         {
-          friendlyTeam: ["", "", "", "", ""],
-          enemyTeam: ["", "", "", "", ""],
           submitted: false,
           isLoading: false,
           winPercentage: null,
-          selectingTeam: null,
-          selectingRole: null,
         },
         async () => {
           const results = {
