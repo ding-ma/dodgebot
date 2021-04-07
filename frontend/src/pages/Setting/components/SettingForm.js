@@ -130,6 +130,7 @@ const SettingForm = () => {
         className="login-form__input"
         variant="outlined"
         color="primary"
+        inputProps={{ style: { textAlign: 'center' } }}
       />
 
       <InputLabel className="label-color">Summoner Name</InputLabel>
@@ -140,6 +141,7 @@ const SettingForm = () => {
         className="login-form__input"
         variant="outlined"
         color="primary"
+        inputProps={{ style: { textAlign: 'center' } }}
       />
 
       <InputLabel className="label-color">Region</InputLabel>
@@ -150,7 +152,7 @@ const SettingForm = () => {
         onChange={(event) => setRegion(event.target.value)}
         style={{ margin: "10px 0", width: "70%" }}
         variant="outlined"
-        select
+        inputProps={{ style: { textAlign: 'center' } }}
       >
         {regions.map((value, index) => {
           return (
