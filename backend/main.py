@@ -19,9 +19,15 @@ def predict_winner():
     champion_array = create_champion_array(data)
     
     elo = data.get("elo", "Gold")
-
+    if elo in ["Challenger", "GrandMaster", "Master"]:
+        elo = "Diamond"
+    
     # Load model from file
-    model = tf.keras.models.load_model(os.path.join("models", f"2021-02-22-{elo}.h5"))
+    try:
+        model = tf.keras.models.load_model(os.path.join("models", f"2021-03-25-{elo}.h5"))
+        # default to gold if there are any issues
+    except:
+        model = tf.keras.models.load_model(os.path.join("models", "2021-03-25-Gold.h5"))
 
     predict_data = []
     predict_data.append(champion_array)
@@ -42,3 +48,4 @@ def create_champion_array(data):
 
 if __name__ == "__main__":
     app.run(threaded=True, host='0.0.0.0', port=int(os.environ.get("PORT", 8080)))
+
