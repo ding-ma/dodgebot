@@ -181,6 +181,7 @@ class Predictions extends React.Component<{}, PredictionsState> {
             ChampToKey[this.state.enemyTeam[3] as keyof typeof ChampToKey],
           blueSupport:
             ChampToKey[this.state.enemyTeam[4] as keyof typeof ChampToKey],
+          elo: this.userElo,
         }),
       };
 
