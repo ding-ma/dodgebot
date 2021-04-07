@@ -174,6 +174,7 @@ const SettingForm = () => {
           variant="outlined"
           color="primary"
           helperText="New password must be at least 8 characters long"
+          inputProps={{ style: { textAlign: 'center' } }}
         />
       )}
 
