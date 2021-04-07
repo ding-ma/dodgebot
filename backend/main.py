@@ -22,12 +22,14 @@ def predict_winner():
     if elo in ["Challenger", "GrandMaster", "Master"]:
         elo = "Diamond"
     
+    if elo == "Unranked":
+        elo = "Silver"
     # Load model from file
     try:
         model = tf.keras.models.load_model(os.path.join("models", f"2021-03-25-{elo}.h5"))
         # default to gold if there are any issues
     except:
-        model = tf.keras.models.load_model(os.path.join("models", "2021-03-25-Gold.h5"))
+        model = tf.keras.models.load_model(os.path.join("models", "2021-03-25-Silver.h5"))
 
     predict_data = []
     predict_data.append(champion_array)
