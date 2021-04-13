@@ -56,8 +56,8 @@ const Login = () => {
             fontWeight: "bold",
           }}
         >
-          Trained on over 10 million matches, this tool will help you predict the winner of your
-          next game of League of Legends!
+          Trained on over 10 million matches, this tool will help you predict
+          the winner of your next game of League of Legends!
         </Typography>
       </div>
       <div
