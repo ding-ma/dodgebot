@@ -1,67 +1,73 @@
 .centered {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 
 .backgroundImg {
-    height: 100% !important;
-    width: 100% !important;
-    padding-top: -50px !important;
-    background-image: linear-gradient(to top, #020b0f, #07141a, #0a1b23, #09222d, #082938);
+  height: 100% !important;
+  width: 100% !important;
+  padding-top: -50px !important;
+  background-image: linear-gradient(
+    to top,
+    #020b0f,
+    #07141a,
+    #0a1b23,
+    #09222d,
+    #082938
+  );
 }
 
 .dodgeBtn {
-    width: 20%;
-    height: 70%;
-    background-color: #7b775b;
-    border-radius: 10px;
-    font-size: 20pt;
-    font-family: 'Courier New';
-    border: #4b4e2e;
-    z-index: 100;
-    margin-top: 1%;
+  width: 20%;
+  height: 70%;
+  background-color: #7b775b;
+  border-radius: 10px;
+  font-size: 20pt;
+  font-family: "Courier New";
+  border: #4b4e2e;
+  z-index: 100;
+  margin-top: 1%;
 }
 
-
-.dodgeBtn:hover{
-    background: #4b4e2e;
+.dodgeBtn:hover {
+  background: #4b4e2e;
 }
 
 .winBtn {
   width: 20%;
   height: 70%;
-  background-color: #1D5107;
+  background-color: #1d5107;
   border-radius: 10px;
   font-size: 20pt;
-  font-family: 'Courier New';
+  font-family: "Courier New";
   border: #4b4e2e;
   z-index: 100;
   margin-right: 2%;
 }
 
-.winBtn:hover{
+.winBtn:hover {
   background: #143705;
 }
 
 .lossBtn {
   width: 20%;
   height: 70%;
-  background-color: #751D0B;
+  background-color: #751d0b;
   border-radius: 10px;
   font-size: 20pt;
-  font-family: 'Courier New';
+  font-family: "Courier New";
   border: #4b4e2e;
   z-index: 100;
   margin-left: 2%;
 }
 
-.lossBtn:hover{
+.lossBtn:hover {
   background: #591608;
 }
 
@@ -77,11 +83,19 @@
 
 /* Safari */
 @-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

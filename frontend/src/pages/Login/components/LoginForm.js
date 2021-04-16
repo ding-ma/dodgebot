@@ -87,14 +87,13 @@ const LoginForm = () => {
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Button
           style={{ width: "15%", marginRight: "2.5%", marginLeft: "2.5%" }}
-
           variant="contained"
           color="primary"
           className="login-form__button"
           onClick={() => handleSubmitEmailPwd()}
         >
           Sign in
-          </Button>
+        </Button>
         <Button
           style={{ width: "15%", marginRight: "2.5%", marginLeft: "2.5%" }}
           variant="contained"
@@ -103,7 +102,7 @@ const LoginForm = () => {
           onClick={() => handleSubmitGoogleAuth()}
         >
           Sign in with
-            <img
+          <img
             src={GoogleLogo}
             alt="Sign in with Google"
             style={{ width: "13%", marginLeft: "5%" }}
@@ -114,7 +113,7 @@ const LoginForm = () => {
         variant="contained"
         color="primary"
         className="login-form__button"
-        style={{ width: "50%"}}
+        style={{ width: "50%" }}
         onClick={() => handleSubmitAnonymousUser()}
       >
         Guest user

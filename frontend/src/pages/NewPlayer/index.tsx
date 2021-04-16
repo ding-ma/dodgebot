@@ -1,1 +1,1 @@
-export {default} from "./containers/NewPlayer"
+export { default } from "./containers/NewPlayer";
