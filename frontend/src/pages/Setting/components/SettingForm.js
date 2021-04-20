@@ -130,7 +130,7 @@ const SettingForm = () => {
         className="login-form__input"
         variant="outlined"
         color="primary"
-        inputProps={{ style: { textAlign: 'center' } }}
+        inputProps={{ style: { textAlign: "center" } }}
       />
 
       <InputLabel className="label-color">Summoner Name</InputLabel>
@@ -141,7 +141,7 @@ const SettingForm = () => {
         className="login-form__input"
         variant="outlined"
         color="primary"
-        inputProps={{ style: { textAlign: 'center' } }}
+        inputProps={{ style: { textAlign: "center" } }}
       />
 
       <InputLabel className="label-color">Region</InputLabel>
@@ -152,7 +152,7 @@ const SettingForm = () => {
         onChange={(event) => setRegion(event.target.value)}
         style={{ margin: "10px 0", width: "70%" }}
         variant="outlined"
-        inputProps={{ style: { textAlign: 'center' } }}
+        inputProps={{ style: { textAlign: "center" } }}
       >
         {regions.map((value, index) => {
           return (
@@ -174,7 +174,7 @@ const SettingForm = () => {
           variant="outlined"
           color="primary"
           helperText="New password must be at least 8 characters long"
-          inputProps={{ style: { textAlign: 'center' } }}
+          inputProps={{ style: { textAlign: "center" } }}
         />
       )}
 

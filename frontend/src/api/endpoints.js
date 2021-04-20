@@ -12,9 +12,17 @@ const endpoints = {
     confirm: "/confirm",
   },
   api: {
-    collect:
-      "https://us-central1-ordinal-cacao-291815.cloudfunctions.net/collect-data",
-    predict: "https://prediction-wvdj36m4qa-uc.a.run.app/predictWinner",
+    collect: process.env.REACT_APP_COLLECTION_URL || "",
+    predict: process.env.REACT_APP_ML_URL || "",
+  },
+  firebase: {
+    apiKey: process.env.REACT_APP_apiKey || "",
+    authDomain: process.env.REACT_APP_authDomain || "",
+    databaseURL: process.env.REACT_APP_databaseURL || "",
+    projectId: process.env.REACT_APP_projectId || "",
+    storageBucket: process.env.REACT_APP_storageBucket || "",
+    messagingSenderId: process.env.REACT_APP_messagingSenderId || "",
+    appId: process.env.REACT_APP_appId || "",
   },
 };
 

@@ -23,13 +23,13 @@ import endpoints from "../../api/endpoints";
 const Router = () => {
   if (!firebase.apps.length) {
     firebase.initializeApp({
-      apiKey: "AIzaSyBXM-gu-99JxDtSMr02ZBBAUfDdWnI1vxk",
-      authDomain: "dodge-bot.firebaseapp.com",
-      databaseURL: "https://dodge-bot.firebaseio.com",
-      projectId: "dodge-bot",
-      storageBucket: "dodge-bot.appspot.com",
-      messagingSenderId: "692707592061",
-      appId: "1:692707592061:web:d72d5b9c419155cddfae14",
+      apiKey: endpoints.firebase.apiKey,
+      authDomain: endpoints.firebase.authDomain,
+      databaseURL: endpoints.firebase.databaseURL,
+      projectId: endpoints.firebase.projectId,
+      storageBucket: endpoints.firebase.storageBucket,
+      messagingSenderId: endpoints.firebase.messagingSenderId,
+      appId: endpoints.firebase.appId,
     });
   }
 

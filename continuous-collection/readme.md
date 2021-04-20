@@ -2,8 +2,9 @@
 
 Parses the request of the Frontend so we can store the results of the predictions
 
-Request domain
-```
+Request domain:
+
+```json
 {
    "friendlyTeam":{
       "top": "str_id",

@@ -1,1 +1,1 @@
-export {default} from './containers/ResetPwd';
+export { default } from "./containers/ResetPwd";

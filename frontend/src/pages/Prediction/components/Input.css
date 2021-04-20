@@ -1,15 +1,15 @@
 .selectBtn {
-    width: 50%;
-    height: 55%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #5a4820;
-    margin: 4%;
-    border-radius: 2px;
-    cursor: pointer;
-    }
+  width: 50%;
+  height: 55%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #5a4820;
+  margin: 4%;
+  border-radius: 2px;
+  cursor: pointer;
+}
 
-.selectBtn:hover{
-background: rgba(0, 0, 0, 0.3);
+.selectBtn:hover {
+  background: rgba(0, 0, 0, 0.3);
 }

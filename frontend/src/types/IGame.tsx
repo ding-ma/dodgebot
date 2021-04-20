@@ -1,6 +1,6 @@
 //TODO might need to export some for dashboard. TBD
 
-import {ChampionID} from "./IChampion";
+import { ChampionID } from "./IChampion";
 
 /**
  * Picks for the team
@@ -13,11 +13,11 @@ import {ChampionID} from "./IChampion";
  */
 
 interface Roles {
-    top: ChampionID;
-    jg: ChampionID;
-    mid: ChampionID;
-    adc: ChampionID;
-    sup: ChampionID;
+  top: ChampionID;
+  jg: ChampionID;
+  mid: ChampionID;
+  adc: ChampionID;
+  sup: ChampionID;
 }
 
 /**
@@ -25,29 +25,38 @@ interface Roles {
  * Use -1 as no ban
  */
 interface Bans {
-    ban1: ChampionID,
-    ban2: ChampionID,
-    ban3: ChampionID,
-    ban4: ChampionID,
-    ban5: ChampionID
+  ban1: ChampionID;
+  ban2: ChampionID;
+  ban3: ChampionID;
+  ban4: ChampionID;
+  ban5: ChampionID;
 }
 
 /**
  * Each team has picks and bans
  */
 interface Team {
-    roles: Roles;
-    bans: Bans;
+  roles: Roles;
+  bans: Bans;
 }
 
-type elo = "IRON"|"BRONZE"|"SILVER"|"GOLD"|"PLATINUM"|"DIAMOND"|"MASTER"|"GRANDMASTER"|"CHALLENGER"
+type elo =
+  | "IRON"
+  | "BRONZE"
+  | "SILVER"
+  | "GOLD"
+  | "PLATINUM"
+  | "DIAMOND"
+  | "MASTER"
+  | "GRANDMASTER"
+  | "CHALLENGER";
 
 /**
  * A game is made of two teams (red and blue)
  */
 export interface IGame {
-    blueTeam: Team;
-    redTeam: Team;
-    elo: elo;
-    date: Date
+  blueTeam: Team;
+  redTeam: Team;
+  elo: elo;
+  date: Date;
 }
